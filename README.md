@@ -15,6 +15,8 @@ This project is using :
 
 The main requirement for the browser is to support ES6 class which is the case for all modern browsers (https://caniuse.com/#feat=es6-class).
 
+If it is the first time using the repository, first install the dependencies : `npm install`
+
 Once you've committed changes to the code, use  : `rollup -c` to compile the code down to the `bundle.js`, then simply open `index.html` in a browser.
 
-We can either install `rollup` globally or locally, to install globally use : `npm install --global rollup`
+( You can either install `rollup` globally or locally, to install globally use : `npm install --global rollup` )
