@@ -1,11 +1,12 @@
 # Data Visualization Project : Process Book
 
 # Table of contents
-- [About the workflow](#About the workflow)
-- [About the data](#About the data)
-    - [Sub paragraph](#subparagraph1)
+- [About the workflow](#About-the-workflow)
+- [About the style](#About-the-style)
+- [About the data](#About-the-data)
+- [Initial Mockup](#Initial-mockup)
 
-# About the workflow
+## About the workflow
 
 Before looking at the data, we'd like to explain our decisions in terms of workflow. In the correction of the lab we were given a boilerplate using ES6 + D3 + Babel + SCSS + NPM + Webpack + React + ... but we choose not to use it in our project because we wanted to understand all of our code and only have the necessary code :
 
@@ -21,6 +22,11 @@ In conclusion, for our use case, we have everything we need with with vanilla JS
 
 Hopefully this make our project structure simpler by not stacking dozens of framework and tools : https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f
 
+# About the style
+
+We took inspiration from the "Swiss Style" also known as the [International Typographic Style](http://www.designishistory.com/home/swiss/). Here are some examples :
+
+![./inspiration_design.jpg](./inspiration_design.jpg)
 
 # About the data
 
