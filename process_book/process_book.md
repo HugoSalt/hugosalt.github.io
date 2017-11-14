@@ -1,9 +1,9 @@
 # Data Visualization Project : Process Book
 
 # Table of contents
-- [About the workflow](#About-the-workflow)
-- [About the style](#About-the-style)
-- [About the data](#About-the-data)
+- [About the workflow](#about-the-workflow)
+- [About the style](#about-the-style)
+- [About the data](#about-the-data)
 - [Initial Mockup](#Initial-mockup)
 
 ## About the workflow
@@ -52,3 +52,11 @@ This data set contains the following features :
 - Rating ( E or M )
 
 The original data set comes from [here](https://www.kaggle.com/gregorut/videogamesales) and contains more than 16,000 games. But the data set we have is extended with critic and user scores and contains about 6,900 games which scores could be found on [Metacritic](http://www.metacritic.com/browse/games/release-date/available).
+
+# Initial mockup
+
+We decided that the general layout for our visualization will be the following :
+
+![./mockup.jpg](./mockup.jpg)
+
+This allow the user to follow our story by just scrolling a single page, yet still having the left menu for quick access to any particular section.
