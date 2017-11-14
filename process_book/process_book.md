@@ -4,7 +4,7 @@
 - [About the workflow](#about-the-workflow)
 - [About the style](#about-the-style)
 - [About the data](#about-the-data)
-- [Initial Mockup](#Initial-mockup)
+- [Initial Mockup](#initial-mockup)
 
 ## About the workflow
 
