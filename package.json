@@ -1,0 +1,17 @@
+{
+  "name": "hugosalt.github.io",
+  "version": "1.0.0",
+  "description": "EPFL DataViz Course Project",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HugoSalt/hugosalt.github.io.git"
+  },
+  "homepage": "https://github.com/HugoSalt/hugosalt.github.io#readme",
+  "dependencies": {
+    "d3": "^4.11.0"
+  },
+  "devDependencies": {
+    "rollup-plugin-node-resolve": "^3.0.0"
+  }
+}
