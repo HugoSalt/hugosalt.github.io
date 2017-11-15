@@ -5,6 +5,7 @@
 - [About the style](#about-the-style)
 - [About the data](#about-the-data)
 - [Initial Mockup](#initial-mockup)
+  - [Layout](#layout)
 
 ## About the workflow
 
@@ -27,6 +28,10 @@ Hopefully this make our project structure simpler by not stacking dozens of fram
 We took inspiration from the "Swiss Style" also known as the [International Typographic Style](http://www.designishistory.com/home/swiss/). Here are some examples :
 
 ![./inspiration_design.jpg](./inspiration_design.jpg)
+
+We've used fonts that convey this style but that are free (unlike the proprietary fonts such as [Helvetica](https://en.wikipedia.org/wiki/Helvetica) or  Brown Pro)
+
+In terms of color, we've picked some from [this site](http://swisscolors.net/) and we exposed them in [CSS Variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables) to remain coherent through the whole visualization.
 
 # About the data
 
@@ -55,8 +60,10 @@ The original data set comes from [here](https://www.kaggle.com/gregorut/videogam
 
 # Initial mockup
 
-We decided that the general layout for our visualization will be the following :
+## Layout
+
+We decided that the general layout for our visualization would be the following :
 
 ![./mockup.jpg](./mockup.jpg)
 
-This allow the user to follow our story by just scrolling a single page, yet still having the left menu for quick access to any particular section.
+This allow the user to follow our story by just scrolling a single page, yet still having the left menu for quick access to any particular section. Furthermore this kind of navigation is adapted to all form factors (phone, tablets,desktops)
