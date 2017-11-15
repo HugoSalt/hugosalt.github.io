@@ -6,7 +6,7 @@
   left: 10px;
   width: 50px;
   height: 50px;
-  background-color: var(--swiss-white);
+  background-color: var(--swiss-background);
   border: 4px solid rgb(0, 0, 0);
   background-image: url("../img/menu.svg");
   background-size: contain;

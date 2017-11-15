@@ -3,7 +3,8 @@
 /* Color Palette For the whole project */
 :root {
   --swiss-black: #000000;
-  --swiss-white: #f1f2f0;
+  --swiss-white: #fff;
+  --swiss-background: #f1f2f0;
   --swiss-red: #f54123;
   --swiss-blue: #0098d8;
   --swiss-yellow: #e6c700;
@@ -41,7 +42,7 @@ body{
   height: 100%;
   width: 100%;
   position: absolute;
-  background-color: var(--swiss-white);
+  background-color: var(--swiss-background);
   overflow-x: hidden;
   overflow-y: scroll;
   z-index: -1;
@@ -63,12 +64,25 @@ body{
     left: 0;
     background: url(../img/noise_small.jpg);
     background-repeat: repeat;
-    opacity: 0.12;
+    opacity: 0.14;
     pointer-events: none;
 }
 
 /* Typography */
 h1{
+  font-family: "Liberation Sans";
+  font-weight: bold;
+  background-color: var(--swiss-black);
+  color: var(--swiss-white);
+  padding-bottom: 8px;
+  padding-top: 8px;
+  margin-right: 20px;
+  width: auto;
+  display: inline;
+  padding-right: 16px;
+}
+
+h2{
   font-family: "Liberation Sans";
   font-weight: bold;
   border-bottom: 4px solid;
