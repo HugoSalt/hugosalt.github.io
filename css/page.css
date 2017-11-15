@@ -24,6 +24,12 @@
   font-weight: bold;
 }
 
+@font-face {
+  font-family: "Ubuntu Mono";
+  src: url("../fonts/UbuntuMono-R.ttf") format("truetype");
+  font-weight: normal;
+}
+
 html{
   font-family: "Liberation Sans";
   background-color: white;
@@ -74,21 +80,29 @@ h1{
   font-weight: bold;
   background-color: var(--swiss-black);
   color: var(--swiss-white);
-  padding-bottom: 8px;
-  padding-top: 8px;
+  padding-bottom: 4px;
+  padding-top: 4px;
   margin-right: 20px;
   width: auto;
   display:inline-block;
   padding-right: 18px;
+  font-size: 2.5em;
 }
 
 h2{
   font-family: "Liberation Sans";
   font-weight: bold;
-  border-bottom: 4px solid;
+  border-bottom: 3px solid;
+  font-size: 1.8em;
+  margin-left: 12px;
+  margin-right: 12px;
 }
 
 p{
-  font-family: "Liberation Sans";
+  font-family: "Ubuntu Mono";
   font-weight: normal;
+  text-align: justify;
+  font-size: 1.2em;
+  margin-left: 12px;
+  margin-right: 12px;
 }
