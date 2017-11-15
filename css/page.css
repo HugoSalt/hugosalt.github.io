@@ -1,0 +1,80 @@
+/* CSS for the page in general (headings, typography, fonts, etc...) */
+
+/* Color Palette For the whole project */
+:root {
+  --swiss-black: #000000;
+  --swiss-white: #f1f2f0;
+  --swiss-red: #f54123;
+  --swiss-blue: #0098d8;
+  --swiss-yellow: #e6c700;
+  --swiss-green: #007500;
+}
+
+/* Fonts */
+@font-face {
+  font-family: "Liberation Sans";
+  src: url("../fonts/LiberationSans-Regular.ttf") format("truetype");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "Liberation Sans";
+  src: url("../fonts/LiberationSans-Bold.ttf") format("truetype");
+  font-weight: bold;
+}
+
+html{
+  font-family: "Liberation Sans";
+  background-color: white;
+}
+
+body{
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  color: var(--swiss-black);
+}
+
+#main_container{
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background-color: var(--swiss-white);
+  overflow-x: hidden;
+  overflow-y: scroll;
+  z-index: -1;
+}
+
+#scrolling_container{
+  padding: 0;
+  margin: 0;
+}
+
+/* Hipster Paper Grain Overlay */
+#main_container:before {
+    content: " ";
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    background: url(../img/noise_small.jpg);
+    background-repeat: repeat;
+    opacity: 0.12;
+    pointer-events: none;
+}
+
+/* Typography */
+h1{
+  font-family: "Liberation Sans";
+  font-weight: bold;
+  border-bottom: 4px solid;
+}
+
+p{
+  font-family: "Liberation Sans";
+  font-weight: normal;
+}

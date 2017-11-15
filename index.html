@@ -4,12 +4,30 @@
 <head>
   <meta charset="UTF-8">
   <title>Video Games Sales</title>
-  <link rel="stylesheet" type="text/css" href="style.css">
+  <!-- See doc at http://flexboxgrid.com/ -->
+  <link rel="stylesheet" href="css/flexboxgrid.min.css" type="text/css">
+  <!-- Our CSS -->
+  <link rel="stylesheet" type="text/css" href="./css/page.css">
+  <link rel="stylesheet" type="text/css" href="./css/menu.css">
+  <link rel="stylesheet" type="text/css" href="./css/banner.css">
   <script type="text/javascript" src="bundle.js" defer></script>
 </head>
 
 <body>
-  <div id="vizContainer"></div>
+  <!-- Menu -->
+  <div id="menu_container"></div>
+  <button id="menu_button"></button>
+  <!-- Visualization -->
+  <div id="main_container">
+    <div id="scrolling_container">
+      <!-- Title -->
+      <div class="row">
+        <div id="banner_container" class="col-xs"></div>
+      </div>
+    </div>
+  </div>
+
+
 </body>
 
 </html>

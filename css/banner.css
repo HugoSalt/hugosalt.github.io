@@ -1,0 +1,12 @@
+#banner_container {
+  background-color: var(--swiss-red);
+  padding: 0;
+  margin: 0;
+  height: 500px;
+}
+#banner_container>svg {
+  height: 500px;
+  width: auto;
+  padding: 0;
+  margin: 0;
+}

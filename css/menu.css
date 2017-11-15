@@ -1,0 +1,25 @@
+/* CSS for the left sliding menu and its button */
+
+#menu_button{
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 50px;
+  height: 50px;
+  background-color: var(--swiss-white);
+  border: 4px solid rgb(0, 0, 0);
+  background-image: url("../img/menu.svg");
+  background-size: contain;
+  outline: none;
+}
+
+#menu_container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 300px;
+  background-color: var(--swiss-black);
+  transform: translate3d(-100%,0,0);
+  transition: 0.25s ease-in-out;
+}
