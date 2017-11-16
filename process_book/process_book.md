@@ -8,6 +8,8 @@
 - [Initial Layout Mockup](#initial-layout-mockup)
 - [About the data](#about-the-data)
 - [Exploring the data](#exploring-the-data)
+  -[Console war](#console-war)
+  -[Publisher war](#publisher-war)
 
 # About the workflow
 
@@ -87,4 +89,10 @@ Looking at the features, three main topic came to our mind :
 
 For each topic we considered all pairs of features and kept only those which seemed to answer relevant questions :
 
-![./feature_pairs.jpg](./featrue_pairs.jpg)
+![./feature_pairs.jpg](./feature_pairs.jpg)
+
+## Console war
+
+## Publisher war
+
+## Game analysis
