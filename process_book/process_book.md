@@ -106,6 +106,12 @@ Question this answer : *What is the popularity of each consoles over the years ?
 
 ### Sales repartition per Console and per Genre (Platform + Sales + Genre)
 
+We considered different representations, among them we had :
+
+![./console_war_platform_sales_genre.jpg](./console_war_platform_sales_genre.jpg)
+
+Question this answer : *Which genres are more popular per console ?*
+
 ## Publishers war
 
 ### Critics over the Years per Publisher (Publisher + Critics + Years)
