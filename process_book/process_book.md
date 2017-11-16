@@ -37,7 +37,7 @@ But still our code is very well "componentized", *every view has its own ES6 cla
 
 We took inspiration from the "Swiss Style" also known as the [International Typographic Style](http://www.designishistory.com/home/swiss/). Here are some examples :
 
-![./inspiration_design.svg](./inspiration_design.svg)
+![./inspiration_design.jpg](./inspiration_design.jpg)
 
 We've used fonts that convey this style but that are free (unlike the proprietary fonts such as [Helvetica](https://en.wikipedia.org/wiki/Helvetica) or  Brown Pro)
 
@@ -49,7 +49,7 @@ Overall we want to convey a "magazine" feeling, we even added some effect like v
 
 We decided that the general layout for our visualization would be the following :
 
-![./mockup.svg](./mockup.svg)
+![./mockup.jpg](./mockup.jpg)
 
 This allow the user to follow our story by just scrolling a single page, yet still having the left menu for quick access to any particular section. Furthermore this kind of navigation is adapted to all form factors (phone, tablets,desktops)
 
@@ -87,4 +87,4 @@ Looking at the features, three main topic came to our mind :
 
 For each topic we considered all pairs of features and kept only those which seemed to answer relevant questions :
 
-![./feature_pairs.svg](./featrue_pairs.svg)
+![./feature_pairs.jpg](./featrue_pairs.jpg)
