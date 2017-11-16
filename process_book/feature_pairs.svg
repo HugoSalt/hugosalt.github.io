@@ -117,8 +117,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.98994949"
-     inkscape:cx="872.03319"
-     inkscape:cy="666.42582"
+     inkscape:cx="545.24884"
+     inkscape:cy="664.40551"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -141,7 +141,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -238,20 +238,15 @@
        cy="87.925011" />
     <text
        id="text4774"
-       y="89.872978"
-       x="268.44519"
+       y="91.743866"
+       x="287.6886"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.09437656px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25235939"
        xml:space="preserve"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.25235939"
-         y="89.872978"
-         x="268.44519"
-         id="tspan4772"
-         sodipodi:role="line">Publisher/Developper</tspan><tspan
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.25235939"
-         y="102.49095"
-         x="268.44519"
+         y="91.743866"
+         x="287.6886"
          sodipodi:role="line"
-         id="tspan4854">       War</tspan></text>
+         id="tspan4854">Publisher War</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.09437656px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25235939"
@@ -372,23 +367,23 @@
          id="tspan4960"
          sodipodi:role="line">Platform</tspan></text>
     <ellipse
-       cy="45.560284"
-       cx="324.2948"
+       cy="45.481705"
+       cx="322.03677"
        id="ellipse4964"
-       style="opacity:0.47300002;fill:#7581ff;fill-opacity:1;stroke:none;stroke-width:4.41496801;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       rx="75.912971"
-       ry="16.097364" />
+       style="opacity:0.47300002;fill:#7581ff;fill-opacity:1;stroke:none;stroke-width:3.63409185;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       rx="56.81702"
+       ry="14.57233" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.09437656px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25235939"
-       x="260.8837"
+       x="298.03415"
        y="48.782528"
        id="text4968"><tspan
          sodipodi:role="line"
          id="tspan4966"
-         x="260.8837"
+         x="298.03415"
          y="48.782528"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.25235939">Publisher/Developper</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.25235939">Publisher</tspan></text>
     <ellipse
        ry="12.323166"
        rx="26.591768"

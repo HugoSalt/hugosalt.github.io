@@ -11,6 +11,8 @@
   - [Console war](#console-war)
   - [Publisher war](#publisher-war)
   - [Games analysis](#games-analysis)
+- [Some extra notes on our decisions](#some-extra-notes-on-our-decisions)
+- [Conclusion](#conclusion)
 
 # About the workflow
 
@@ -77,7 +79,7 @@ This data set contains the following features :
 - User Score (out of 10)
 - User Count
 - Developer
-- Rating ( E or M )
+- Rating ( E, E10+, M, ... )
 
 The original data set comes from [here](https://www.kaggle.com/gregorut/videogamesales) and contains more than 16,000 games. But the data set we have is extended with critic and user scores. About 6,900 games could be extend with those scores (i.e games whose scores could be found on [Metacritic](http://www.metacritic.com/browse/games/release-date/available).
 
@@ -85,7 +87,7 @@ The original data set comes from [here](https://www.kaggle.com/gregorut/videogam
 
 Looking at the features, three main topic came to our mind :
 - Consoles War
-- Publisher/Developer War
+- Publisher War
 - General games analysis
 
 For each topic we considered all pairs of features and kept only those which seemed to answer relevant questions :
@@ -121,3 +123,14 @@ Now we will explore some ideas of visualization for each topic and see which que
 ### Evolution of genre popularity (Sales + Genre + Year)
 
 ### Top 5 genre per region
+
+# Some extra notes on our decisions
+
+As you may have notices, we chose to ignore some data. It's not because it would not be interesting to visualize them but because we thought they were less relevant to the topics we wanted to explore :
+  - we didn't use Ratings (E, E10+, M, ...)
+  - we didn't use Developer but only Publisher. It would have been interesting to confront the two (Developers might get bought or work for other publishers) but wanted to remain general and only analyse publishers.
+  - we didn't confront Critic Score vs. Critic Count or User Score vs. User Count. This would be more of a social study of the density of review in function of the review score ("For eg : Are people hating a game more likely to go on Metacritic and write a review than those loving the game ?")
+
+  # Conclusion
+
+  TODO : Complete when we finish the viz. What did we end up implementing and not implementing ? Problem encountered ? Are we satisfied ? Did we answer well questions we ask ourselves about the data ? etc...
