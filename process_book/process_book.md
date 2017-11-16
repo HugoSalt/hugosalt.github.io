@@ -100,6 +100,10 @@ Now we will explore some ideas of visualization for each topic and see which que
 
 ### Sales evolution per Console (Platform + Sales + Years)
 
+![./console_war_platform_sales_years.jpg](./console_war_platform_sales_years.jpg)
+
+Question this answer : *What is the popularity of each consoles over the years ?*
+
 ### Sales repartition per Console and per Genre (Platform + Sales + Genre)
 
 ## Publishers war
@@ -134,7 +138,7 @@ As you may have notice, we chose to ignore some data. It's not because it would 
 Another question we encountered was : should we consider the sales or the number of game released ?
 For example to reflect the popularity of a console over the years, should we represent the number of sales of games on that console or the number game released for that console ?
 
-We ended up choosing sales over the number of release, but both options were a possible representation for the trends in the console war.
+We ended up choosing sales over the number of release, but both options were a possible representation for the trends.
 
 # Conclusion
 
