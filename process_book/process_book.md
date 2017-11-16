@@ -8,8 +8,8 @@
 - [Initial Layout Mockup](#initial-layout-mockup)
 - [About the data](#about-the-data)
 - [Exploring the data](#exploring-the-data)
-  - [Console war](#console-war)
-  - [Publisher war](#publisher-war)
+  - [Consoles war](#consoles-war)
+  - [Publishers war](#publishers-war)
   - [Games analysis](#games-analysis)
 - [Some extra notes on our decisions](#some-extra-notes-on-our-decisions)
 - [Conclusion](#conclusion)
@@ -96,13 +96,13 @@ For each topic we considered all pairs of features and kept only those which see
 
 Now we will explore some ideas of visualization for each topic and see which questions they might answer.
 
-## Console war
+## Consoles war
 
 ### Sales evolution per Console (Platform + Sales + Years)
 
 ### Sales repartition per Console and per Genre (Platform + Sales + Genre)
 
-## Publisher war
+## Publishers war
 
 ### Critics over the Years per Publisher (Publisher + Critics + Years)
 
@@ -120,17 +120,22 @@ Now we will explore some ideas of visualization for each topic and see which que
 
 ### From unknown masterpieces to popular flops (Critics + Sales + Year)
 
-### Evolution of genre popularity (Sales + Genre + Year)
+### Evolution of Genre popularity (Sales + Genre + Year)
 
-### Top 5 genre per region
+### Top 5 Genre per region
 
 # Some extra notes on our decisions
 
-As you may have notices, we chose to ignore some data. It's not because it would not be interesting to visualize them but because we thought they were less relevant to the topics we wanted to explore :
+As you may have notice, we chose to ignore some data. It's not because it would not be interesting to visualize them, but because we thought they were less relevant to the topics we wanted to explore :
   - we didn't use Ratings (E, E10+, M, ...)
   - we didn't use Developer but only Publisher. It would have been interesting to confront the two (Developers might get bought or work for other publishers) but wanted to remain general and only analyse publishers.
   - we didn't confront Critic Score vs. Critic Count or User Score vs. User Count. This would be more of a social study of the density of review in function of the review score ("For eg : Are people hating a game more likely to go on Metacritic and write a review than those loving the game ?")
 
-  # Conclusion
+Another question we encountered was : should we consider the sales or the number of game released ?
+For example to reflect the popularity of a console over the years, should we represent the number of sales of games on that console or the number game released for that console ?
+
+We ended up choosing sales over the number of release, but both options were a possible representation for the trends in the console war.
+
+# Conclusion
 
   TODO : Complete when we finish the viz. What did we end up implementing and not implementing ? Problem encountered ? Are we satisfied ? Did we answer well questions we ask ourselves about the data ? etc...
