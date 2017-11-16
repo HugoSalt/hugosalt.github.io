@@ -8,8 +8,8 @@
 - [Initial Layout Mockup](#initial-layout-mockup)
 - [About the data](#about-the-data)
 - [Exploring the data](#exploring-the-data)
-  -[Console war](#console-war)
-  -[Publisher war](#publisher-war)
+  - [Console war](#console-war)
+  - [Publisher war](#publisher-war)
 
 # About the workflow
 
