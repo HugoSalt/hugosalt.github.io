@@ -110,11 +110,17 @@ We considered different representations, among them we had :
 
 ![./console_war_platform_sales_genre.jpg](./console_war_platform_sales_genre.jpg)
 
+But we found the array chart to be less intuitive than the second one. Moreover the second one allows to see and to order by total sale (height of the bar).
+
 Question this answer : *Which genres are more popular per console ?*
 
 ## Publishers war
 
 ### Critics over the Years per Publisher (Publisher + Critics + Years)
+
+![./publishers_war_publishers_critics_years.jpg](./publishers_war_publishers_critics_years.jpg)
+
+Question this answer : *What is the evolution of the quality of a publisher' games ?*
 
 ### Sales over the Years per Publisher (Publisher + Sales + Years)
 
