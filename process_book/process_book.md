@@ -10,6 +10,7 @@
 - [Exploring the data](#exploring-the-data)
   - [Console war](#console-war)
   - [Publisher war](#publisher-war)
+  - [Games analysis](#games-analysis)
 
 # About the workflow
 
@@ -91,8 +92,32 @@ For each topic we considered all pairs of features and kept only those which see
 
 ![./feature_pairs.jpg](./feature_pairs.jpg)
 
+Now we will explore some ideas of visualization for each topic and see which questions they might answer.
+
 ## Console war
+
+### Sales evolution per Console (Platform + Sales + Years)
+
+### Sales repartition per Console and per Genre (Platform + Sales + Genre)
 
 ## Publisher war
 
-## Game analysis
+### Critics over the Years per Publisher (Publisher + Critics + Years)
+
+### Sales over the Years per Publisher (Publisher + Sales + Years)
+
+### Repartition of Publishers sales per Platform (Publisher + Platform + Sales)
+
+### Repartition of Publishers sales per Genre (Publisher + Platform + Genre)
+
+### Top 5 Publisher per region (Publisher + Genre + Sales per Region)
+
+### Console portage quality (consistency) (Publisher + Platform + Sales)
+
+## Games analysis
+
+### From unknown masterpieces to popular flops (Critics + Sales + Year)
+
+### Evolution of genre popularity (Sales + Genre + Year)
+
+### Top 5 genre per region
