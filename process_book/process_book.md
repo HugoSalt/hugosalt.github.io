@@ -138,7 +138,17 @@ Question this answers : **What is the dominance of publishers on each platform ?
 
 ### Repartition of Publishers sales per Genre (Publisher + Platform + Genre)
 
+Same as above but with genre instead of consoles.
+
+Question this answers : **What kind of game publishers are the most famous for?**
+
 ### Top 5 Publisher per region (Publisher + Genre + Sales per Region)
+
+Unfortunately, our features only separate sales in JP, EU, NA and other thus we don't have detail for every country and so it doesn't make a lot of sense to visualize them on a map. Instead we propose four charts :
+
+![./publisher_war_top_per_region.jpg](./publisher_war_top_per_region.jpg)
+
+Question this answers : **Where publishers are the most popular ?**
 
 ### Console portage quality (consistency) (Publisher + Platform + Sales)
 

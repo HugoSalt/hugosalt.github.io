@@ -16,7 +16,7 @@
    id="svg8"
    inkscape:version="0.92.1 r15371"
    sodipodi:docname="publisher_war_publisher_platform_sales.svg"
-   inkscape:export-filename="/home/hugo/Desktop/DataViz/hugosalt.github.io/process_book/console_war_platform_sales_genre.png"
+   inkscape:export-filename="/home/hugo/Desktop/DataViz/hugosalt.github.io/process_book/publisher_war_publisher_platform_sales.png"
    inkscape:export-xdpi="82"
    inkscape:export-ydpi="82">
   <defs
@@ -165,9 +165,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.35"
-     inkscape:cx="910.29068"
-     inkscape:cy="552.61056"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="1872.5878"
+     inkscape:cy="433.32765"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -190,7 +190,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
