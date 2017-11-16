@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="482.69006mm"
+   height="310.27307mm"
+   viewBox="0 0 482.69006 310.27307"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.1 r15371"
+   sodipodi:docname="feature_pairs.svg">
+  <defs
+     id="defs2">
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker8734"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow2Send">
+      <path
+         transform="matrix(-0.3,0,0,-0.3,0.69,0)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
+         id="path8732"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow2Sstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker8670"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path8668"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(0.3,0,0,0.3,-0.69,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow2Sstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker7503"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path7501"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(0.3,0,0,0.3,-0.69,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Send"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Send"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path4657"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         transform="matrix(-0.2,0,0,-0.2,-1.2,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow2Mstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Mstart"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path4666"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="scale(0.6)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Lend"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path4645"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="872.03319"
+     inkscape:cy="666.42582"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="3200"
+     inkscape:window-height="1690"
+     inkscape:window-x="0"
+     inkscape:window-y="54"
+     inkscape:window-maximized="1"
+     inkscape:measure-start="0,0"
+     inkscape:measure-end="0,0"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(22.313817,-22.801566)">
+    <ellipse
+       ry="12.323166"
+       rx="26.591768"
+       style="opacity:0.47300002;fill:#bababa;fill-opacity:1;stroke:none;stroke-width:2.2862668;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="ellipse4754"
+       cx="106.02412"
+       cy="49.714203" />
+    <ellipse
+       cy="84.388435"
+       cx="56.97393"
+       id="circle4549"
+       style="opacity:1;fill:#e4b200;fill-opacity:0.1254902;stroke:none;stroke-width:3.61033821;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       rx="51.349209"
+       ry="15.913939" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.09437656px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25235939"
+       x="16.001919"
+       y="87.578255"
+       id="text4990"><tspan
+         sodipodi:role="line"
+         id="tspan4988"
+         x="16.001919"
+         y="87.578255"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.25235939">Consoles War</tspan></text>
+    <text
+       id="text4752"
+       y="51.959084"
+       x="92.455391"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.09437656px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25235939"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.25235939"
+         y="51.959084"
+         x="92.455391"
+         id="tspan4750"
+         sodipodi:role="line">Year</tspan></text>
+    <ellipse
+       cy="111.22475"
+       cx="116.20319"
+       id="ellipse4756"
+       style="opacity:0.47300002;fill:#bababa;fill-opacity:1;stroke:none;stroke-width:2.2862668;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       rx="26.591768"
+       ry="12.323166" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.09437656px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25235939"
+       x="99.988617"
+       y="114.98152"
+       id="text4760"><tspan
+         sodipodi:role="line"
+         id="tspan4758"
+         x="99.988617"
+         y="114.98152"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.25235939">Genre</tspan></text>
+    <ellipse
+       ry="12.323166"
+       rx="26.591768"
+       style="opacity:0.47300002;fill:#bababa;fill-opacity:1;stroke:none;stroke-width:2.2862668;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="ellipse4762"
+       cx="20.450115"
+       cy="116.80824" />
+    <text
+       id="text4766"
+       y="121.13198"
+       x="5.5584536"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.09437656px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25235939"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.25235939"
+         y="121.13198"
+         x="5.5584536"
+         id="tspan4764"
+         sodipodi:role="line">Sales</tspan></text>
+    <ellipse
+       cy="66.662888"
+       cx="425.15369"
+       id="ellipse4768"
+       style="opacity:0.47300002;fill:#bababa;fill-opacity:1;stroke:none;stroke-width:2.2862668;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       rx="26.591768"
+       ry="12.323166" />
+    <ellipse
+       ry="21.653519"
+       rx="73.555313"
+       style="opacity:1;fill:#e4b200;fill-opacity:0.1254902;stroke:none;stroke-width:5.04038143;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="ellipse4770"
+       cx="328.74265"
+       cy="87.925011" />
+    <text
+       id="text4774"
+       y="89.872978"
+       x="268.44519"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.09437656px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25235939"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.25235939"
+         y="89.872978"
+         x="268.44519"
+         id="tspan4772"
+         sodipodi:role="line">Publisher/Developper</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.25235939"
+         y="102.49095"
+         x="268.44519"
+         sodipodi:role="line"
+         id="tspan4854">       War</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.09437656px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25235939"
+       x="411.58496"
+       y="68.907768"
+       id="text4778"><tspan
+         sodipodi:role="line"
+         id="tspan4776"
+         x="411.58496"
+         y="68.907768"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.25235939">Year</tspan></text>
+    <ellipse
+       ry="12.323166"
+       rx="26.591768"
+       style="opacity:0.47300002;fill:#bababa;fill-opacity:1;stroke:none;stroke-width:2.2862668;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="ellipse4780"
+       cx="423.4455"
+       cy="113.44443" />
+    <text
+       id="text4784"
+       y="117.20123"
+       x="407.23093"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.09437656px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25235939"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.25235939"
+         y="117.20123"
+         x="407.23093"
+         id="tspan4782"
+         sodipodi:role="line">Genre</tspan></text>
+    <ellipse
+       cy="71.285324"
+       cx="216.29663"
+       id="ellipse4786"
+       style="opacity:0.47300002;fill:#bababa;fill-opacity:1;stroke:none;stroke-width:2.75413156;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       rx="36.891621"
+       ry="12.89013" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.09437656px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25235939"
+       x="191.10509"
+       y="75.042099"
+       id="text4790"><tspan
+         sodipodi:role="line"
+         id="tspan4788"
+         x="191.10509"
+         y="75.042099"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.25235939">Platform</tspan></text>
+    <ellipse
+       cy="118.17415"
+       cx="243.99748"
+       id="ellipse4792"
+       style="opacity:0.47300002;fill:#bababa;fill-opacity:1;stroke:none;stroke-width:2.2862668;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       rx="26.591768"
+       ry="12.323166" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.09437656px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25235939"
+       x="230.16417"
+       y="122.49788"
+       id="text4796"><tspan
+         sodipodi:role="line"
+         id="tspan4794"
+         x="230.16417"
+         y="122.49788"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.25235939">Sales</tspan></text>
+    <ellipse
+       ry="15.913939"
+       rx="51.349209"
+       style="opacity:1;fill:#e4b200;fill-opacity:0.1254902;stroke:none;stroke-width:3.61033821;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="ellipse4798"
+       cx="195.31322"
+       cy="244.65034" />
+    <text
+       id="text4802"
+       y="248.90924"
+       x="151.6685"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.09437656px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25235939"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.25235939"
+         y="248.90924"
+         x="151.6685"
+         id="tspan4800"
+         sodipodi:role="line">Games Analysis</tspan></text>
+    <ellipse
+       ry="12.89013"
+       rx="36.891621"
+       style="opacity:0.47300002;fill:#bababa;fill-opacity:1;stroke:none;stroke-width:2.75413156;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="ellipse4856"
+       cx="338.19281"
+       cy="129.75018" />
+    <text
+       id="text4860"
+       y="133.50696"
+       x="317.81213"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.09437656px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25235939"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.25235939"
+         y="133.50696"
+         x="317.81213"
+         id="tspan4858"
+         sodipodi:role="line">Critics</tspan></text>
+    <ellipse
+       ry="12.89013"
+       rx="36.891621"
+       style="opacity:0.47300002;fill:#7581ff;fill-opacity:1;stroke:none;stroke-width:2.75413156;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="ellipse4958"
+       cx="22.280251"
+       cy="51.974762" />
+    <text
+       id="text4962"
+       y="55.731541"
+       x="-2.9112916"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.09437656px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25235939"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.25235939"
+         y="55.731541"
+         x="-2.9112916"
+         id="tspan4960"
+         sodipodi:role="line">Platform</tspan></text>
+    <ellipse
+       cy="45.560284"
+       cx="324.2948"
+       id="ellipse4964"
+       style="opacity:0.47300002;fill:#7581ff;fill-opacity:1;stroke:none;stroke-width:4.41496801;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       rx="75.912971"
+       ry="16.097364" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.09437656px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25235939"
+       x="260.8837"
+       y="48.782528"
+       id="text4968"><tspan
+         sodipodi:role="line"
+         id="tspan4966"
+         x="260.8837"
+         y="48.782528"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.25235939">Publisher/Developper</tspan></text>
+    <ellipse
+       ry="12.323166"
+       rx="26.591768"
+       style="opacity:0.47300002;fill:#bababa;fill-opacity:1;stroke:none;stroke-width:2.2862668;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="ellipse4970"
+       cx="114.37176"
+       cy="227.22014" />
+    <text
+       id="text4974"
+       y="231.54387"
+       x="100.53844"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.09437656px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25235939"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.25235939"
+         y="231.54387"
+         x="100.53844"
+         id="tspan4972"
+         sodipodi:role="line">Sales</tspan></text>
+    <ellipse
+       cy="283.16293"
+       cx="165.80397"
+       id="ellipse4976"
+       style="opacity:0.47300002;fill:#bababa;fill-opacity:1;stroke:none;stroke-width:2.75413156;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       rx="36.891621"
+       ry="12.89013" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.09437656px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25235939"
+       x="145.42329"
+       y="286.91971"
+       id="text4980"><tspan
+         sodipodi:role="line"
+         id="tspan4978"
+         x="145.42329"
+         y="286.91971"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.25235939">Critics</tspan></text>
+    <ellipse
+       cy="260.17538"
+       cx="289.54346"
+       id="ellipse4982"
+       style="opacity:0.47300002;fill:#bababa;fill-opacity:1;stroke:none;stroke-width:2.2862668;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       rx="26.591768"
+       ry="12.323166" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.09437656px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25235939"
+       x="273.32889"
+       y="263.93219"
+       id="text4986"><tspan
+         sodipodi:role="line"
+         id="tspan4984"
+         x="273.32889"
+         y="263.93219"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.25235939">Genre</tspan></text>
+    <ellipse
+       ry="12.323166"
+       rx="26.591768"
+       style="opacity:0.47300002;fill:#bababa;fill-opacity:1;stroke:none;stroke-width:2.2862668;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="ellipse4988"
+       cx="230.58148"
+       cy="208.31573" />
+    <text
+       id="text4992"
+       y="210.56062"
+       x="217.01274"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.09437656px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25235939"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.25235939"
+         y="210.56062"
+         x="217.01274"
+         id="tspan4990"
+         sodipodi:role="line">Year</tspan></text>
+  </g>
+</svg>
