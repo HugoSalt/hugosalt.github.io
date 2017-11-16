@@ -102,7 +102,7 @@ Now we will explore some ideas of visualization for each topic and see which que
 
 ![./console_war_platform_sales_years.jpg](./console_war_platform_sales_years.jpg)
 
-Question this answer : *What is the popularity of each consoles over the years ?*
+Question this answers : **What is the popularity of consoles over the years ?**
 
 ### Sales repartition per Console and per Genre (Platform + Sales + Genre)
 
@@ -112,7 +112,7 @@ We considered different representations, among them we had :
 
 But we found the array chart to be less intuitive than the second one. Moreover the second one allows to see and to order by total sale (height of the bar).
 
-Question this answer : *Which genres are more popular per console ?*
+Question this answers : **Which genres are more popular per console ?**
 
 ## Publishers war
 
@@ -120,11 +120,21 @@ Question this answer : *Which genres are more popular per console ?*
 
 ![./publishers_war_publishers_critics_years.jpg](./publishers_war_publishers_critics_years.jpg)
 
-Question this answer : *What is the evolution of the quality of a publisher' games ?*
+Question this answers : **What is the evolution of the quality of publishers' games ?**
 
 ### Sales over the Years per Publisher (Publisher + Sales + Years)
 
+Same as above but with sales on the y-axis.
+
+Question this answers : **What is the evolution of publishers popularity ?**
+
 ### Repartition of Publishers sales per Platform (Publisher + Platform + Sales)
+
+Here again we could have used the array representation like mentioned before but as we said before we didn't find it intuitive. We also considered pie chart and also bar chart as before :
+
+![./publisher_war_publisher_platform_sales.jpg](./publisher_war_publisher_platform_sales.jpg)
+
+Question this answers : **What is the dominance of publishers on each platform ?**
 
 ### Repartition of Publishers sales per Genre (Publisher + Platform + Genre)
 
