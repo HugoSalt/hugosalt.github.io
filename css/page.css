@@ -4,9 +4,11 @@
 :root {
   --swiss-black: #000000;
   --swiss-white: #fff;
-  --swiss-background: #f1f2f0;
+  --swiss-dark-grey: #3c3c3c;
+  --swiss-light-grey: #dfe0e2;
   --swiss-red: #f54123;
   --swiss-blue: #0098d8;
+  --swiss-blue-dark: #08327d;
   --swiss-yellow: #e6c700;
   --swiss-green: #007500;
 }
@@ -48,7 +50,7 @@ body{
   height: 100%;
   width: 100%;
   position: absolute;
-  background-color: var(--swiss-background);
+  background-color: var(--swiss-white);
   overflow-x: hidden;
   overflow-y: scroll;
   z-index: -1;
@@ -70,7 +72,7 @@ body{
     left: 0;
     background: url(../img/noise_small.jpg);
     background-repeat: repeat;
-    opacity: 0.14;
+    opacity: 0.12;
     pointer-events: none;
 }
 
@@ -86,7 +88,7 @@ h1{
   width: auto;
   display:inline-block;
   padding-right: 18px;
-  font-size: 2.5em;
+  font-size: 2.8em;
 }
 
 h2{
@@ -96,6 +98,7 @@ h2{
   font-size: 1.8em;
   margin-left: 12px;
   margin-right: 12px;
+  color: var(--swiss-dark-grey);
 }
 
 p{
@@ -105,4 +108,5 @@ p{
   font-size: 1.5em;
   margin-left: 12px;
   margin-right: 12px;
+  color: var(--swiss-dark-grey);
 }

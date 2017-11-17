@@ -1,4 +1,3 @@
-//import * as d3 from "d3";
 import Menu from "./modules/menu/menu.js";
 import Banner from "./modules/banner/banner.js";
 
