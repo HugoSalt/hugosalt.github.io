@@ -178,13 +178,13 @@ We could also add time brushing so that we can filter depending if we're only in
 
 Question this answers : **Which popular games didn't get a good score ? Which less popular games are actually worth playing ?**
 
-### Evolution of Genre popularity (Sales + Genre + Year)
+### Evolution of Genre popularity (Sales per region + Genre + Year)
 
 Evolution of Genre popularity over the years, with possibility to filter according to regions :
 
 ![./game_analysis_genre_sales_year.jpg](./game_analysis_genre_sales_year.jpg)
 
-Question this answers : **What has been the trends for the different video games genres ?**
+Question this answers : **What have been the trends for the different video games genres ?**
 
 # Some extra notes on our decisions
 
