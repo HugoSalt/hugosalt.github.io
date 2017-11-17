@@ -164,19 +164,27 @@ The metric would be the variance, lower variance mean more consistency and quali
 
 ![./publisher_war_console_port.jpg](./publisher_war_console_port.jpg)
 
+Question this answers : **Which publishers are the best at porting their games on multiple platforms ?**
+
 ## Games analysis
 
-### From unknown masterpieces to popular flops (Critics + Sales + + Publisher + Year)
+### From unknown masterpieces to popular flops (Critics + Sales + Publisher + Year)
 
-We can confront Critics vs Sales to discover which games are popular yet poorly scored or, on the contrary, the less popular games that are actually very good :
+We can confront Critics vs Sales to discover which games are popular yet poorly scored, or on the contrary, the less popular games that are actually very good :
 
 ![./game_analysis_dot_graph.jpg](./game_analysis_dot_graph.jpg)
 
 We could also add time brushing so that we can filter depending if we're only interested in recent or old games.
 
+Question this answers : **Which popular games didn't get a good score ? Which less popular games are actually worth playing ?**
+
 ### Evolution of Genre popularity (Sales + Genre + Year)
 
-### Top 5 Genre per region
+Evolution of Genre popularity over the years, with possibility to filter according to regions :
+
+![./game_analysis_genre_sales_year.jpg](./game_analysis_genre_sales_year.jpg)
+
+Question this answers : **What has been the trends for the different video games genres ?**
 
 # Some extra notes on our decisions
 
