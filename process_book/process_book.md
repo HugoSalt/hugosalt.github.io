@@ -56,7 +56,9 @@ We decided that the general layout for our visualization would be the following 
 
 ![./mockup.jpg](./mockup.jpg)
 
-This allow the user to follow our story by just scrolling a single page, yet still having the left menu for quick access to any particular section. Furthermore this kind of navigation is adapted to all form factors (phone, tablets,desktops)
+This allow the user to follow our story by just scrolling a single page, yet still having the left menu for quick access to any particular section. Furthermore this kind of navigation is adapted to all form factors (phone, tablets,desktops).
+
+Also we will use [FlexBox](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Using_CSS_flexible_boxes) to structure our page in a responsive way.
 
 # About the data
 
@@ -164,7 +166,13 @@ The metric would be the variance, lower variance mean more consistency and quali
 
 ## Games analysis
 
-### From unknown masterpieces to popular flops (Critics + Sales + Year)
+### From unknown masterpieces to popular flops (Critics + Sales + + Publisher + Year)
+
+We can confront Critics vs Sales to discover which games are popular yet poorly scored or, on the contrary, the less popular games that are actually very good :
+
+![./game_analysis_dot_graph.jpg](./game_analysis_dot_graph.jpg)
+
+We could also add time brushing so that we can filter depending if we're only interested in recent or old games.
 
 ### Evolution of Genre popularity (Sales + Genre + Year)
 
