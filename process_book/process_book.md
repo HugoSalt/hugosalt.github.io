@@ -152,6 +152,16 @@ Question this answers : **Where publishers are the most popular ?**
 
 ### Console portage quality (consistency) (Publisher + Platform + Sales)
 
+We also imagined comparing the critics score of games that were published on multiple platform. As this is the same game but on different console, a big variation in the critics would indicate either :
+  - The players of one particular console are harsher in their critics than players of other console
+  - The publisher did a bad job at porting the game to the other console.
+
+Of course the second option is more likely and we take the assumption that critics on different platform are equally harsh.
+
+The metric would be the variance, lower variance mean more consistency and quality in the different console ports. Higher variance mean a bad job at adapting games to another console.
+
+![./publisher_war_console_port.jpg](./publisher_war_console_port.jpg)
+
 ## Games analysis
 
 ### From unknown masterpieces to popular flops (Critics + Sales + Year)

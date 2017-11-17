@@ -212,8 +212,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.35"
-     inkscape:cx="1691.8062"
-     inkscape:cy="1251.5963"
+     inkscape:cx="770.37763"
+     inkscape:cy="1245.882"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -236,7 +236,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -268,17 +268,6 @@
          x="224.72379"
          id="tspan5471"
          sodipodi:role="line">Total Sale of games</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:13.24027824px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.33100694"
-       x="549.32428"
-       y="243.34848"
-       id="text5603"><tspan
-         sodipodi:role="line"
-         id="tspan5601"
-         x="549.32428"
-         y="243.34848"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.33100694">Year</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:13.24027824px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.33100694"
@@ -389,17 +378,6 @@
          y="50.769142"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.33100694">Total Sale of games</tspan></text>
     <text
-       id="text4636"
-       y="243.34848"
-       x="945.41772"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:13.24027824px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.33100694"
-       xml:space="preserve"><tspan
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.33100694"
-         y="243.34848"
-         x="945.41772"
-         id="tspan4634"
-         sodipodi:role="line">Year</tspan></text>
-    <text
        id="text4640"
        y="287.52515"
        x="906.1792"
@@ -499,17 +477,6 @@
          y="388.67984"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.33100694">Total Sale of games</tspan></text>
     <text
-       id="text4780"
-       y="581.25916"
-       x="549.32428"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:13.24027824px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.33100694"
-       xml:space="preserve"><tspan
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.33100694"
-         y="581.25916"
-         x="549.32428"
-         id="tspan4778"
-         sodipodi:role="line">Year</tspan></text>
-    <text
        id="text4784"
        y="625.43585"
        x="510.08575"
@@ -608,17 +575,6 @@
          x="620.81726"
          id="tspan4813"
          sodipodi:role="line">Total Sale of games</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:13.24027824px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.33100694"
-       x="945.41772"
-       y="581.25916"
-       id="text4819"><tspan
-         sodipodi:role="line"
-         id="tspan4817"
-         x="945.41772"
-         y="581.25916"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';stroke-width:0.33100694">Year</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:13.24027824px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:'Purisa Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.33100694"
