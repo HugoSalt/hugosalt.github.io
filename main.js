@@ -1,5 +1,5 @@
-import Menu from "./modules/menu/menu.js";
-import Banner from "./modules/banner/banner.js";
+import Menu from "./modules/Menu/Menu.js";
+import Banner from "./modules/Banner/Banner.js";
 
 // Set up left side menu
 let menu = new Menu("menu_container")

@@ -8,7 +8,7 @@
   height: 50px;
   background-color: var(--swiss-white);
   border: 4px solid rgb(0, 0, 0);
-  background-image: url("../img/menu.svg");
+  background-image: url("../modules/Menu/menu.svg");
   background-size: contain;
   outline: none;
 }
