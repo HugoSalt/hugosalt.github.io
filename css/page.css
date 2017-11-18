@@ -1,5 +1,8 @@
 /* CSS for the page in general (headings, typography, fonts, etc...) */
 
+:focus {outline:none;}
+::-moz-focus-inner {border:0;}
+
 /* Color Palette For the whole project */
 :root {
   --swiss-black: #000000;
@@ -99,6 +102,7 @@ h2{
   margin-left: 12px;
   margin-right: 12px;
   color: var(--swiss-dark-grey);
+  padding-bottom: 10px;
 }
 
 p{

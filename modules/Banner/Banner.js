@@ -8,7 +8,8 @@ export default class Banner {
       if (error) throw error;
       document.getElementById(container_id).appendChild(xml.documentElement);
 
-      let spaceInvaders = d3.select("#space_invaders");
+      let spaceInvaders = d3.select(`#${container_id} #space_invaders`);
+      console.log(spaceInvaders);
       repeat()
 
       function repeat() {
