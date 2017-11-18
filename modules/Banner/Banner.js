@@ -9,7 +9,6 @@ export default class Banner {
       document.getElementById(container_id).appendChild(xml.documentElement);
 
       let spaceInvaders = d3.select(`#${container_id} #space_invaders`);
-      console.log(spaceInvaders);
       repeat()
 
       function repeat() {
