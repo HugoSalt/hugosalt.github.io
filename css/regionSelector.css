@@ -1,0 +1,28 @@
+.region_selector{
+  padding-right :20px;
+}
+
+.region_selector_button {
+  height: 100px;
+  padding: 0;
+  margin: 0;
+  margin-right: 10px;
+  margin-left: 10px;
+  background-color: rgba(0, 0, 0, 0);
+  border: 3px solid rgba(0, 0, 0, 0);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transform: scale(1);
+  transition: 0.15s ease-in-out;
+}
+
+.region_selector_button:hover{
+  border: 3px solid var(--swiss-light-grey);
+  transform: scale(1.1);
+}
+
+.region_selector_button.selected{
+  border: 3px solid var(--swiss-dark-grey);
+  transform: scale(1.1);
+}
