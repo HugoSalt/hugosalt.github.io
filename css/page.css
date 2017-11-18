@@ -18,25 +18,19 @@
 
 /* Fonts */
 @font-face {
-  font-family: "Liberation Sans";
-  src: url("../fonts/LiberationSans-Regular.ttf") format("truetype");
+  font-family: "IBMPlex Sans";
+  src: url("../fonts/IBMPlexSans-Regular.ttf") format("truetype");
   font-weight: normal;
 }
 
 @font-face {
-  font-family: "Liberation Sans";
-  src: url("../fonts/LiberationSans-Bold.ttf") format("truetype");
+  font-family: "IBMPlex Sans";
+  src: url("../fonts/IBMPlexSans-Bold.ttf") format("truetype");
   font-weight: bold;
 }
 
-@font-face {
-  font-family: "Lora";
-  src: url("../fonts/Lora-Regular.ttf") format("truetype");
-  font-weight: normal;
-}
-
 html{
-  font-family: "Liberation Sans";
+  font-family: "IBMPlex Sans";
   background-color: white;
 }
 
@@ -81,7 +75,7 @@ body{
 
 /* Typography */
 h1{
-  font-family: "Liberation Sans";
+  font-family: "IBMPlex Sans";
   font-weight: bold;
   background-color: var(--swiss-black);
   color: var(--swiss-white);
@@ -95,7 +89,7 @@ h1{
 }
 
 h2{
-  font-family: "Liberation Sans";
+  font-family: "IBMPlex Sans";
   font-weight: bold;
   border-bottom: 3px solid;
   font-size: 1.8em;
@@ -106,7 +100,7 @@ h2{
 }
 
 p{
-  font-family: "Lora";
+  font-family: "IBMPlex Sans";
   font-weight: normal;
   text-align: justify;
   font-size: 1.5em;
