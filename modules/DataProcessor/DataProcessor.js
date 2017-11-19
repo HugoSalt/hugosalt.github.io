@@ -15,13 +15,14 @@ export default class DataProcessor {
       }, [Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY])
     // Create scale
     this.yearScale = ["Year"];
-    for (let y = this.minMaxYear[0]; y <= this.minMaxYear[1]; y++) this.yearScale.push(y);
+    // Stop at 2015
+    for (let y = this.minMaxYear[0]; y <= this.minMaxYear[1] - 2; y++) this.yearScale.push(y);
   }
 
-  // Get Console Popularity (sum of sales) over Years per Console and per Region
-  // Region : "WORLD","EU","JP","NA" or "OTHER"
+  // Get Console Sales (sum of sales) over Years per Console and per Region
+  // region : "Global","EU","JP","NA" or "Other"
   // platform : list of the consoles as in the csv, for eg ["Wii","DS"]
-  getConsolePopularityOverYears(region, platforms) {
+  getConsoleSalesYears(platforms, region) {
 
     // Final data as C3 expect them http://c3js.org/samples/simple_xy.html
     let finalData = [];
@@ -34,7 +35,7 @@ export default class DataProcessor {
         let thisYearSum = this.data.reduce(
           (sum, game) => {
             let releaseYear = parseInt(game.Year_of_Release);
-            if ((releaseYear == year) && (game.Platform == platform)) sum += parseInt(game.Global_Sales);
+            if ((releaseYear == year) && (game.Platform == platform)) sum += parseInt(game[region + "_Sales"]);
             return sum;
           }, 0);
         plaformArray.push(thisYearSum)
@@ -45,6 +46,34 @@ export default class DataProcessor {
     return finalData
 
   }
+
+  // Get Number Release over Year per COnsole and per Region
+  // platform : list of the consoles as in the csv, for eg ["Wii","DS"]
+  getConsoleReleaseYears(platforms) {
+
+    // Final data as C3 expect them http://c3js.org/samples/simple_xy.html
+    let finalData = [];
+    finalData.push(this.yearScale);
+
+    // For each Platform create array of sales sum per year
+    for (let platform of platforms) {
+      let plaformArray = [platform];
+      for (let year = this.minMaxYear[0]; year <= this.minMaxYear[1]; year++) {
+        let thisYearSum = this.data.reduce(
+          (sum, game) => {
+            let releaseYear = parseInt(game.Year_of_Release);
+            if ((releaseYear == year) && (game.Platform == platform)) sum += 1;
+            return sum;
+          }, 0);
+        plaformArray.push(thisYearSum)
+      }
+      finalData.push(plaformArray)
+    }
+
+    return finalData
+
+  }
+
 
   getConsoleList() {
     return this.data.reduce(

@@ -49,7 +49,7 @@
       <div class="row">
         <div id="banner_container" class="col-xs"></div>
       </div>
-      <!-- Part 1 -->
+      <!-- About -->
       <div class="row">
         <div class="col-xs">
           <h1>About</h1>
@@ -81,7 +81,7 @@
             gravida lacinia. Quisque dapibus cursus nunc, sed aliquam quam. Mauris placerat varius tellus at tempus. Praesent at lacus laoreet, hendrerit felis eu, varius orci. Nam sollicitudin accumsan justo sed bibendum. </p>
         </div>
       </div>
-      <!-- Part 2 -->
+      <!-- Console War -->
       <div class="row">
         <div class="col-xs">
           <h1>The consoles war</h1>
@@ -92,18 +92,54 @@
                 col-sm-12
                 col-md-4
                 col-lg-4">
-          <h2>Consoles popularity evolution</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sagittis hendrerit nunc, sit amet elementum nulla maximus vel. Ut laoreet pretium lorem sodales aliquet. Donec tincidunt nibh justo, quis elementum massa venenatis eu. Donec vestibulum
-            gravida lacinia. Quisque dapibus cursus nunc, sed aliquam quam. Mauris placerat varius tellus at tempus. Praesent at lacus laoreet, hendrerit felis eu, varius orci. Nam sollicitudin accumsan justo sed bibendum. </p>
+          <h2>Games releases</h2>
+          <p>A first interesting metric is the amount of games released for each console over the years. We've grouped those by manufacturers :</p>
+          <img class="full_width" src="./img/manufacturers.svg" />
+          <p>Atari was first in the console industry but died quicky (will it <a href="https://en.wikipedia.org/wiki/Ataribox">come back</a> ?). Then arrived Nintendo, Sony and only later Microsoft. We can observe a peak of game release around year 2009,
+            mainly due to the amount of games for mobile consoles such as Nintendo's DS and Sony's PSP but also because of the success of the Wii.</p>
         </div>
         <div class="col-xs-12
                 col-sm-12
                 col-md-8
                 col-lg-8">
-          <div class="row region_selector" id="console_war_region_selector"></div>
-          <div id="consolePopularityYears_container" class="row stackArea_chart"></div>
+          <div id="consoleReleaseYears_container" class="row stackArea_chart"></div>
         </div>
       </div>
+      <div class="row">
+        <div class="col-xs-12
+                col-sm-12
+                col-md-6
+                col-lg-6">
+          <p>This peak is followed by a collapse which is essentially because of the vanishing of those mobile consoles (maybe because of the developement of smartphones games ?) despite the efforts of Nintendo with the release of Nintendo 3DS.</p>
+        </div>
+        <div class="col-xs-12
+                col-sm-12
+                col-md-6
+                col-lg-6">
+          <p>However we can also see that the production of games for the Wii and its sucessor the WiiU became very small. Also there is a general decrease in video games releases for other consoles such as the X360, PS3 or PC. All those together created
+            this collapse in video game releases.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12
+                col-sm-12
+                col-md-8
+                col-lg-8">
+          <div id="console_sales_region_selector" class="row region_selector"></div>
+          <div id="consoleSalesYears_container" class="row stackArea_chart"></div>
+        </div>
+        <div class="col-xs-12
+                col-sm-12
+                col-md-4
+                col-lg-4">
+          <h2>Sales evolution</h2>
+          <p>A second metric we can consider is of course the number of sales. This graph shows how many sales were made by the games released in a given year. We can see that Microsoft Xbox is essentially present only in North America and Europe, while
+            Nintendo dominates the sales in Japan. In other countries it's mainly Sony who makes most of the sales.</p>
+          <p>The genreal worldwide trend follows the same evolution as the previous graph, once again this collapse in sales might be explained by the arrival of smartphones games (which are not taken into account in our dataset)</p>
+        </div>
+      </div>
+
+      <!-- ........ -->
     </div>
   </div>
 

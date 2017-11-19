@@ -30,13 +30,11 @@ function initialize() {
   new Banner("banner_container");
 
   // ---------------------------------------------------------------------------
-  // Set up console popularity over years
+  // CONSOLE WAR
   // ---------------------------------------------------------------------------
-  // Set up region select
-  let consoleWarRegionSelector = new RegionSelector("console_war_region_selector")
   // Get data
   let platformList = ["NES", "SNES", "N64", "GC", "Wii", "WiiU", "GB", "DS", "GBA", "3DS", "PS", "PS2", "PS3", "PS4", "PSP", "2600", "X360", "XOne", "XB", "PC"];
-  let console_pop_data = dataProcessor.getConsolePopularityOverYears("EU", platformList);
+  let console_release_data = dataProcessor.getConsoleReleaseYears(platformList);
   let types = {};
   for (let console of platformList) types[console] = 'area-spline';
   let colors = {
@@ -53,7 +51,7 @@ function initialize() {
     "PS": "#025485",
     "PS2": "#046195",
     "PS3": "#036eac",
-    "PS4": "#067dc2",
+    "PS4": "#0b90dd",
     "PSP": "#0481c9",
     "2600": "#77007a",
     "X360": "#047e09",
@@ -83,8 +81,39 @@ function initialize() {
     "XB": 19,
     "PC": 20
   }
-
-  // Set Up Graph
-  let consolePopularityYears = new StackedAreaChart("consolePopularityYears_container", "Year","Sales", console_pop_data, types, [platformList], colors, order_stack);
+  // Set Up Release Games Graph
+  let consoleReleaseYears = new StackedAreaChart("consoleReleaseYears_container", "Year", "Number of games released that year", 1600, console_release_data, types, [platformList], colors, order_stack);
+  // Get Data
+  let console_sales_data_WORLD = dataProcessor.getConsoleSalesYears(platformList, "Global");
+  let console_sales_data_NA = dataProcessor.getConsoleSalesYears(platformList, "NA");
+  let console_sales_data_EU = dataProcessor.getConsoleSalesYears(platformList, "EU");
+  let console_sales_data_JP = dataProcessor.getConsoleSalesYears(platformList, "JP");
+  let console_sales_data_OTHER = dataProcessor.getConsoleSalesYears(platformList, "Other");
+  // Set Up Sales Games Graph
+  let consoleSalesYears = new StackedAreaChart("consoleSalesYears_container", "Year", "Sales of games released that year", 350, console_sales_data_WORLD, types, [platformList], colors, order_stack);
+  // Set Up Region Selector
+  let consoleWarRegionSelector = new RegionSelector("console_sales_region_selector")
+  consoleWarRegionSelector.selectedRegion = (region) => {
+    switch (region) {
+      case "WORLD":
+        consoleSalesYears.update(console_sales_data_WORLD)
+        break;
+      case "NA":
+        console.log("NA");
+        consoleSalesYears.update(console_sales_data_NA)
+        break;
+      case "EU":
+        console.log("EU");
+        consoleSalesYears.update(console_sales_data_EU)
+        break;
+      case "JP":
+        console.log("JP");
+        consoleSalesYears.update(console_sales_data_JP)
+        break;
+      case "OTHER":
+      consoleSalesYears.update(console_sales_data_OTHER)
+        break;
+    }
+  }
 
 }

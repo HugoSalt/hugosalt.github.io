@@ -103,12 +103,32 @@ p{
   font-family: "IBMPlex Sans";
   font-weight: normal;
   text-align: justify;
-  font-size: 1.5em;
+  font-size: 1.4em;
   margin-left: 12px;
   margin-right: 12px;
   color: var(--swiss-dark-grey);
 }
 
-#consolePopularityYears_container{
+#consoleReleaseYears_container{
   margin-right: 20px;
+}
+
+.full_width{
+  width: 100%;
+}
+
+a {
+  text-decoration: none;
+  font-family: "IBMPlex Sans";
+  font-weight: bold;
+  color: var(--swiss-dark-grey);
+  transition: all 0.1s;
+}
+
+a:hover{
+  color: var(--swiss-black);
+}
+
+#console_sales_region_selector{
+  margin: 10px;
 }
