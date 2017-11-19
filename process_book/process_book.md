@@ -12,6 +12,7 @@
   - [Publishers war](#publishers-war)
   - [Games analysis](#games-analysis)
 - [Some extra notes on our decisions](#some-extra-notes-on-our-decisions)
+- [Progress report](#progress-report)
 - [Conclusion](#conclusion)
 
 # About the workflow
@@ -196,8 +197,38 @@ As you may have notice, we chose to ignore some data. It's not because it would 
 Another question we encountered was : should we consider the sales or the number of game released ?
 For example to reflect the popularity of a console over the years, should we represent the number of sales of games on that console or the number game released for that console ?
 
-We ended up choosing sales over the number of release, but both options were a possible representation for the trends.
+# Along the progress
+
+Here we'll describe the problem encountered, our decisions, our solutions, etc... as we progress through the implementation.
+
+## C3 library
+
+The `c3` library doesn't support the modern `d3` V4 but only `d3` V3. So we had to add a "legacy_script" folder where we put scripts that are not ES6 (`d3` V3 and `c3`).
+
+## Data weirdness
+
+- A game had a release date of 2020, after checking on Internet it was release in 2009, we've corrected the csv.
+- Some games don't have a release date ("N/A")
+
+## Console Popularity
+
+As a first graph, using sum of sales, we obtained :
+
+![./popularity_console_first_graph.png](./popularity_console_first_graph.png)
+
+- Sum of sales goes down at the end (year 2016 / 2017) because games released in those year had less time to get sold than older games. Maybe we should switch to number of released game per year instead of sales ?
+
+- Too many lines could be clearer. We could do the following :
+  - Remove console that make almost no sales, keep only the most important ones
+  - Use a stacked chart ?
+  - Maybe we could put similar color for console of the same manufacturer ? For eg [PS, PS2, PS3, etc..] for Sony, [Xbox, XboxOne, ...] for Microsoft, etc... We don't have data for this so this would require us to look on Internet for each console who is the manufacturer but doable.
+
+We did all of the above and obtained a much clearer chart :
+
+![./popularity_console_final_graph.png](./popularity_console_final_graph.png)
+
+And we did both graph : with number of release and with number of sales
 
 # Conclusion
 
-  TODO : Complete when we finish the viz. What did we end up implementing and not implementing ? Problem encountered ? Are we satisfied ? Did we answer well questions we ask ourselves about the data ? etc...
+  TODO : Complete when we finish the viz. What did we end up implementing and not implementing ? Are we satisfied ? Did we answer well questions we ask ourselves about the data ? etc...
