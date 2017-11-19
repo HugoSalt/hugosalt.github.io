@@ -227,7 +227,11 @@ We did all of the above and obtained a much clearer chart :
 
 ![./popularity_console_final_graph.png](./popularity_console_final_graph.png)
 
-And we did both graph : with number of release and with number of sales
+And we did both graph : with number of release and with number of sales.
+
+## Publisher war
+
+## Game analysis
 
 # Conclusion
 
