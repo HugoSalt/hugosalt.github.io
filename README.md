@@ -29,3 +29,5 @@ To add an element to the page, follow the following steps :
   - 2) If your module needs extra css, add `MyModule.css` in the css folder and link it in the `head` of `index.html`.
   - 3) *No color should be hardcoded*, only use the color palette defined in `page.css`. For for `#ff0000` (for a red color), use `var(--swiss-red)` instead.
   - 4) In the `main.js` initiate your module with `new MyModule("container_id");`
+
+Also any method to extract or process data should go in `DataProcessor.js`.
