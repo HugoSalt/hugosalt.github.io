@@ -1,0 +1,31 @@
+.line_chart{
+  width: 100%;
+  min-height: 500px;
+}
+
+.line_chart .c3-axis path {
+  stroke-width: 6px;
+  stroke: var(--swiss-dark-grey);
+}
+
+.line_chart .c3 line {
+  stroke-width: 8px;
+}
+
+.line_chart text {
+  fill: var(--swiss-dark-grey);
+  font-size: 1.2em;
+}
+
+.line_chart .tick line {
+  stroke: var(--swiss-dark-grey);
+  stroke-width: 3px;
+}
+
+.line_chart .c3-lines *{
+  stroke-width: 4px;
+}
+
+.line_chart .c3-target.c3-focused path{
+  stroke-width: 5px;
+}

@@ -1,0 +1,40 @@
+.stackArea_chart {
+  width: 100%;
+  min-height: 500px;
+}
+
+.stackArea_chart .c3-axis path {
+  stroke-width: 3px;
+  stroke: var(--swiss-dark-grey);
+}
+
+.stackArea_chart .c3 line {
+  stroke-width: 0px;
+}
+
+.stackArea_chart text {
+  fill: var(--swiss-dark-grey);
+  font-size: 1.2em;
+}
+
+.stackArea_chart .tick line {
+  stroke: var(--swiss-dark-grey);
+  stroke-width: 3px;
+}
+
+.stackArea_chart .c3-lines *{
+  stroke-width: 0px;
+}
+
+.stackArea_chart .c3-target.c3-focused path{
+  stroke-width: 0px;
+}
+
+.stackArea_chart .c3-areas path{
+  opacity: 0.8;
+}
+
+
+.stackArea_chart .c3-chart-lines .c3-circles .c3-circle {
+    display: none;
+}

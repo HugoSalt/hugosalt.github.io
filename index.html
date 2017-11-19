@@ -4,6 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Video Games Sales</title>
+  <!-- Old legacy loading because c3 dosen't support d3 v4-->
+  <script src="./legacy_script/d3.v3.min.js" charset="utf-8"></script>
+  <script src="./legacy_script/c3.min.js"></script>
+  <link href="./css/c3.min.css" rel="stylesheet">
   <!-- See doc at http://flexboxgrid.com/ -->
   <link rel="stylesheet" href="css/flexboxgrid.min.css" type="text/css">
   <!-- Our CSS -->
@@ -11,6 +15,7 @@
   <link rel="stylesheet" type="text/css" href="./css/menu.css">
   <link rel="stylesheet" type="text/css" href="./css/banner.css">
   <link rel="stylesheet" type="text/css" href="./css/regionSelector.css">
+  <link rel="stylesheet" type="text/css" href="./css/stackedAreaChart.css">
   <script type="text/javascript" src="bundle.js" defer></script>
 </head>
 
@@ -56,21 +61,24 @@
                 col-md-4
                 col-lg-4">
           <h2>1/3 Width & Full Width on Phone</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sagittis hendrerit nunc, sit amet elementum nulla maximus vel. Ut laoreet pretium lorem sodales aliquet. Donec tincidunt nibh justo, quis elementum massa venenatis eu. Donec vestibulum gravida lacinia. Quisque dapibus cursus nunc, sed aliquam quam. Mauris placerat varius tellus at tempus. Praesent at lacus laoreet, hendrerit felis eu, varius orci. Nam sollicitudin accumsan justo sed bibendum. </p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sagittis hendrerit nunc, sit amet elementum nulla maximus vel. Ut laoreet pretium lorem sodales aliquet. Donec tincidunt nibh justo, quis elementum massa venenatis eu. Donec vestibulum
+            gravida lacinia. Quisque dapibus cursus nunc, sed aliquam quam. Mauris placerat varius tellus at tempus. Praesent at lacus laoreet, hendrerit felis eu, varius orci. Nam sollicitudin accumsan justo sed bibendum. </p>
         </div>
         <div class="col-xs-12
                 col-sm-12
                 col-md-4
                 col-lg-4">
           <h2>1/3 Width & Full Width on Phone</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sagittis hendrerit nunc, sit amet elementum nulla maximus vel. Ut laoreet pretium lorem sodales aliquet. Donec tincidunt nibh justo, quis elementum massa venenatis eu. Donec vestibulum gravida lacinia. Quisque dapibus cursus nunc, sed aliquam quam. Mauris placerat varius tellus at tempus. Praesent at lacus laoreet, hendrerit felis eu, varius orci. Nam sollicitudin accumsan justo sed bibendum. </p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sagittis hendrerit nunc, sit amet elementum nulla maximus vel. Ut laoreet pretium lorem sodales aliquet. Donec tincidunt nibh justo, quis elementum massa venenatis eu. Donec vestibulum
+            gravida lacinia. Quisque dapibus cursus nunc, sed aliquam quam. Mauris placerat varius tellus at tempus. Praesent at lacus laoreet, hendrerit felis eu, varius orci. Nam sollicitudin accumsan justo sed bibendum. </p>
         </div>
         <div class="col-xs-12
                 col-sm-12
                 col-md-4
                 col-lg-4">
           <h2>1/3 Width & Full Width on Phone</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sagittis hendrerit nunc, sit amet elementum nulla maximus vel. Ut laoreet pretium lorem sodales aliquet. Donec tincidunt nibh justo, quis elementum massa venenatis eu. Donec vestibulum gravida lacinia. Quisque dapibus cursus nunc, sed aliquam quam. Mauris placerat varius tellus at tempus. Praesent at lacus laoreet, hendrerit felis eu, varius orci. Nam sollicitudin accumsan justo sed bibendum. </p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sagittis hendrerit nunc, sit amet elementum nulla maximus vel. Ut laoreet pretium lorem sodales aliquet. Donec tincidunt nibh justo, quis elementum massa venenatis eu. Donec vestibulum
+            gravida lacinia. Quisque dapibus cursus nunc, sed aliquam quam. Mauris placerat varius tellus at tempus. Praesent at lacus laoreet, hendrerit felis eu, varius orci. Nam sollicitudin accumsan justo sed bibendum. </p>
         </div>
       </div>
       <!-- Part 2 -->
@@ -84,17 +92,16 @@
                 col-sm-12
                 col-md-4
                 col-lg-4">
-          <h2>Consoles popularity</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sagittis hendrerit nunc, sit amet elementum nulla maximus vel. Ut laoreet pretium lorem sodales aliquet. Donec tincidunt nibh justo, quis elementum massa venenatis eu. Donec vestibulum gravida lacinia. Quisque dapibus cursus nunc, sed aliquam quam. Mauris placerat varius tellus at tempus. Praesent at lacus laoreet, hendrerit felis eu, varius orci. Nam sollicitudin accumsan justo sed bibendum. </p>
+          <h2>Consoles popularity evolution</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sagittis hendrerit nunc, sit amet elementum nulla maximus vel. Ut laoreet pretium lorem sodales aliquet. Donec tincidunt nibh justo, quis elementum massa venenatis eu. Donec vestibulum
+            gravida lacinia. Quisque dapibus cursus nunc, sed aliquam quam. Mauris placerat varius tellus at tempus. Praesent at lacus laoreet, hendrerit felis eu, varius orci. Nam sollicitudin accumsan justo sed bibendum. </p>
         </div>
         <div class="col-xs-12
                 col-sm-12
                 col-md-8
                 col-lg-8">
-                  <div class="row region_selector" id="console_war_region_selector"></div>
-                  <div class="row">
-                    World
-                  </div>
+          <div class="row region_selector" id="console_war_region_selector"></div>
+          <div id="consolePopularityYears_container" class="row stackArea_chart"></div>
         </div>
       </div>
     </div>
