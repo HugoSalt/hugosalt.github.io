@@ -1,0 +1,27 @@
+.stackBar_chart {
+  width: 100%;
+  min-height: 500px;
+}
+
+.stackBar_chart .c3-axis path {
+  stroke-width: 3px;
+  stroke: var(--swiss-dark-grey);
+}
+
+.stackBar_chart text {
+  fill: var(--swiss-dark-grey);
+  font-size: 1.2em;
+}
+
+.stackBar_chart .c3-axis-x > .tick line{
+  display: none;
+}
+
+.stackBar_chart .c3-axis-x > .tick line {
+  stroke: var(--swiss-dark-grey);
+  stroke-width: 3px;
+}
+
+.stackBar_chart .c3-legend-item text{
+  font-size: 1.1em;
+}

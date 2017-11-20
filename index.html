@@ -16,6 +16,7 @@
   <link rel="stylesheet" type="text/css" href="./css/banner.css">
   <link rel="stylesheet" type="text/css" href="./css/regionSelector.css">
   <link rel="stylesheet" type="text/css" href="./css/stackedAreaChart.css">
+  <link rel="stylesheet" type="text/css" href="./css/stackedBarChart.css">
   <script type="text/javascript" src="bundle.js" defer></script>
 </head>
 
@@ -134,8 +135,36 @@
                 col-lg-4">
           <h2>Sales evolution</h2>
           <p>A second metric we can consider is of course the number of sales. This graph shows how many sales were made by the games released in a given year. We can see that Microsoft Xbox is essentially present only in North America and Europe, while
-            Nintendo dominates the sales in Japan. In other countries it's mainly Sony who makes most of the sales.</p>
-          <p>The genreal worldwide trend follows the same evolution as the previous graph, once again this collapse in sales might be explained by the arrival of smartphones games (which are not taken into account in our dataset)</p>
+            Nintendo dominates the sales in Japan. In other countries it's mainly Sony making most of the sales.</p>
+          <p>The genreal worldwide trend follows the same evolution as the previous graph, once again this collapse in sales might be explained by the arrival of smartphones games (which are not taken into account in our dataset).</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12
+                col-sm-12
+                col-md-4
+                col-lg-4">
+          <h2>Sales per genres</h2>
+          <p>At last, it might be also pertinent to ask ourself which video game genre is the most present on each platform. On this graph you can select the genre you're interested in to get a better idea of which console sells the most this genre.</p>
+        </div>
+        <div class="col-xs-12
+                col-sm-12
+                col-md-4
+                col-lg-4">
+          <p>For instance, most of the <a id="sport_games_text_button" class="interactive_text_chart">sport games</a> were sold on the Wii which is not surprising. Indeed this category has been one of the Wii's main target as Nintendo's launch title <a href="https://en.wikipedia.org/wiki/Wii_Sports">Wii Sports</a> reminds
+            us. When it comes to <a id="puzzle_games_text_button" class="interactive_text_chart">puzzle games</a> it's Nintendo's DS that made most of the sales, surely because its stylus-driven interface and touchscreen made it ideal for this kind of game. </p>
+        </div>
+        <div class="col-xs-12
+                col-sm-12
+                col-md-4
+                col-lg-4">
+          <p>Concerning <a id="shooter_games_text_button" class="interactive_text_chart">shooter games</a>, it's clearly the Playstations and Xbox that dominate the sales for this genre. And as a last example, in <a id="strategy_games_text_button" class="interactive_text_chart">strategy games</a> playing require a lot of rapid clicks on many parts of the screen which makes nothing better than a mouse for that. This surely explains
+            why most of strategy games sales are made on PC.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs">
+          <div id="consoleGenre_container" class="row stackBar_chart"></div>
         </div>
       </div>
 

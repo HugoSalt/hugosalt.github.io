@@ -35,7 +35,7 @@ export default class DataProcessor {
         let thisYearSum = this.data.reduce(
           (sum, game) => {
             let releaseYear = parseInt(game.Year_of_Release);
-            if ((releaseYear == year) && (game.Platform == platform)) sum += parseInt(game[region + "_Sales"]);
+            if ((releaseYear == year) && (game.Platform == platform)) sum += parseFloat(game[region + "_Sales"]);
             return sum;
           }, 0);
         plaformArray.push(thisYearSum)
@@ -47,7 +47,7 @@ export default class DataProcessor {
 
   }
 
-  // Get Number Release over Year per COnsole and per Region
+  // Get Number Release over Year per Console and per Region
   // platform : list of the consoles as in the csv, for eg ["Wii","DS"]
   getConsoleReleaseYears(platforms) {
 
@@ -74,12 +74,43 @@ export default class DataProcessor {
 
   }
 
+  // Get Sales for each genre per Console
+  // platform : list of the genre as in the csv, for eg ["Sports", "Platform"]
+  getConsoleGenreSales(genreList, platformList) {
+
+    // Final data as C3 expect them http://c3js.org/samples/chart_bar_stacked.html
+    let finalData = [];
+
+    // For each Platform create array of sales sum per year
+    for (let genre of genreList) {
+      let genreArray = [genre];
+      for (let platform of platformList) {
+        let thisPlatformSum = this.data.reduce(
+          (sum, game) => {
+            if ((game.Genre == genre) && (game.Platform == platform)) sum += parseFloat(game.Global_Sales);
+            return sum;
+          }, 0);
+        genreArray.push(thisPlatformSum)
+      }
+      finalData.push(genreArray)
+    }
+
+    return finalData
+  }
 
   getConsoleList() {
     return this.data.reduce(
       (platform_list, game) => {
         if (!platform_list.includes(game.Platform)) platform_list.push(game.Platform);
         return platform_list;
+      }, []);
+  }
+
+  getGenreList() {
+    return this.data.reduce(
+      (genre_list, game) => {
+        if (!genre_list.includes(game.Genre)) genre_list.push(game.Genre);
+        return genre_list;
       }, []);
   }
 

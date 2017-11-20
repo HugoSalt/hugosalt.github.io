@@ -1,5 +1,6 @@
 import * as d3 from "d3";
 import StackedAreaChart from "./modules/StackedAreaChart/StackedAreaChart.js"
+import StackedBarChart from "./modules/StackedBarChart/StackedBarChart.js"
 import DataProcessor from "./modules/DataProcessor/DataProcessor.js";
 import Menu from "./modules/Menu/Menu.js";
 import Banner from "./modules/Banner/Banner.js";
@@ -32,8 +33,9 @@ function initialize() {
   // ---------------------------------------------------------------------------
   // CONSOLE WAR
   // ---------------------------------------------------------------------------
-  // Get data
-  let platformList = ["NES", "SNES", "N64", "GC", "Wii", "WiiU", "GB", "DS", "GBA", "3DS", "PS", "PS2", "PS3", "PS4", "PSP", "2600", "X360", "XOne", "XB", "PC"];
+  // ------------------------ Releases over years ------------------------------
+  // Get data Releases
+  let platformList = ["2600", "NES", "SNES", "N64", "GC", "Wii", "WiiU", "GB", "DS", "GBA", "3DS", "PS", "PS2", "PS3", "PS4", "PSP", "X360", "XOne", "XB", "PC"];
   let console_release_data = dataProcessor.getConsoleReleaseYears(platformList);
   let types = {};
   for (let console of platformList) types[console] = 'area-spline';
@@ -83,14 +85,15 @@ function initialize() {
   }
   // Set Up Release Games Graph
   let consoleReleaseYears = new StackedAreaChart("consoleReleaseYears_container", "Year", "Number of games released that year", 1600, console_release_data, types, [platformList], colors, order_stack);
-  // Get Data
+  //------------------------- Sales over years ---------------------------------
+  // Get Data Release
   let console_sales_data_WORLD = dataProcessor.getConsoleSalesYears(platformList, "Global");
   let console_sales_data_NA = dataProcessor.getConsoleSalesYears(platformList, "NA");
   let console_sales_data_EU = dataProcessor.getConsoleSalesYears(platformList, "EU");
   let console_sales_data_JP = dataProcessor.getConsoleSalesYears(platformList, "JP");
   let console_sales_data_OTHER = dataProcessor.getConsoleSalesYears(platformList, "Other");
   // Set Up Sales Games Graph
-  let consoleSalesYears = new StackedAreaChart("consoleSalesYears_container", "Year", "Sales of games released that year", 350, console_sales_data_WORLD, types, [platformList], colors, order_stack);
+  let consoleSalesYears = new StackedAreaChart("consoleSalesYears_container", "Year", "Sales of games released that year", 700, console_sales_data_WORLD, types, [platformList], colors, order_stack);
   // Set Up Region Selector
   let consoleWarRegionSelector = new RegionSelector("console_sales_region_selector")
   consoleWarRegionSelector.selectedRegion = (region) => {
@@ -111,9 +114,23 @@ function initialize() {
         consoleSalesYears.update(console_sales_data_JP)
         break;
       case "OTHER":
-      consoleSalesYears.update(console_sales_data_OTHER)
+        consoleSalesYears.update(console_sales_data_OTHER)
         break;
     }
   }
-
+  //----------------------- Genre Sales per Console ----------------------------
+  // Get Data Genre
+  let genreList = ["Sports", "Platform", "Racing", "Role-Playing", "Puzzle", "Misc", "Shooter", "Simulation", "Action", "Fighting", "Adventure", "Strategy"]
+  let console_genre_data = dataProcessor.getConsoleGenreSales(genreList, platformList);
+  // Set Up Graph Genre
+  let consoleGenreSales = new StackedBarChart("consoleGenre_container", "Consoles", "Total Sales", platformList, console_genre_data, [genreList]);
+  // Set Up text interactivity
+  let sportGamesTextButton = document.getElementById('sport_games_text_button');
+  sportGamesTextButton.onclick = () => consoleGenreSales.showOnly("Sports");
+  let puzzleGamesTextButton = document.getElementById('puzzle_games_text_button');
+  puzzleGamesTextButton.onclick = () => consoleGenreSales.showOnly("Puzzle");
+  let shooterGamesTextButton = document.getElementById('shooter_games_text_button');
+  shooterGamesTextButton.onclick = () => consoleGenreSales.showOnly("Shooter");
+  let strategyGamesTextButton = document.getElementById('strategy_games_text_button');
+  strategyGamesTextButton.onclick = () => consoleGenreSales.showOnly("Strategy");
 }
