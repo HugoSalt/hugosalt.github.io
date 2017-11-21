@@ -8,10 +8,6 @@ export default class StackedAreaChart {
         columns: columns,
         type: "bar",
         groups: groups
-        //colors: colors,
-        //order: function(t1, t2) {
-        //  return order_stack[t1.id] < order_stack[t2.id];
-        //}
       },
       tooltip: {
         show: false
@@ -35,7 +31,7 @@ export default class StackedAreaChart {
     });
   }
 
-  showOnly(column_name){
+  showOnly(column_name) {
     this.chart.hide();
     this.chart.show(column_name);
   }

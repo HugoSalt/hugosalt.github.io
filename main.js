@@ -102,15 +102,12 @@ function initialize() {
         consoleSalesYears.update(console_sales_data_WORLD)
         break;
       case "NA":
-        console.log("NA");
         consoleSalesYears.update(console_sales_data_NA)
         break;
       case "EU":
-        console.log("EU");
         consoleSalesYears.update(console_sales_data_EU)
         break;
       case "JP":
-        console.log("JP");
         consoleSalesYears.update(console_sales_data_JP)
         break;
       case "OTHER":
