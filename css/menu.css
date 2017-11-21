@@ -26,7 +26,7 @@
 }
 
 .menu_item{
-  font-family: "Liberation Sans";
+  font-family: "IBMPlex Sans";
   font-weight: bold;
   color: var(--swiss-white);
   background-color: rgba(0, 0, 0, 0);

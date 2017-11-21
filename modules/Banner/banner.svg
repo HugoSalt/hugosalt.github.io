@@ -26,8 +26,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="79.103644"
-     inkscape:cy="298.09757"
+     inkscape:cx="-151.2535"
+     inkscape:cy="296.669"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -1157,7 +1157,9 @@
          x="-145.91776"
          y="89.028595"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans Bold';fill:#fefefe;fill-opacity:1;stroke-width:0.52053738;"
-         id="tspan4668">sales &amp; critics</tspan></text>
+         id="tspan4668"><tspan
+   style="-inkscape-font-specification:'IBMPlex Sans Bold';font-family:'IBMPlex Sans';font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal"
+   id="tspan4661">sales</tspan> &amp; critics</tspan></text>
     <rect
        transform="rotate(-45)"
        y="82.674423"
