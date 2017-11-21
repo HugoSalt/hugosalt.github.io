@@ -11,7 +11,7 @@ export default class StackedAreaChart {
         groups: groups,
         colors: colors,
         order: function(t1, t2) {
-          return order_stack[t1.id] < order_stack[t2.id];
+          return order_stack[t1.id] < order_stack[t2.id]  ? 1 : -1;
         }
       },
       tooltip: {
