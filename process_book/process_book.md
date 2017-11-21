@@ -13,6 +13,9 @@
   - [Games analysis](#games-analysis)
 - [Some extra notes on our decisions](#some-extra-notes-on-our-decisions)
 - [Progress report](#progress-report)
+  - [Consoles war report](#consoles-war-report)
+  - [Publishers war report](#publishers-war-report)
+  - [Games analysis report](#games-analysis-report)
 - [Conclusion](#conclusion)
 
 # About the workflow
@@ -207,16 +210,16 @@ The `c3` library doesn't support the modern `d3` V4 but only `d3` V3. So we had 
 
 ### Data weirdness
 
-- A game had a release date of 2020, after checking on Internet it was release in 2009, we've corrected the csv.
-- Some games don't have a release date ("N/A")
+- A game had a release date of 2020, after checking on Internet it was released in 2009, we've corrected the csv.
+- Some games don't have a release date ("N/A").
 
-## Console Popularity
+## Console Popularity report
 
 As a first graph, using sum of sales, we obtained :
 
 ![./popularity_console_first_graph.png](./popularity_console_first_graph.png)
 
-- Sum of sales goes down at the end (year 2016 / 2017) because games released in those year had less time to get sold than older games. Maybe we should switch to number of released game per year instead of sales ?
+- Sum of sales goes down at the end (year 2016) maybe because games released this year had less time to get sold than older games. Maybe we should switch to number of released game per year instead of sales ?
 
 - Too many lines could be clearer. We could do the following :
   - Remove console that make almost no sales, keep only the most important ones
@@ -229,13 +232,13 @@ We did all of the above and obtained a much clearer chart :
 
 And we did both graph : with number of release and with number of sales.
 
-For the sales per genre we implemented the stacked bars as we planned, but we added extra interactivity we the description text (clicking on key words filter the data) :
+For the sales per genre we implemented the stacked bars as we planned, but we added extra interactivity we the description text (clicking on key words filters the data) :
 
 ![./sales_per_genre_stacked_bar.png](./sales_per_genre_stacked_bar.png)
 
-## Publisher war
+## Publisher war report
 
-## Game analysis
+## Game analysis report
 
 # Conclusion
 
