@@ -34,13 +34,11 @@ Before looking at the data, we'd like to explain our decisions in terms of workf
 
 In conclusion, for our use case, we have everything we need with with vanilla JS, CSS and HTML. The only problem is that Module Loading is not yet standardized thus with needed `Rollup` to bundle all our classes in one JS file.
 
-Hopefully this make our project structure simpler by not stacking dozens of framework and tools : https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f
-
 ## About the code
 
-Concerning the code we went with a clean and modulable code. Unfortunately we couldn't use the WebComponents standard because some of the spec is not yet standardized (disagreement concerning HTML imports while [Custom Elements not yet implemented everywhere](https://caniuse.com/#feat=custom-elementsv1))
+Concerning the code tried to keep a clean and modulable code. Unfortunately we couldn't use the WebComponents standard because some of the spec is not yet standardized (disagreement concerning HTML imports while [Custom Elements not yet implemented everywhere](https://caniuse.com/#feat=custom-elementsv1))
 
-But still our code is very well "componentized", *every view has its own ES6 class and it's own css file.*
+But still our code is well "componentized", every view has its own ES6 class and it's own css file.
 
 # About the style
 
@@ -52,7 +50,7 @@ We've used fonts that convey this style but that are free (unlike the proprietar
 
 In terms of color, we've picked some from [this site](http://swisscolors.net/) and we exposed them in [CSS Variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables) to remain coherent through the whole visualization.
 
-Overall we want to convey a "magazine" feeling, we even added some effect like very subtle paper grain to try even more emphasis this aspect.
+Overall we wanted to convey a "magazine" feeling, we even added some effect like very subtle paper grain to try even more emphasis this aspect.
 
 # Initial Layout Mockup
 
@@ -60,7 +58,7 @@ We decided that the general layout for our visualization would be the following 
 
 ![./mockup.jpg](./mockup.jpg)
 
-This allow the user to follow our story by just scrolling a single page, yet still having the left menu for quick access to any particular section. Furthermore this kind of navigation is adapted to all form factors (phone, tablets,desktops).
+This allow the user to follow our story by just scrolling a single page, yet still having the left menu for quick access to any particular section. Furthermore this kind of navigation is adapted to all form factors (tablets / desktops).
 
 Also we will use [FlexBox](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Using_CSS_flexible_boxes) to structure our page in a responsive way.
 
@@ -100,7 +98,7 @@ For each topic we considered all pairs of features and kept only those which see
 
 ![./feature_pairs.jpg](./feature_pairs.jpg)
 
-Now we will explore some ideas of visualization for each topic and see which questions they might answer.
+Now we will explore some ideas of visualization for each topic and see which questions they might answer. We will not necessarily implement those exactly but this is a first exploration of which insights this dataset can provide.
 
 ## Consoles war
 
