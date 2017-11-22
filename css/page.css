@@ -95,6 +95,7 @@ h1 {
   width: auto;
   display: inline-block;
   padding-right: 18px;
+  padding-left: 18px;
   font-size: 2.8em;
 }
 
@@ -165,4 +166,16 @@ a:hover {
   background-color: var(--swiss-black);
   color: var(--swiss-white) !important;
   border: 3px solid rgba(0, 0, 0, 0);
+}
+
+.row_padded{
+  margin-right: 50px;
+  margin-left: 50px;
+}
+
+@media screen and (max-width: 800px) {
+  .row_padded{
+    margin-right: 10px;
+    margin-left: 10px;
+  }
 }
