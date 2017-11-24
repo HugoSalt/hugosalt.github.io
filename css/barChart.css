@@ -1,0 +1,28 @@
+.bar_chart {
+  width: 100%;
+  min-height: 300px;
+  margin-top: 20px;
+}
+
+.bar_chart .c3-axis path {
+  stroke-width: 3px;
+  stroke: var(--swiss-dark-grey);
+}
+
+.bar_chart text {
+  fill: var(--swiss-dark-grey);
+  font-size: 1em;
+}
+
+.bar_chart .c3-axis-x > .tick line{
+  display: none;
+}
+
+.bar_chart .c3-axis-x > .tick line {
+  stroke: var(--swiss-dark-grey);
+  stroke-width: 3px;
+}
+
+.bar_chart .c3-legend-item text{
+  font-size: 1.1em;
+}

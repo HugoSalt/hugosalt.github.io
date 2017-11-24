@@ -1,6 +1,7 @@
 import * as d3 from "d3";
 import StackedAreaChart from "./modules/StackedAreaChart/StackedAreaChart.js"
 import StackedBarChart from "./modules/StackedBarChart/StackedBarChart.js"
+import BarChart from "./modules/BarChart/BarChart.js"
 import DataProcessor from "./modules/DataProcessor/DataProcessor.js";
 import Menu from "./modules/Menu/Menu.js";
 import Banner from "./modules/Banner/Banner.js";
@@ -29,7 +30,6 @@ function initialize() {
   // Set up animated top header
   // ---------------------------------------------------------------------------
   new Banner("banner_container");
-
   // ---------------------------------------------------------------------------
   // CONSOLE WAR
   // ---------------------------------------------------------------------------
@@ -37,9 +37,9 @@ function initialize() {
   // Get data Releases
   let platformList = ["2600", "NES", "SNES", "N64", "GC", "Wii", "WiiU", "GB", "DS", "GBA", "3DS", "PS", "PS2", "PS3", "PS4", "PSP", "X360", "XOne", "XB", "PC"];
   let console_release_data = dataProcessor.getConsoleReleaseYears(platformList);
-  let types = {};
-  for (let console of platformList) types[console] = 'area-spline';
-  let colors = {
+  let typesConsoles = {};
+  for (let platform of platformList) typesConsoles[platform] = 'area-spline';
+  let colorsConsole = {
     "NES": "#632920",
     "SNES": "#6e0f01",
     "N64": "#792215",
@@ -61,7 +61,7 @@ function initialize() {
     "XB": "#026705",
     "PC": "#606060"
   }
-  let order_stack = {
+  let order_stack_consoles = {
     "NES": 1,
     "SNES": 2,
     "N64": 3,
@@ -84,7 +84,8 @@ function initialize() {
     "PC": 20
   }
   // Set Up Release Games Graph
-  let consoleReleaseYears = new StackedAreaChart("consoleReleaseYears_container", "Year", "Number of games released that year", 1600, console_release_data, types, [platformList], colors, order_stack);
+  let consoleReleaseYears = new StackedAreaChart("consoleReleaseYears_container", "Year", "Number of games released that year", 1600, console_release_data, typesConsoles, [platformList], colorsConsole, order_stack_consoles);
+  
   //------------------------- Sales over years ---------------------------------
   // Get Data Release
   let console_sales_data_WORLD = dataProcessor.getConsoleSalesYears(platformList, "Global");
@@ -93,7 +94,7 @@ function initialize() {
   let console_sales_data_JP = dataProcessor.getConsoleSalesYears(platformList, "JP");
   let console_sales_data_OTHER = dataProcessor.getConsoleSalesYears(platformList, "Other");
   // Set Up Sales Games Graph
-  let consoleSalesYears = new StackedAreaChart("consoleSalesYears_container", "Year", "Sales of games released that year", 700, console_sales_data_WORLD, types, [platformList], colors, order_stack);
+  let consoleSalesYears = new StackedAreaChart("consoleSalesYears_container", "Year", "Sales of games released that year", 700, console_sales_data_WORLD, typesConsoles, [platformList], colorsConsole, order_stack_consoles);
   // Set Up Region Selector
   let consoleWarRegionSelector = new RegionSelector("console_sales_region_selector")
   consoleWarRegionSelector.selectedRegion = (region) => {
@@ -120,7 +121,7 @@ function initialize() {
   let genreList = ["Sports", "Platform", "Racing", "Role-Playing", "Puzzle", "Misc", "Shooter", "Simulation", "Action", "Fighting", "Adventure", "Strategy"]
   let console_genre_data = dataProcessor.getConsoleGenreSales(genreList, platformList);
   // Set Up Graph Genre
-  let consoleGenreSales = new StackedBarChart("consoleGenre_container", "Consoles", "Total Sales", platformList, console_genre_data, [genreList]);
+  let consoleGenreSales = new StackedBarChart("consoleGenre_container", "Consoles", "All-Time Sales", platformList, console_genre_data, [genreList]);
   // Set Up text interactivity
   let sportGamesTextButton = document.getElementById('sport_games_text_button');
   sportGamesTextButton.onclick = () => consoleGenreSales.showOnly("Sports");
@@ -130,4 +131,67 @@ function initialize() {
   shooterGamesTextButton.onclick = () => consoleGenreSales.showOnly("Shooter");
   let strategyGamesTextButton = document.getElementById('strategy_games_text_button');
   strategyGamesTextButton.onclick = () => consoleGenreSales.showOnly("Strategy");
+
+  // ---------------------------------------------------------------------------
+  // PUBLISHER WAR
+  // ---------------------------------------------------------------------------
+  //--------------------- Top Publisher by Sales -------------------------------
+  // Get Data Sales Top10
+  let publishers_sales_top10_data_WORLD = dataProcessor.getTop10PublisherSales("Global");
+  let publishers_sales_top10_data_NA = dataProcessor.getTop10PublisherSales("NA");
+  let publishers_sales_top10_data_EU = dataProcessor.getTop10PublisherSales("EU");
+  let publishers_sales_top10_data_JP = dataProcessor.getTop10PublisherSales("JP");
+  let publishers_sales_top10_data_OTHER = dataProcessor.getTop10PublisherSales("Other");
+  // Set Up Publishers Sales Top 10 graph
+  let publisherWarSalesTop10 = new BarChart("publisherSalesTop10_container", "Publishers", "All-Time Sales", publishers_sales_top10_data_WORLD[0], [publishers_sales_top10_data_WORLD[1]], {
+    Sales: "#3c3c3c"
+  });
+  // Get Data Sales over year
+  let top10_publishers_sales_year_data_WORLD = dataProcessor.getPublisherSalesYear("Global", publishers_sales_top10_data_WORLD[0]);
+  let top10_publishers_sales_year_data_NA = dataProcessor.getPublisherSalesYear("NA", publishers_sales_top10_data_NA[0]);
+  let top10_publishers_sales_year_data_EU = dataProcessor.getPublisherSalesYear("EU", publishers_sales_top10_data_EU[0]);
+  let top10_publishers_sales_year_data_JP = dataProcessor.getPublisherSalesYear("JP", publishers_sales_top10_data_JP[0]);
+  let top10_publishers_sales_year_data_OTHER = dataProcessor.getPublisherSalesYear("Other", publishers_sales_top10_data_OTHER[0]);
+  // Set Up Publisher Sales Year
+  let typesPublishers_WORLD = {}
+  for (let publisher of publishers_sales_top10_data_WORLD[0]) typesPublishers_WORLD[publisher] = 'area-spline';
+  let typesPublishers_NA = {}
+  for (let publisher of publishers_sales_top10_data_NA[0]) typesPublishers_NA[publisher] = 'area-spline';
+  let typesPublishers_EU = {}
+  for (let publisher of publishers_sales_top10_data_WORLD[0]) typesPublishers_EU[publisher] = 'area-spline';
+  let typesPublishers_JP = {}
+  for (let publisher of publishers_sales_top10_data_WORLD[0]) typesPublishers_JP[publisher] = 'area-spline';
+  let typesPublishers_OTHER = {}
+  for (let publisher of publishers_sales_top10_data_WORLD[0]) typesPublishers_OTHER[publisher] = 'area-spline';
+  let publisherWarSalesYears = new StackedAreaChart("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_WORLD, typesPublishers_WORLD, [publishers_sales_top10_data_WORLD[0]], null, null);
+
+
+  // Set Up Region Selector
+  let publisherWarRegionSelector = new RegionSelector("publishers_war_region_selector")
+  publisherWarRegionSelector.selectedRegion = (region) => {
+    switch (region) {
+      case "WORLD":
+        publisherWarSalesTop10.update(publishers_sales_top10_data_WORLD[0], [publishers_sales_top10_data_WORLD[1]]);
+        setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_WORLD, typesPublishers_WORLD, [publishers_sales_top10_data_WORLD[0]], null, null),200);
+        break;
+      case "NA":
+        publisherWarSalesTop10.update(publishers_sales_top10_data_NA[0], [publishers_sales_top10_data_NA[1]]);
+        setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_NA, typesPublishers_NA, [publishers_sales_top10_data_NA[0]], null, null),200);
+        break;
+      case "EU":
+        publisherWarSalesTop10.update(publishers_sales_top10_data_EU[0], [publishers_sales_top10_data_EU[1]]);
+        setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_EU, typesPublishers_EU, [publishers_sales_top10_data_EU[0]], null, null),200);
+        break;
+      case "JP":
+        publisherWarSalesTop10.update(publishers_sales_top10_data_JP[0], [publishers_sales_top10_data_JP[1]]);
+        setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_JP, typesPublishers_JP, [publishers_sales_top10_data_JP[0]], null, null),200);
+        break;
+      case "OTHER":
+        publisherWarSalesTop10.update(publishers_sales_top10_data_OTHER[0], [publishers_sales_top10_data_OTHER[1]]);
+        setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_OTHER, typesPublishers_OTHER, [publishers_sales_top10_data_OTHER[0]], null, null),200);
+        break;
+    }
+  }
+
+
 }

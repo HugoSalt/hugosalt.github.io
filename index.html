@@ -17,6 +17,7 @@
   <link rel="stylesheet" type="text/css" href="./css/regionSelector.css">
   <link rel="stylesheet" type="text/css" href="./css/stackedAreaChart.css">
   <link rel="stylesheet" type="text/css" href="./css/stackedBarChart.css">
+  <link rel="stylesheet" type="text/css" href="./css/barChart.css">
   <script type="text/javascript" src="bundle.js" defer></script>
 </head>
 
@@ -56,39 +57,13 @@
           <h1>About</h1>
         </div>
       </div>
-      <div class="row">
-        <div class="col-xs-12
-                col-sm-12
-                col-md-4
-                col-lg-4">
-          <h2>1/3 Width & Full Width on Phone</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sagittis hendrerit nunc, sit amet elementum nulla maximus vel. Ut laoreet pretium lorem sodales aliquet. Donec tincidunt nibh justo, quis elementum massa venenatis eu. Donec vestibulum
-            gravida lacinia. Quisque dapibus cursus nunc, sed aliquam quam. Mauris placerat varius tellus at tempus. Praesent at lacus laoreet, hendrerit felis eu, varius orci. Nam sollicitudin accumsan justo sed bibendum. </p>
-        </div>
-        <div class="col-xs-12
-                col-sm-12
-                col-md-4
-                col-lg-4">
-          <h2>1/3 Width & Full Width on Phone</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sagittis hendrerit nunc, sit amet elementum nulla maximus vel. Ut laoreet pretium lorem sodales aliquet. Donec tincidunt nibh justo, quis elementum massa venenatis eu. Donec vestibulum
-            gravida lacinia. Quisque dapibus cursus nunc, sed aliquam quam. Mauris placerat varius tellus at tempus. Praesent at lacus laoreet, hendrerit felis eu, varius orci. Nam sollicitudin accumsan justo sed bibendum. </p>
-        </div>
-        <div class="col-xs-12
-                col-sm-12
-                col-md-4
-                col-lg-4">
-          <h2>1/3 Width & Full Width on Phone</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sagittis hendrerit nunc, sit amet elementum nulla maximus vel. Ut laoreet pretium lorem sodales aliquet. Donec tincidunt nibh justo, quis elementum massa venenatis eu. Donec vestibulum
-            gravida lacinia. Quisque dapibus cursus nunc, sed aliquam quam. Mauris placerat varius tellus at tempus. Praesent at lacus laoreet, hendrerit felis eu, varius orci. Nam sollicitudin accumsan justo sed bibendum. </p>
-        </div>
-      </div>
       <!-- Console War -->
       <div class="row">
         <div class="col-xs">
           <h1>The consoles war</h1>
         </div>
       </div>
-      <div class="row">
+      <div class="row row_padded">
         <div class="col-xs-12
                 col-sm-12
                 col-md-4
@@ -106,7 +81,7 @@
           <div id="consoleReleaseYears_container" class="row stackArea_chart"></div>
         </div>
       </div>
-      <div class="row">
+      <div class="row row_padded">
         <div class="col-xs-12
                 col-sm-12
                 col-md-6
@@ -121,7 +96,7 @@
             this collapse in video game releases.</p>
         </div>
       </div>
-      <div class="row">
+      <div class="row row_padded">
         <div class="col-xs-12
                 col-sm-12
                 col-md-8
@@ -139,7 +114,7 @@
           <p>The genreal worldwide trend follows the same evolution as the previous graph, once again this collapse in sales might be explained by the arrival of smartphones games (which are not taken into account in our dataset).</p>
         </div>
       </div>
-      <div class="row">
+      <div class="row row_padded">
         <div class="col-xs-12
                 col-sm-12
                 col-md-4
@@ -161,7 +136,7 @@
           <p>Concerning <a id="shooter_games_text_button" class="interactive_text_chart">shooter games</a>, it's clearly the Playstations and Xbox that dominate the sales for this genre. And as a last example, in <a id="strategy_games_text_button" class="interactive_text_chart">strategy games</a>            playing require a lot of rapid clicks on many parts of the screen which makes nothing better than a mouse for that. This surely explains why most of strategy games sales are made on PC.</p>
         </div>
       </div>
-      <div class="row">
+      <div class="row row_padded">
         <div class="col-xs">
           <div id="consoleGenre_container" class="row stackBar_chart"></div>
         </div>
@@ -170,6 +145,23 @@
       <div class="row">
         <div class="col-xs">
           <h1>The publishers war</h1>
+        </div>
+      </div>
+      <div class="row row_padded">
+        <div class="col-xs-12
+                col-sm-12
+                col-md-4
+                col-lg-4">
+          <h2>Publishers sales</h2>
+          <p>Here are the top 20 publishers making the most money out of their video games sales.</p>
+        </div>
+        <div class="col-xs-12
+                col-sm-12
+                col-md-8
+                col-lg-8">
+          <div id="publishers_war_region_selector" class="row region_selector"></div>
+          <div id="publisherSalesTop10_container" class="row bar_chart"></div>
+          <div id="publisherSalesYears_container" class="row stackArea_chart"></div>
         </div>
       </div>
       <!-- Game Analysis -->
