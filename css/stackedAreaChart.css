@@ -22,6 +22,11 @@
   font-size: 1.2em;
 }
 
+.stackArea_chart.smaller_text text {
+  fill: var(--swiss-dark-grey);
+  font-size: 1em;
+}
+
 .stackArea_chart .tick line {
   stroke: var(--swiss-dark-grey);
   stroke-width: 3px;

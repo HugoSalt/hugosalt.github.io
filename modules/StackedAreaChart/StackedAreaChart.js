@@ -37,10 +37,10 @@ export default class StackedAreaChart {
   }
 
   update_full(container_id, x_name, y_name, y_max, columns, types, groups, colors, order_stack) {
-    let container = document.getElementById(container_id);
-    container.style.opacity = "0.0";
+    //let container = document.getElementById(container_id);
+    //container.style.opacity = "0.0";
     setTimeout(() => {
-      this.chart.destroy();
+      //this.chart.destroy();
       this.chart = c3.generate({
         bindto: '#' + container_id,
         data: {
@@ -66,10 +66,10 @@ export default class StackedAreaChart {
           },
         }
       });
-    }, 400);
-    setTimeout(() => {
-      container.style.opacity = "1.0";
-    }, 401);
+    }, 300);
+    //setTimeout(() => {
+    //  container.style.opacity = "1.0";
+    //}, 401);
   }
 
 }

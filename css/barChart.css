@@ -27,9 +27,217 @@
   font-size: 1.1em;
 }
 
+.bar_chart *{
+  transition: fill 0.5s ease-in-out;
+}
 /*Data specific*/
 
-/*Data specific*/
-/*.bar_chart.c3 *.c3-bar-1{
-  fill : var(--swiss-red) !important;
-}*/
+/*WORLD Top10*/
+/*Nintendo*/
+.bar_chart.WORLD.c3 *.c3-bar-0{
+  fill : rgb(194, 32, 32) !important;
+}
+/*Electronic Arts*/
+.bar_chart.WORLD.c3 *.c3-bar-1{
+  fill : rgb(69, 87, 162) !important;
+}
+/*Activision*/
+.bar_chart.WORLD.c3 *.c3-bar-2{
+  fill : rgb(75, 64, 47) !important;
+}
+/*Sony*/
+.bar_chart.WORLD.c3 *.c3-bar-3{
+  fill : rgb(0, 187, 255) !important;
+}
+/*Ubisoft*/
+.bar_chart.WORLD.c3 *.c3-bar-4{
+  fill : rgb(155, 180, 191) !important;
+}
+/*Take two*/
+.bar_chart.WORLD.c3 *.c3-bar-5{
+  fill : rgb(209, 203, 66) !important;
+}
+/*THQ*/
+.bar_chart.WORLD.c3 *.c3-bar-6{
+  fill : rgb(184, 89, 1) !important;
+}
+/*Konami*/
+.bar_chart.WORLD.c3 *.c3-bar-7{
+  fill : rgb(56, 91, 51) !important;
+}
+/*Sega*/
+.bar_chart.WORLD.c3 *.c3-bar-8{
+  fill : rgb(51, 26, 73) !important;
+}
+/*Namco*/
+.bar_chart.WORLD.c3 *.c3-bar-9{
+  fill : rgb(255, 0, 96) !important;
+}
+
+/*NA Top10*/
+/*Nintendo*/
+.bar_chart.NA.c3 *.c3-bar-0{
+  fill : rgb(194, 32, 32) !important;
+}
+/*Electronic Arts*/
+.bar_chart.NA.c3 *.c3-bar-1{
+  fill : rgb(69, 87, 162) !important;
+}
+/*Activision*/
+.bar_chart.NA.c3 *.c3-bar-2{
+  fill : rgb(75, 64, 47) !important;
+}
+/*Sony*/
+.bar_chart.NA.c3 *.c3-bar-3{
+  fill : rgb(0, 187, 255) !important;
+}
+/*Ubisoft*/
+.bar_chart.NA.c3 *.c3-bar-4{
+  fill : rgb(155, 180, 191) !important;
+}
+/*Take two*/
+.bar_chart.NA.c3 *.c3-bar-5{
+  fill : rgb(209, 203, 66) !important;
+}
+/*THQ*/
+.bar_chart.NA.c3 *.c3-bar-6{
+  fill : rgb(184, 89, 1) !important;
+}
+/*Microsoft*/
+.bar_chart.NA.c3 *.c3-bar-7{
+  fill : rgb(22, 232, 0) !important;
+}
+/*Atari*/
+.bar_chart.NA.c3 *.c3-bar-8{
+  fill : rgb(159, 36, 156) !important;
+}
+/*Sega*/
+.bar_chart.NA.c3 *.c3-bar-9{
+  fill : rgb(51, 26, 73) !important;
+}
+
+/*EU Top10*/
+/*Nintendo*/
+.bar_chart.EU.c3 *.c3-bar-0{
+  fill : rgb(194, 32, 32) !important;
+}
+/*Electronic Arts*/
+.bar_chart.EU.c3 *.c3-bar-1{
+  fill : rgb(69, 87, 162) !important;
+}
+/*Activision*/
+.bar_chart.EU.c3 *.c3-bar-2{
+  fill : rgb(75, 64, 47) !important;
+}
+/*Sony*/
+.bar_chart.EU.c3 *.c3-bar-3{
+  fill : rgb(0, 187, 255) !important;
+}
+/*Ubisoft*/
+.bar_chart.EU.c3 *.c3-bar-4{
+  fill : rgb(155, 180, 191) !important;
+}
+/*Take two*/
+.bar_chart.EU.c3 *.c3-bar-5{
+  fill : rgb(209, 203, 66) !important;
+}
+/*THQ*/
+.bar_chart.EU.c3 *.c3-bar-6{
+  fill : rgb(184, 89, 1) !important;
+}
+/*Sega*/
+.bar_chart.EU.c3 *.c3-bar-7{
+  fill : rgb(51, 26, 73) !important;
+}
+/*Konami*/
+.bar_chart.EU.c3 *.c3-bar-8{
+  fill : rgb(56, 91, 51) !important;
+}
+/*Microsoft*/
+.bar_chart.EU.c3 *.c3-bar-9{
+  fill : rgb(22, 232, 0) !important;
+}
+
+/*JP Top10*/
+/*Nintendo*/
+.bar_chart.JP.c3 *.c3-bar-0{
+  fill : rgb(194, 32, 32) !important;
+}
+/*Namco*/
+.bar_chart.JP.c3 *.c3-bar-1{
+  fill : rgb(255, 0, 96) !important;
+}
+/*Konami*/
+.bar_chart.JP.c3 *.c3-bar-2{
+  fill : rgb(56, 91, 51) !important;
+}
+/*Sony*/
+.bar_chart.JP.c3 *.c3-bar-3{
+  fill : rgb(0, 187, 255) !important;
+}
+/*Capcom*/
+.bar_chart.JP.c3 *.c3-bar-4{
+  fill : rgb(129, 175, 151) !important;
+}
+/*Sega*/
+.bar_chart.JP.c3 *.c3-bar-5{
+  fill : rgb(51, 26, 73) !important;
+}
+/*Square Enix*/
+.bar_chart.JP.c3 *.c3-bar-6{
+  fill : rgb(0, 1, 134) !important;
+}
+/*Square Soft*/
+.bar_chart.JP.c3 *.c3-bar-7{
+  fill : rgb(199, 190, 127) !important;
+}
+/*Enix Corporation*/
+.bar_chart.JP.c3 *.c3-bar-8{
+  fill : rgb(124, 82, 119) !important;
+}
+/*Tecmo Koi*/
+.bar_chart.JP.c3 *.c3-bar-9{
+  fill : rgb(78, 78, 78) !important;
+}
+
+/*WORLD Top10*/
+/*Electronic Arts*/
+.bar_chart.OTHER.c3 *.c3-bar-0{
+  fill : rgb(69, 87, 162) !important;
+}
+/*Nintendo*/
+.bar_chart.OTHER.c3 *.c3-bar-1{
+  fill : rgb(194, 32, 32) !important;
+}
+/*Sony*/
+.bar_chart.OTHER.c3 *.c3-bar-2{
+  fill : rgb(0, 187, 255) !important;
+}
+/*Activision*/
+.bar_chart.OTHER.c3 *.c3-bar-3{
+  fill : rgb(75, 64, 47) !important;
+}
+/*Take two*/
+.bar_chart.OTHER.c3 *.c3-bar-4{
+  fill : rgb(209, 203, 66) !important;
+}
+/*Ubisoft*/
+.bar_chart.OTHER.c3 *.c3-bar-5{
+  fill : rgb(155, 180, 191) !important;
+}
+/*THQ*/
+.bar_chart.OTHER.c3 *.c3-bar-6{
+  fill : rgb(184, 89, 1) !important;
+}
+/*Konami*/
+.bar_chart.OTHER.c3 *.c3-bar-7{
+  fill : rgb(56, 91, 51) !important;
+}
+/*Sega*/
+.bar_chart.OTHER.c3 *.c3-bar-8{
+  fill : rgb(51, 26, 73) !important;
+}
+/*Microsoft*/
+.bar_chart.OTHER.c3 *.c3-bar-9{
+  fill : rgb(22, 232, 0) !important;
+}
