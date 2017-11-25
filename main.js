@@ -85,7 +85,7 @@ function initialize() {
   }
   // Set Up Release Games Graph
   let consoleReleaseYears = new StackedAreaChart("consoleReleaseYears_container", "Year", "Number of games released that year", 1600, console_release_data, typesConsoles, [platformList], colorsConsole, order_stack_consoles);
-  
+
   //------------------------- Sales over years ---------------------------------
   // Get Data Release
   let console_sales_data_WORLD = dataProcessor.getConsoleSalesYears(platformList, "Global");
@@ -163,7 +163,47 @@ function initialize() {
   for (let publisher of publishers_sales_top10_data_WORLD[0]) typesPublishers_JP[publisher] = 'area-spline';
   let typesPublishers_OTHER = {}
   for (let publisher of publishers_sales_top10_data_WORLD[0]) typesPublishers_OTHER[publisher] = 'area-spline';
-  let publisherWarSalesYears = new StackedAreaChart("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_WORLD, typesPublishers_WORLD, [publishers_sales_top10_data_WORLD[0]], null, null);
+  let colorsPublishers = {
+    "Nintendo": "#221937",
+    "Electronic Arts": "#273657",
+    "Activision" : "#334774",
+    "Sony Computer Entertainment" : "#3e568b",
+    "Ubisoft": "#4865a4",
+    "Take-Two Interactive": "#597ecd",
+    "THQ": "#6288da",
+    "Konami Digital Entertainment" : "#6891e8",
+    "Sega" : "#709dff",
+    "Namco Bandai Games" : "#bccdf2",
+    "Microsoft Game Studios" : "#471616",
+    "Atari" : "#471616",
+    "Capcom": "#1b6b25",
+    "Square Enix": "#1f992e",
+    "SquareSoft": "#21c735",
+    "Enix Corporation": "#4bf960",
+    "Tecmo Koei": "#8bfc99"
+
+  }
+  let order_stack_publishers = {
+    "Nintendo": 1,
+    "Electronic Arts": 2,
+    "Activision" : 3,
+    "Sony Computer Entertainment" : 4,
+    "Ubisoft": 5,
+    "Take-Two Interactive": 6,
+    "THQ": 7,
+    "Konami Digital Entertainment" : 8,
+    "Sega" : 9,
+    "Namco Bandai Games" : 10,
+    "Microsoft Game Studios" : 11,
+    "Atari" : 12,
+    "Sega" : 13,
+    "Capcom": 14,
+    "Square Enix": 15,
+    "SquareSoft": 16,
+    "Enix Corporation": 17,
+    "Tecmo Koei": 18
+  }
+  let publisherWarSalesYears = new StackedAreaChart("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_WORLD, typesPublishers_WORLD, [publishers_sales_top10_data_WORLD[0]], colorsPublishers, order_stack_publishers);
 
 
   // Set Up Region Selector
@@ -172,23 +212,23 @@ function initialize() {
     switch (region) {
       case "WORLD":
         publisherWarSalesTop10.update(publishers_sales_top10_data_WORLD[0], [publishers_sales_top10_data_WORLD[1]]);
-        setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_WORLD, typesPublishers_WORLD, [publishers_sales_top10_data_WORLD[0]], null, null),200);
+        setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_WORLD, typesPublishers_WORLD, [publishers_sales_top10_data_WORLD[0]], colorsPublishers, order_stack_publishers), 200);
         break;
       case "NA":
         publisherWarSalesTop10.update(publishers_sales_top10_data_NA[0], [publishers_sales_top10_data_NA[1]]);
-        setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_NA, typesPublishers_NA, [publishers_sales_top10_data_NA[0]], null, null),200);
+        setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_NA, typesPublishers_NA, [publishers_sales_top10_data_NA[0]], colorsPublishers, order_stack_publishers), 200);
         break;
       case "EU":
         publisherWarSalesTop10.update(publishers_sales_top10_data_EU[0], [publishers_sales_top10_data_EU[1]]);
-        setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_EU, typesPublishers_EU, [publishers_sales_top10_data_EU[0]], null, null),200);
+        setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_EU, typesPublishers_EU, [publishers_sales_top10_data_EU[0]], colorsPublishers, order_stack_publishers), 200);
         break;
       case "JP":
         publisherWarSalesTop10.update(publishers_sales_top10_data_JP[0], [publishers_sales_top10_data_JP[1]]);
-        setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_JP, typesPublishers_JP, [publishers_sales_top10_data_JP[0]], null, null),200);
+        setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_JP, typesPublishers_JP, [publishers_sales_top10_data_JP[0]], colorsPublishers, order_stack_publishers), 200);
         break;
       case "OTHER":
         publisherWarSalesTop10.update(publishers_sales_top10_data_OTHER[0], [publishers_sales_top10_data_OTHER[1]]);
-        setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_OTHER, typesPublishers_OTHER, [publishers_sales_top10_data_OTHER[0]], null, null),200);
+        setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_OTHER, typesPublishers_OTHER, [publishers_sales_top10_data_OTHER[0]], colorsPublishers, order_stack_publishers), 200);
         break;
     }
   }

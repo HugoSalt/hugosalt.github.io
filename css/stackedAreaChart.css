@@ -3,6 +3,11 @@
   min-height: 500px;
 }
 
+.stackArea_chart.smaller_stackArea_chart{
+  width: 100%;
+  min-height: 400px;
+}
+
 .stackArea_chart .c3-axis path {
   stroke-width: 3px;
   stroke: var(--swiss-dark-grey);

@@ -2,7 +2,7 @@
 export default class StackedAreaChart {
 
   constructor(container_id, x_name, y_name, y_max, columns, types, groups, colors, order_stack) {
-    document.getElementById(container_id).style.transition = "all 0.5s ease-in-out";
+    document.getElementById(container_id).style.transition = "all 0.4s ease-in-out";
     this.chart = c3.generate({
       bindto: '#' + container_id,
       data: {
@@ -47,11 +47,11 @@ export default class StackedAreaChart {
           x: x_name,
           columns: columns,
           types: types,
-          groups: groups
-          // colors: colors,
-          //order: function(t1, t2) {
-          //  return order_stack[t1.id] < order_stack[t2.id]  ? 1 : -1;
-          //}
+          groups: groups,
+          colors: colors,
+          order: function(t1, t2) {
+            return order_stack[t1.id] < order_stack[t2.id]  ? 1 : -1;
+          }
         },
         tooltip: {
           show: false
@@ -66,10 +66,10 @@ export default class StackedAreaChart {
           },
         }
       });
-    }, 500);
+    }, 400);
     setTimeout(() => {
       container.style.opacity = "1.0";
-    }, 510);
+    }, 401);
   }
 
 }

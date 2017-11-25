@@ -1,6 +1,6 @@
 .bar_chart {
   width: 100%;
-  min-height: 300px;
+  min-height: 250px;
   margin-top: 20px;
 }
 
@@ -26,3 +26,10 @@
 .bar_chart .c3-legend-item text{
   font-size: 1.1em;
 }
+
+/*Data specific*/
+
+/*Data specific*/
+/*.bar_chart.c3 *.c3-bar-1{
+  fill : var(--swiss-red) !important;
+}*/
