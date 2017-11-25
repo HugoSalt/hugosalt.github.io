@@ -202,14 +202,19 @@ For example to reflect the popularity of a console over the years, should we rep
 
 Here we'll describe the problem encountered, our decisions, our solutions, etc... as we progress through the implementation.
 
-### C3 library
+### C3 library problems
 
 The `c3` library doesn't support the modern `d3` V4 but only `d3` V3. So we had to add a "legacy_script" folder where we put scripts that are not ES6 (`d3` V3 and `c3`).
+
+Also we had a lot of problems with this library and we lost a lot of time because of it : limited documentation and cross browser / OS incoherence (on Chrome + Mac some graphs don't appear while they do on Chrome + Windows and Chrome + Linux)).
+
+_We spent hours and hours fighting against this library_. If we had to do it again we'd use Plotly or other any other more established and maintained library.
 
 ### Data weirdness
 
 - A game had a release date of 2020, after checking on Internet it was released in 2009, we've corrected the csv.
 - Some games don't have a release date ("N/A").
+- PC sales in our dataset are surprisingly low but the rest seems coherent.
 
 ## Console Popularity report
 
@@ -235,6 +240,10 @@ For the sales per genre we implemented the stacked bars as we planned, but we ad
 ![./sales_per_genre_stacked_bar.png](./sales_per_genre_stacked_bar.png)
 
 ## Publisher war report
+
+We ended going with this representation :
+
+![./publisher_war_graphs.png](./publisher_war_graphs.png)
 
 ## Game analysis report
 
