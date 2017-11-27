@@ -258,5 +258,23 @@ function initialize() {
     }
   }
 
+  // ---------------------------------------------------------------------------
+  // GAME ANALYSIS
+  // ---------------------------------------------------------------------------
 
+  // Set up Data Manager
+  let dataManager = new DataManager("gameScoreSales_container", data, components_to_update);
+
+  // Set up Scatter Plot
+  // TODO : complete args
+  let gameScoreSales = new ScatterPlot(...);
+
+  // Set up Time Brush
+  // TODO: Create Time Brush
+
+  // Set up Genres Bar Chart
+  // TODO: Create Genre Buttons
+
+  // Set up Consoles Bar Chart
+  // TODO: Create Consoles Buttons
 }

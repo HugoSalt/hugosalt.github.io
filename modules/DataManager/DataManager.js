@@ -12,11 +12,11 @@ export default class DataManager {
   }
 
   /*
-  * The functions below are used to filter our data given a particular feature.
-  * TODO : implement update methods
+  *  The functions below are used to filter our data given a particular
+  *  feature.
+  *  TODO : implement update methods
   */
 
-  //
   setGenre(genres) {
     this.genres = genres;
     this.filteredData = this.data.filter(genres, "Genre");
@@ -31,7 +31,8 @@ export default class DataManager {
 
   setTimeInterval(timeInterval) {
     this.timeInterval = timeInterval;
-    this.filteredData = this.data.filter(); // TODO: special filter for Years ?
+    this.filteredData = this.data.filter(timeInterval,
+      "Year_of_Release"); // TODO: special filter for Years ?
     this.updateComponents();
   }
 
@@ -59,15 +60,18 @@ export default class DataManager {
           return filteredData;
         }, filteredData);
     }
-    
+
     return filteredData;
   }
 
+  /*
+  *  Notify all the components to update themselves by giving them
+  *  the new filterd dataset.
+  */
   updateComponents() {
     for(let component of components_to_update) {
       component.update(this.filteredData);
+      // TODO: create update() for all components
     }
   }
-
-
 }
