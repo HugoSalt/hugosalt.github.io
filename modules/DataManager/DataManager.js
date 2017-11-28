@@ -1,14 +1,14 @@
 export default class DataManager {
 
-  constructor(container_id, data, components_to_update) {
+  constructor(data, components_to_update, genres, platforms, publishers, timeInterval) {
     this.data = data;
     this.filteredData = data;
     this.components_to_update = components_to_update;
-    this.genres = "any";
-    this.platforms = "any";
-    this.publishers = "any";
-    this.timeInterval = [1980, 2015];
-    this.components_to_update();
+    this.genres = genres;
+    this.platforms = platforms;
+    this.publishers = publishers;
+    this.timeInterval = timeInterval;
+    this.updateComponents();
   }
 
   /*
@@ -19,26 +19,25 @@ export default class DataManager {
 
   setGenre(genres) {
     this.genres = genres;
-    this.filteredData = this.data.filter(genres, "Genre");
+    this.filteredData = this.filter();
     this.updateComponents();
   }
 
   setPlatform(platforms) {
     this.platforms = platforms;
-    this.filteredData = this.data.filter(platforms, "Platform");
+    this.filteredData = this.filter();
     this.updateComponents();
   }
 
   setTimeInterval(timeInterval) {
     this.timeInterval = timeInterval;
-    this.filteredData = this.data.filter(timeInterval,
-      "Year_of_Release"); // TODO: special filter for Years ?
+    this.filteredData = this.filter();
     this.updateComponents();
   }
 
   setPublisher(publishers) {
     this.publishers = publishers;
-    this.filteredData = this.data.filter(publishers, "Publisher");
+    this.filteredData = this.filter();
     this.updateComponents();
   }
 
@@ -73,5 +72,25 @@ export default class DataManager {
       component.update(this.filteredData);
       // TODO: create update() for all components
     }
+  }
+
+  filter() {
+    this.filteredData = []
+    for (let i = 0 ; i < this.data.length ; ++i) {
+      if (this.genres.includes(this.data[i].Genre) &&
+          this.platforms.includes(this.data[i].Platform) &&
+          this.timeInterval[0] <= this.data[i].Year_of_Release &&
+          this.data[i].Year_of_Release <= this.timeInterval[1] &&
+          this.publishers.includes(this.data[i].Publisher)) {
+            this.filteredData.push(this.data[i])
+          }
+    }
+    return this.filteredData
+  }
+
+  update(newData) {
+    this.data = newData
+    this.filteredData = this.filter()
+    updateComponents()
   }
 }

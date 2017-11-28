@@ -6,6 +6,8 @@ import DataProcessor from "./modules/DataProcessor/DataProcessor.js";
 import Menu from "./modules/Menu/Menu.js";
 import Banner from "./modules/Banner/Banner.js";
 import RegionSelector from "./modules/RegionSelector/RegionSelector.js"
+import GenreBar from "./modules/GenreBar/GenreBar.js"
+import DataManager from "./modules/DataManager/DataManager.js";
 
 // Load CSV Data
 let data = [];
@@ -83,7 +85,7 @@ function initialize() {
     "XB": 19,
     "PC": 20
   }
-  // Set Up Release Games Graph
+  /*// Set Up Release Games Graph
   let consoleReleaseYears = new StackedAreaChart("consoleReleaseYears_container", "Year", "Number of games released that year", 1600, console_release_data, typesConsoles, [platformList], colorsConsole, order_stack_consoles);
 
   //------------------------- Sales over years ---------------------------------
@@ -256,25 +258,63 @@ function initialize() {
         setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_OTHER, typesPublishers_OTHER, [publishers_sales_top10_data_OTHER[0]], colorsPublishers, order_stack_publishers), 200);
         break;
     }
+  }*/
+
+  let colorsGameType = {
+    "Sports": "#632920",
+    "Platform": "#6e0f01",
+    "Racing": "#792215",
+    "Role-Playing": "#831e0e",
+    "Puzzle": "#932513",
+    "Misc": "#a3200a",
+    "Shooter": "#b9260d",
+    "Simulation": "#d02407",
+    "Action": "#e33316",
+    "Fighting": "#f54123",
+    "Adventure": "#025485",
+    "Strategy": "#046195",
   }
 
   // ---------------------------------------------------------------------------
   // GAME ANALYSIS
   // ---------------------------------------------------------------------------
+  let order_stack_game_type = {
+    "Sports": 1,
+    "Platform": 2,
+    "Racing": 3,
+    "Role-Playing": 4,
+    "Puzzle": 5,
+    "Misc": 6,
+    "Shooter": 7,
+    "Simulation": 8,
+    "Action": 9,
+    "Fighting": 10,
+    "Adventure": 11,
+    "Strategy": 12
+  }
 
-  // Set up Data Manager
-  let dataManager = new DataManager("gameScoreSales_container", data, components_to_update);
+  //let main_genre_list = dataProcessor.getGenreDistribution(Object.keys(order_stack_game_type))
+  let genreBar = new GenreBar("genreBar_container", colorsGameType)
 
-  // Set up Scatter Plot
-  // TODO : complete args
-  let gameScoreSales = new ScatterPlot(...);
+  let dataManager = new DataManager(data,
+                                    [genreBar],
+                                    dataProcessor.getGenreList(),
+                                    dataProcessor.getConsoleList(),
+                                    dataProcessor.getPublisherList(),
+                                    [1980, 2015])
 
-  // Set up Time Brush
-  // TODO: Create Time Brush
+  dataManager.setGenre("Sports")
 
-  // Set up Genres Bar Chart
-  // TODO: Create Genre Buttons
+  dataManager.setGenre(dataProcessor.getGenreList())
 
-  // Set up Consoles Bar Chart
-  // TODO: Create Consoles Buttons
+  dataManager.setPlatform("PS2")
+
+  dataManager.setPlatform(dataProcessor.getConsoleList())
+
+  dataManager.setGenre("Sports")
+
+  dataManager.setPlatform("PS2")
+
+
+
 }
