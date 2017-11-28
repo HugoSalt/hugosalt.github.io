@@ -13,7 +13,6 @@ export default class DataManager {
 
   /*
   * The functions below are used to filter our data given a particular feature.
-  * TODO : implement filter methods and update
   */
 
   //
@@ -42,28 +41,22 @@ export default class DataManager {
   }
 
   updateComponents() {
-    for(let i = 0 ; i < this.components_to_update.length ; ++i) {
-      (this.components_to_update[i]).update(this.filteredData);
+    for(let component of this.components_to_update) {
+      component.update(this.filteredData);
     }
   }
 
   filter() {
     this.filteredData = []
-    for (let i = 0 ; i < this.data.length ; ++i) {
-      if (this.genres.includes(this.data[i].Genre) &&
-          this.platforms.includes(this.data[i].Platform) &&
-          this.timeInterval[0] <= this.data[i].Year_of_Release &&
-          this.data[i].Year_of_Release <= this.timeInterval[1] &&
-          this.publishers.includes(this.data[i].Publisher)) {
-            this.filteredData.push(this.data[i])
+    for (let game of this.data) {
+      if (this.genres.includes(game.Genre) &&
+          this.platforms.includes(game.Platform) &&
+          this.timeInterval[0] <= game.Year_of_Release &&
+          game.Year_of_Release <= this.timeInterval[1] &&
+          this.publishers.includes(game.Publisher)) {
+            this.filteredData.push(game)
           }
     }
     return this.filteredData
-  }
-
-  update(newData) {
-    this.data = newData
-    this.filteredData = this.filter()
-    updateComponents()
   }
 }
