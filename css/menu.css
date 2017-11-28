@@ -31,23 +31,19 @@
   color: var(--swiss-white);
   background-color: rgba(0, 0, 0, 0);
   font-size: 2em;
-  margin-top: 20px;
-  margin-bottom:20px;
+  width: 264px;
   padding-top: 8px;
   padding-bottom: 10px;
-  display:inline-block;
+  display:grid;
   clear: left;
-  padding-right: 18px;
+  padding-right: 20px;
+  padding-left: 20px;
   cursor: pointer;
   border-bottom: 3px solid rgba(0, 0, 0, 0);
   transition: 0.15s ease-in-out;
 }
 
 .menu_item:hover{
-  border-bottom: 3px solid var(--swiss-white);
-}
-
-.active{
   color: var(--swiss-black);
   background-color: var(--swiss-white);
 }

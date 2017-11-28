@@ -247,6 +247,13 @@ We ended going with this representation :
 
 ## Game analysis report
 
+We wanted to add much more interactivity so we come up with a new concept where
+every component would be tied to one another through the data :
+
+![./final_plot.png](./final_plot.png)
+
+Selecting categories or time brushing would update all the components (the scatter plot and all the bar charts)
+
 # Conclusion
 
   TODO : Complete when we finish the viz. What did we end up implementing and not implementing ? Are we satisfied ? Did we answer well questions we ask ourselves about the data ? etc...
