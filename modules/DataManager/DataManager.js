@@ -12,11 +12,11 @@ export default class DataManager {
   }
 
   /*
-  * The functions below are used to filter our data given a particular feature.
-  * TODO : implement filter methods and update
+  *  The functions below are used to filter our data given a particular
+  *  feature.
+  *  TODO : implement update methods
   */
 
-  //
   setGenre(genres) {
     this.genres = genres;
     this.filteredData = this.filter();
@@ -41,9 +41,36 @@ export default class DataManager {
     this.updateComponents();
   }
 
+  /*
+  *  Returns a filtered data given a list of selected elements and the
+  *  feature evaluated.
+  *
+  *  => Eg. selectedElements = [EA, Ubisoft, Nintendo, ...]
+  *         feature = "Publisher"
+  */
+  filter(selectedElements, feature) {
+    let filteredData = this.data;
+
+    // Keep only games that have as feature the selected elements
+    for(selectedElement in selectedElements) {
+      filteredData = filteredData.reduce(
+        (filteredData, game) => {
+          if(game[feature] = selectedElement) { filteredData.push(game); }
+          return filteredData;
+        }, filteredData);
+    }
+
+    return filteredData;
+  }
+
+  /*
+  *  Notify all the components to update themselves by giving them
+  *  the new filterd dataset.
+  */
   updateComponents() {
-    for(let i = 0 ; i < this.components_to_update.length ; ++i) {
-      (this.components_to_update[i]).update(this.filteredData);
+    for(let component of components_to_update) {
+      component.update(this.filteredData);
+      // TODO: create update() for all components
     }
   }
 
