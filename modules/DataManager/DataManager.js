@@ -19,25 +19,25 @@ export default class DataManager {
   //
   setGenre(genres) {
     this.genres = genres;
-    this.filteredData = this.filter(this.data);
+    this.filteredData = this.filter();
     this.updateComponents();
   }
 
   setPlatform(platforms) {
     this.platforms = platforms;
-    this.filteredData = this.filter(this.data);
+    this.filteredData = this.filter();
     this.updateComponents();
   }
 
   setTimeInterval(timeInterval) {
     this.timeInterval = timeInterval;
-    this.filteredData = this.filter(this.data);
+    this.filteredData = this.filter();
     this.updateComponents();
   }
 
   setPublisher(publishers) {
     this.publishers = publishers;
-    this.filteredData = this.filter(this.data);
+    this.filteredData = this.filter();
     this.updateComponents();
   }
 
@@ -63,7 +63,7 @@ export default class DataManager {
 
   update(newData) {
     this.data = newData
-    this.filteredData = this.filter(this.data)
+    this.filteredData = this.filter()
     updateComponents()
   }
 }
