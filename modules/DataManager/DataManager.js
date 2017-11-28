@@ -2,12 +2,12 @@ export default class DataManager {
 
   constructor(data, components_to_update, genres, platforms, publishers, timeInterval) {
     this.data = data;
-    this.filteredData = data;
     this.components_to_update = components_to_update;
     this.genres = genres;
     this.platforms = platforms;
     this.publishers = publishers;
     this.timeInterval = timeInterval;
+    this.filter();
     this.updateComponents();
   }
 
@@ -17,25 +17,25 @@ export default class DataManager {
 
   setGenre(genres) {
     this.genres = genres;
-    this.filteredData = this.filter();
+    this.filter();
     this.updateComponents();
   }
 
   setPlatform(platforms) {
     this.platforms = platforms;
-    this.filteredData = this.filter();
+    this.filter();
     this.updateComponents();
   }
 
   setTimeInterval(timeInterval) {
     this.timeInterval = timeInterval;
-    this.filteredData = this.filter();
+    this.filter();
     this.updateComponents();
   }
 
   setPublisher(publishers) {
     this.publishers = publishers;
-    this.filteredData = this.filter();
+    this.filter();
     this.updateComponents();
   }
 
