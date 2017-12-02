@@ -162,12 +162,6 @@ export default class DataProcessor {
 
 
 
-
-
-
-
-
-
   getConsoleList() {
     return this.data.reduce(
       (platform_list, game) => {
@@ -179,7 +173,7 @@ export default class DataProcessor {
   getGenreList() {
     return this.data.reduce(
       (genre_list, game) => {
-        if (!genre_list.includes(game.Genre)) genre_list.push(game.Genre);
+        if (game.Genre != "" && !genre_list.includes(game.Genre)) genre_list.push(game.Genre);
         return genre_list;
       }, []);
   }

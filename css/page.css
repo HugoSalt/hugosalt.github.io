@@ -179,3 +179,7 @@ a:hover {
     margin-left: 10px;
   }
 }
+
+#salesCriticsYears_container {
+  display: flex
+}

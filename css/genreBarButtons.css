@@ -1,0 +1,33 @@
+.button_not_selected rect {
+  fill: #707070;
+  stroke: #999faa;
+  stroke-width: 2px;
+}
+
+.button_not_selected.button_hovered rect {
+  fill: #909090;
+  stroke: #999faa;
+  stroke-width: 2px;
+}
+
+.button_selected rect {
+  fill: #202020;
+  stroke: #999faa;
+  stroke-width: 2px;
+}
+
+.button_selected.button_hovered rect {
+  fill: #404040;
+  stroke: #999faa;
+  stroke-width: 2px;
+}
+
+.button_not_selected text {
+  fill: white;
+  font-size: 16px;
+}
+
+.button_selected text {
+  fill: white;
+  font-size: 16px;
+}

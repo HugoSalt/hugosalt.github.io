@@ -7,6 +7,8 @@
   <!-- Old legacy loading because c3 dosen't support d3 v4-->
   <script src="./legacy_script/d3.v3.min.js" charset="utf-8"></script>
   <script src="./legacy_script/c3.min.js"></script>
+  <script src="./d3tip.js"></script>
+  <script src="./d3button.js"></script>
   <link href="./css/c3.min.css" rel="stylesheet">
   <!-- See doc at http://flexboxgrid.com/ -->
   <link rel="stylesheet" href="css/flexboxgrid.min.css" type="text/css">
@@ -18,6 +20,8 @@
   <link rel="stylesheet" type="text/css" href="./css/stackedAreaChart.css">
   <link rel="stylesheet" type="text/css" href="./css/stackedBarChart.css">
   <link rel="stylesheet" type="text/css" href="./css/barChart.css">
+  <link rel="stylesheet" type="text/css" href="./css/genreBar.css">
+  <link rel="stylesheet" type="text/css" href="./css/genreBarButtons.css">
   <script type="text/javascript" src="bundle.js" defer></script>
 </head>
 
@@ -203,6 +207,7 @@
         <div class="col-xs">
           <p>Here goes the final Viz</p>
           <div id="salesCriticsYears_container" class="scatter_plot">
+            <div id="genreBarButtons_container"></div>
             <div id="genreBar_container"></div>
         </div>
       </div>

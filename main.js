@@ -7,6 +7,7 @@ import Menu from "./modules/Menu/Menu.js";
 import Banner from "./modules/Banner/Banner.js";
 import RegionSelector from "./modules/RegionSelector/RegionSelector.js"
 import GenreBar from "./modules/GenreBar/GenreBar.js"
+import GenreBarButtons from "./modules/GenreBar/GenreBarButtons.js"
 import DataManager from "./modules/DataManager/DataManager.js";
 
 // Load CSV Data
@@ -303,18 +304,10 @@ function initialize() {
                                     dataProcessor.getPublisherList(),
                                     [1980, 2015])
 
-  dataManager.setGenre("Sports")
+  let genreBarButtons = new GenreBarButtons("genreBarButtons_container",
+                                            dataProcessor.getGenreList(),
+                                            dataManager)
 
-  dataManager.setGenre(dataProcessor.getGenreList())
-
-  dataManager.setPlatform("PS2")
-
-  dataManager.setPlatform(dataProcessor.getConsoleList())
-
-  dataManager.setGenre("Sports")
-
-  dataManager.setPlatform("PS2")
-
-
+  //dataManager.setGenre(["Sports", "Platform", "Racing"])
 
 }

@@ -55,7 +55,8 @@ export default class DataManager {
   filter() {
     this.filteredData = []
     for (let game of this.data) {
-      if (this.genres.includes(game.Genre) &&
+      if (game.Genre != "" &&
+          this.genres.includes(game.Genre) &&
           this.platforms.includes(game.Platform) &&
           this.timeInterval[0] <= game.Year_of_Release &&
           game.Year_of_Release <= this.timeInterval[1] &&
