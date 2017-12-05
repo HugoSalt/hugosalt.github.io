@@ -279,6 +279,7 @@ function initialize() {
   // ---------------------------------------------------------------------------
   // GAME ANALYSIS
   // ---------------------------------------------------------------------------
+
   let order_stack_game_type = {
     "Sports": 1,
     "Platform": 2,
@@ -309,5 +310,17 @@ function initialize() {
                                             dataManager)
 
   //dataManager.setGenre(["Sports", "Platform", "Racing"])
+
+  dataManager.setPlatform("PS2")
+
+  dataManager.setPlatform(dataProcessor.getConsoleList())
+
+  dataManager.setGenre("Sports")
+
+  dataManager.setPlatform("PS2")
+
+
+  let scatterPlot = new ScatterPlot("scatterPlot_container", data, "Number of Sales", "Critics Score");
+
 
 }

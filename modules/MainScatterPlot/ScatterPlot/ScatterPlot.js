@@ -51,6 +51,11 @@ export default class ScatterPlot {
   // Create our SVG canvas
   // ---------------------------------------------------------------------------
   var svg = d3.select("body")
+              .select("div#main_container")
+              .select("div#scrolling_container")
+              .select("div.row row_padded")
+              .selectAll("div.col-xs")
+  .           .select("div#scatterPlot_container")
               .append("svg")
               .attr("width", width)
               .attr("height", height);
