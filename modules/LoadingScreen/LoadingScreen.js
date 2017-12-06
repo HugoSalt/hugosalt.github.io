@@ -6,7 +6,6 @@ export default class LoadingScreen {
   setProgress(percentage) {
     let bar = document.getElementById("loading_bar");
     bar.style.width = percentage * 400 + "px";
-    console.log("hello");
   }
 
   hide() {
