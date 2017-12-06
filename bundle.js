@@ -7266,7 +7266,6 @@ class LoadingScreen {
   setProgress(percentage) {
     let bar = document.getElementById("loading_bar");
     bar.style.width = percentage * 400 + "px";
-    console.log("hello");
   }
 
   hide() {
@@ -7277,9 +7276,9 @@ class LoadingScreen {
 
 }
 
+// Initialize Loading Screen
 let loadingScreen = new LoadingScreen();
 loadingScreen.setProgress(0.0);
-
 
 // Load CSV Data
 let data = [];
@@ -7482,7 +7481,6 @@ function initialize() {
     };
     let publisherWarSalesYears = new StackedAreaChart("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_WORLD, typesPublishers_WORLD, [publishers_sales_top10_data_WORLD[0]], colorsPublishers, order_stack_publishers);
 
-
     // Set Up Region Selector
     let publisherWarRegionSelector = new RegionSelector("publishers_war_region_selector");
     publisherWarRegionSelector.selectedRegion = (region) => {
@@ -7536,22 +7534,9 @@ function initialize() {
       }
     };
 
-    let colorsGameType = {
-      "Sports": "#632920",
-      "Platform": "#6e0f01",
-      "Racing": "#792215",
-      "Role-Playing": "#831e0e",
-      "Puzzle": "#932513",
-      "Misc": "#a3200a",
-      "Shooter": "#b9260d",
-      "Simulation": "#d02407",
-      "Action": "#e33316",
-      "Fighting": "#f54123",
-      "Adventure": "#025485",
-      "Strategy": "#046195",
-    };
   }
 
+  // Loading Screen Timing
   consoleWarInit();
   loadingScreen.setProgress(0.7);
   setTimeout(() => {
@@ -7563,6 +7548,21 @@ function initialize() {
   // ---------------------------------------------------------------------------
   // GAME ANALYSIS
   // ---------------------------------------------------------------------------
+
+  let colorsGameType = {
+    "Sports": "#632920",
+    "Platform": "#6e0f01",
+    "Racing": "#792215",
+    "Role-Playing": "#831e0e",
+    "Puzzle": "#932513",
+    "Misc": "#a3200a",
+    "Shooter": "#b9260d",
+    "Simulation": "#d02407",
+    "Action": "#e33316",
+    "Fighting": "#f54123",
+    "Adventure": "#025485",
+    "Strategy": "#046195",
+  };
 
   let order_stack_game_type = {
     "Sports": 1,
@@ -7603,8 +7603,6 @@ function initialize() {
 
 
   //let scatterPlot = new ScatterPlot("scatterPlot_container", data, "Number of Sales", "Critics Score");
-
-  loadingScreen.setProgress(1);
 }
 
 }());
