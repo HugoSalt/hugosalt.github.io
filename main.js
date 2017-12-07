@@ -6,6 +6,7 @@ import DataProcessor from "./modules/DataProcessor/DataProcessor.js";
 import Menu from "./modules/Menu/Menu.js";
 import Banner from "./modules/Banner/Banner.js";
 import RegionSelector from "./modules/RegionSelector/RegionSelector.js"
+import ScatterPlot from "./modules/ScatterPlot/ScatterPlot.js"
 import GenreBar from "./modules/GenreBar/GenreBar.js"
 import GenreBarButtons from "./modules/GenreBar/GenreBarButtons.js"
 import DataManager from "./modules/DataManager/DataManager.js";
@@ -316,8 +317,9 @@ function initialize() {
 
   //let main_genre_list = dataProcessor.getGenreDistribution(Object.keys(order_stack_game_type))
   let genreBar = new GenreBar("genreBar_container", colorsGameType)
+  let scatterPlot = new ScatterPlot("scatterPlot_container", data, "Number of Sales", "Critics Score");
 
-  let dataManager = new DataManager(data, [genreBar],
+  let dataManager = new DataManager(data, [scatterPlot, genreBar],
     dataProcessor.getGenreList(),
     dataProcessor.getConsoleList(),
     dataProcessor.getPublisherList(), [1980, 2015])
@@ -337,5 +339,5 @@ function initialize() {
   dataManager.setPlatform("PS2")
 
 
-  //let scatterPlot = new ScatterPlot("scatterPlot_container", data, "Number of Sales", "Critics Score");
+
 }

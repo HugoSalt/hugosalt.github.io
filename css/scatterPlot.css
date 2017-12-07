@@ -1,0 +1,15 @@
+#scatterPlot_container {
+  width: 1200px;
+  height: 600px;
+}
+
+.axis {
+  font: 16px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
