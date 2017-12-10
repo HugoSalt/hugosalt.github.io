@@ -1,11 +1,10 @@
-#genreBar_container {
-  width: 800px;
-  height: 400px;
+#consoleBar_container {
+  width: 300px;
+  height: 600px;
 }
 
 .axis {
   font: 16px sans-serif;
-  fill: #111;
 }
 
 .axis path,
@@ -15,14 +14,14 @@
   shape-rendering: crispEdges;
 }
 
-.genre_tip {
+.console_tip {
   font-weight: bold;
   font-size: 14px;
   padding: 4px;
   color: #111;
 }
 
-.genre_tip:after {
+.console_tip:after {
   box-sizing: border-box;
   display: inline;
   font-size: 10px;
@@ -30,11 +29,10 @@
   line-height: 1;
   color: rgba(0, 0, 0, 0.8);
   content: "\25BC";
-  position: absolute;
   text-align: center;
 }
 
-.genre_tip.n:after {
+.console_tip.n:after {
   margin: -1px 0 0 0;
   top: 100%;
   left: 0;

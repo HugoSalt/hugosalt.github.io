@@ -8,6 +8,7 @@ import Banner from "./modules/Banner/Banner.js";
 import RegionSelector from "./modules/RegionSelector/RegionSelector.js"
 import GenreBar from "./modules/GenreBar/GenreBar.js"
 import GenreBarButtons from "./modules/GenreBar/GenreBarButtons.js"
+import ConsoleBar from "./modules/ConsoleBar/ConsoleBar.js"
 import DataManager from "./modules/DataManager/DataManager.js";
 
 // Load CSV Data
@@ -86,6 +87,22 @@ function initialize() {
     "XB": 19,
     "PC": 20
   }
+/*
+  not in list :
+
+  GEN : Mega Drive                  (SEGA)
+  DC : Dreamcast                    (SEGA)
+  PSV : PlayStation Vita            (PlayStation) (SONY)
+  SAT : Saturn                      (SEGA)
+  SCD : Sega CD (Mega CD)           (SEGA)
+  WS : WonderSwan                   (Bandai)
+  NG : Neo-Geo AES                  (SNK)
+  TG16 : PC Engine                  (NEC Corporation)
+  3DO : 3DO Interactive Multiplayer (Panasonic)
+  GG : Game Gear                    (SEGA)
+  PCFX : PC-FX                      (NEC)
+*/
+
   /*// Set Up Release Games Graph
   let consoleReleaseYears = new StackedAreaChart("consoleReleaseYears_container", "Year", "Number of games released that year", 1600, console_release_data, typesConsoles, [platformList], colorsConsole, order_stack_consoles);
 
@@ -294,15 +311,60 @@ function initialize() {
     "Strategy": 12
   }
 
-  //let main_genre_list = dataProcessor.getGenreDistribution(Object.keys(order_stack_game_type))
+  let genreList = ["Sports",
+                    "Platform",
+                    "Racing",
+                    "Role-Playing",
+                    "Puzzle",
+                    "Misc",
+                    "Shooter",
+                    "Simulation",
+                    "Action",
+                    "Fighting",
+                    "Adventure",
+                    "Strategy"]
+/*
+  let platformList = [
+                      "NES",
+                      "SNES",
+                      "N64",
+                      "GC",
+                      "Wii",
+                      "WiiU",
+                      "GB",
+                      "DS",
+                      "GBA",
+                      "3DS",
+                      "PS",
+                      "PS2",
+                      "PS3",
+                      "PS4",
+                      "PSP",
+                      "2600",
+                      "X360",
+                      "XOne",
+                      "XB",
+                      "PC",
+                      "GEN",
+                      "DC",
+                      "PSV",
+                      "SAT",
+                      "SCD",
+                      "GG"]
+    }
+*/
   let genreBar = new GenreBar("genreBar_container", colorsGameType)
 
+  let consoleBar = new ConsoleBar("all_brands_barChart_container")
+
   let dataManager = new DataManager(data,
-                                    [genreBar],
-                                    dataProcessor.getGenreList(),
-                                    dataProcessor.getConsoleList(),
+                                    [genreBar, consoleBar],
+                                    genreList,
+                                    platformList,
                                     dataProcessor.getPublisherList(),
                                     [1980, 2015])
+
+  consoleBar.setDataManager(dataManager)
 
   let genreBarButtons = new GenreBarButtons("genreBarButtons_container",
                                             dataProcessor.getGenreList(),

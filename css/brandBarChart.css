@@ -1,0 +1,62 @@
+.brand_chart {
+  background: #EEE;
+  border: outset;
+  border-width: 5px;
+  border-radius: 5%;
+}
+
+.brand_chart_selected {
+  border-color: orange;
+}
+
+.brand_chart_not_selected{
+  border-color: grey;
+}
+
+.brand_title_selected {
+  font-size: 16px;
+  font-weight: bold;
+  fill: #111;
+  cursor: pointer;
+}
+
+.brand_title_not_selected {
+  font-size: 16px;
+  font-weight: bold;
+  fill: #777;
+  cursor: pointer;
+}
+
+.brand_title_selected.brand_title_hovered {
+  font-size: 16px;
+  font-weight: bold;
+  fill: #333;
+  cursor: pointer;
+}
+
+.brand_title_not_selected.brand_title_hovered {
+  font-size: 16px;
+  font-weight: bold;
+  fill: #555;
+  cursor: pointer;
+}
+
+.console_selected{
+  font-size: 16px;
+  fill: #111;
+}
+
+.console_not_selected{
+  font-size: 16px;
+  fill: #777;
+}
+
+.console_selected.console_hovered{
+  font-size: 16px;
+  fill: #333;
+}
+
+.console_not_selected.console_hovered{
+  font-size: 16px;
+  fill: #555;
+}

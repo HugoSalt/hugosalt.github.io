@@ -8,7 +8,6 @@
   <script src="./legacy_script/d3.v3.min.js" charset="utf-8"></script>
   <script src="./legacy_script/c3.min.js"></script>
   <script src="./d3tip.js"></script>
-  <script src="./d3button.js"></script>
   <link href="./css/c3.min.css" rel="stylesheet">
   <!-- See doc at http://flexboxgrid.com/ -->
   <link rel="stylesheet" href="css/flexboxgrid.min.css" type="text/css">
@@ -22,6 +21,7 @@
   <link rel="stylesheet" type="text/css" href="./css/barChart.css">
   <link rel="stylesheet" type="text/css" href="./css/genreBar.css">
   <link rel="stylesheet" type="text/css" href="./css/genreBarButtons.css">
+  <link rel="stylesheet" type="text/css" href="./css/brandBarChart.css">
   <script type="text/javascript" src="bundle.js" defer></script>
 </head>
 
@@ -206,9 +206,25 @@
       <div class="row row_padded">
         <div class="col-xs">
           <p>Here goes the final Viz</p>
-          <div id="salesCriticsYears_container" class="scatter_plot">
-            <div id="genreBarButtons_container"></div>
-            <div id="genreBar_container"></div>
+          <div id="viz_container">
+            <div id="genreBar_and_buttons">
+              <div id="genreBarButtons_container"></div>
+              <div id="genreBar_container"></div>
+            </div>
+            <div id="scatterPlot_and_consoles">
+              <div id="scatterPlot_container"></div>
+              <div id="consoleBar_container">
+                <div id="individual_brands_barChart_container">
+                  <div id="nintendo_barChart_container" class="brandBarChart"></div>
+                  <div id="playstation_barChart_container" class="brandBarChart"></div>
+                  <div id="xbox_barChart_container" class="brandBarChart"></div>
+                  <div id="atari_barChart_container" class="brandBarChart"></div>
+                  <div id="pc_barChart_container" class="brandBarChart"></div>
+                </div>
+                <div id="all_brands_barChart_container"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
         <!-- Conclusion -->

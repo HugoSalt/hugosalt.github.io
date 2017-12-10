@@ -180,6 +180,37 @@ a:hover {
   }
 }
 
-#salesCriticsYears_container {
-  display: flex
+#viz_container {
+  display: flex;
+  flex-direction: column;
 }
+
+  #genreBar_and_buttons {
+    display: flex;
+    flex-direction: row;
+  }
+
+  #scatterPlot_and_consoles {
+    display: flex;
+    flex-direction: row;
+  }
+
+  #consoleBar_container {
+    display: flex;
+    flex-direction: row;
+  }
+
+    #individual_brands_barChart_container{
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brandBarChart{
+      display: flex;
+      flex-direction: row;
+      margin-top: 10px;
+    }
+
+    .brand_bar{
+      margin-top: 5px;
+    }
