@@ -2,9 +2,9 @@
 export default class GenreBar {
 
   constructor(container_id, colors) {
-    this.margin = {top: 20, right: 20, bottom: 50, left: 50},
-    this.width = 800 - this.margin.left - this.margin.right,
-    this.height = 310 - this.margin.top - this.margin.bottom;
+    this.margin = {top: 10, right: 0, bottom: 50, left: 50},
+    this.width = 700 - this.margin.left - this.margin.right,
+    this.height = 190 - this.margin.top - this.margin.bottom;
     this.svg = d3.select('#' + container_id)
                  .append("svg")
                  .attr("width", this.width + this.margin.left + this.margin.right)
@@ -83,6 +83,21 @@ export default class GenreBar {
     respect to all genre specified, such that the sum of each percentage is 1.
   */
   getGenreDistribution(newData) {
+      let genre_sort_rule = {
+        "Sports": 1,
+        "Platform": 2,
+        "Racing": 3,
+        "Role-Playing": 4,
+        "Puzzle": 5,
+        "Misc": 6,
+        "Shooter": 7,
+        "Simulation": 8,
+        "Action": 9,
+        "Fighting": 10,
+        "Adventure": 11,
+        "Strategy": 12,
+      }
+
       let data = newData.reduce(
         (genre_list, game) => {
         let found = false
@@ -93,7 +108,7 @@ export default class GenreBar {
           }
         }
         if (! found) {
-          genre_list.push([game.Genre, 0])
+          genre_list.push([game.Genre, 1])
         }
         return genre_list
       }, [])
@@ -101,6 +116,12 @@ export default class GenreBar {
       for (let e of data) {
         e[1] /= newData.length
       }
+
+      // We sort
+      data.sort(function(a, b) {
+        return genre_sort_rule[a[0]] - genre_sort_rule[b[0]]
+      })
+
       return data
   }
 }

@@ -44,19 +44,35 @@
 .console_selected{
   font-size: 16px;
   fill: #111;
+  cursor: pointer;
 }
 
 .console_not_selected{
   font-size: 16px;
   fill: #777;
+  cursor: pointer;
 }
 
 .console_selected.console_hovered{
   font-size: 16px;
   fill: #333;
+  cursor: pointer;
 }
 
 .console_not_selected.console_hovered{
   font-size: 16px;
   fill: #555;
+  cursor: pointer;
+}
+
+.tooltip {
+  position: absolute;
+  width: 42px;
+  height: 12px;
+  padding: 10px;
+  font: 16px sans-serif;
+  background: #999;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
 }

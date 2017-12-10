@@ -2,32 +2,65 @@
   fill: #707070;
   stroke: #999faa;
   stroke-width: 2px;
+  cursor: pointer;
 }
 
 .button_not_selected.button_hovered rect {
   fill: #909090;
   stroke: #999faa;
   stroke-width: 2px;
+  cursor: pointer;
 }
 
 .button_selected rect {
   fill: #202020;
   stroke: #999faa;
   stroke-width: 2px;
+  cursor: pointer;
 }
 
 .button_selected.button_hovered rect {
   fill: #404040;
   stroke: #999faa;
   stroke-width: 2px;
+  cursor: pointer;
 }
 
 .button_not_selected text {
   fill: white;
   font-size: 16px;
+  cursor: pointer;
 }
 
 .button_selected text {
   fill: white;
   font-size: 16px;
+  cursor: pointer;
+}
+
+.button_all_none rect{
+  fill: #666;
+  stroke: #BBB;
+  stroke-width: 2px;
+  cursor: pointer;
+}
+
+.button_all_none_selected rect{
+  fill: #222;
+  stroke: #BBB;
+  stroke-width: 2px;
+  cursor: pointer;
+}
+
+.button_all_none_hovered rect{
+  fill: #888;
+  stroke: #BBB;
+  stroke-width: 2px;
+  cursor: pointer;
+}
+
+.button_all_none_text{
+  fill: white;
+  font-size: 16px;
+  cursor: pointer;
 }

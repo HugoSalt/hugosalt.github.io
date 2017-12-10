@@ -9,7 +9,15 @@ export default class ConsoleBar {
     this.atari = ["2600"]
     this.pc = ["PC"]
 
-    this.consoles_selected = [true, true, true, true, true]
+    // Creation of a dictionary representing the selected consoles
+    this.consoles = this.nintendo.concat(this.playstation)
+                            .concat(this.xbox)
+                            .concat(this.atari)
+                            .concat(this.pc)
+    this.consoles_selected = {}
+    for (let e of this.consoles) {
+      this.consoles_selected[e] = true
+    }
 
     this.margin = {top: 20, right: 20, bottom: 30, left: 200},
     this.width = 500 - this.margin.left - this.margin.right,
@@ -25,46 +33,58 @@ export default class ConsoleBar {
     this.total_distribution = []
     this.sum_brand_distribution = []
 
-    this.nintendoBarChart = new BrandBarChart(this, "nintendo_barChart_container",
+    this.nintendoBarChart = new BrandBarChart(this, this.nintendo, "nintendo_barChart_container",
                                        "Nintendo",
                                        this.get_brand_distribution(this.nintendo))
 
-    this.playstationBarChart = new BrandBarChart(this, "playstation_barChart_container",
+    this.playstationBarChart = new BrandBarChart(this, this.playstation, "playstation_barChart_container",
                                        "Playstation",
                                        this.get_brand_distribution(this.nintendo))
 
-    this.xboxBarChart = new BrandBarChart(this, "xbox_barChart_container",
+    this.xboxBarChart = new BrandBarChart(this, this.xbox, "xbox_barChart_container",
                                        "Xbox",
                                        this.get_brand_distribution(this.nintendo))
 
-    this.atariBarChart = new BrandBarChart(this, "atari_barChart_container",
+    this.atariBarChart = new BrandBarChart(this, this.atari, "atari_barChart_container",
                                        "Atari",
                                        this.get_brand_distribution(this.nintendo))
 
-    this.pcBarChart = new BrandBarChart(this, "pc_barChart_container",
+    this.pcBarChart = new BrandBarChart(this, this.pc, "pc_barChart_container",
                                        "PC",
                                        this.get_brand_distribution(this.nintendo))
+
+    this.tooltip = d3.select("body")
+                     .append("div")
+                     .attr("class", "tooltip")
+                     .style("opacity", 0);
   }
 
   update(newData) {
     this.computeConsoleDistribution(newData)
 
-    let max_brand = Math.max(...this.sum_brand_distribution.map(e => e[1]))
+    let values = this.sum_brand_distribution.map(e => e[1])
+    let max_brand = Math.max(...values)
+    let game_count = values.reduce((a, b) => a + b, 0);
     this.nintendoBarChart.update(this.get_brand_distribution(this.nintendo),
                                  this.sum_brand_distribution[0][1],
-                                 max_brand)
+                                 max_brand,
+                                 game_count)
     this.playstationBarChart.update(this.get_brand_distribution(this.playstation),
                                     this.sum_brand_distribution[1][1],
-                                    max_brand)
+                                    max_brand,
+                                    game_count)
     this.xboxBarChart.update(this.get_brand_distribution(this.xbox),
                                     this.sum_brand_distribution[2][1],
-                                    max_brand)
+                                    max_brand,
+                                    game_count)
     this.atariBarChart.update(this.get_brand_distribution(this.atari),
                                     this.sum_brand_distribution[3][1],
-                                    max_brand)
+                                    max_brand,
+                                    game_count)
     this.pcBarChart.update(this.get_brand_distribution(this.pc),
                                     this.sum_brand_distribution[4][1],
-                                    max_brand)
+                                    max_brand,
+                                    game_count)
   }
 
   /*
@@ -139,54 +159,63 @@ export default class ConsoleBar {
                                    ["PC", pc]]
   }
 
-    get_brand_distribution(brand) {
-      return this.total_distribution.filter(e => brand.includes(e[0]) )
+  get_brand_distribution(brand) {
+    return this.total_distribution.filter(e => brand.includes(e[0]) )
+  }
+
+  setDataManager(dataManager) {
+    this.dataManager = dataManager
+  }
+
+  update_brand(name, value) {
+    let brand = null
+    switch (name){
+      case "nintendo_barChart_container":
+        brand = this.nintendo
+        break;
+      case "playstation_barChart_container":
+        brand = this.playstation
+        break;
+      case "xbox_barChart_container":
+        brand = this.xbox
+        break;
+      case "atari_barChart_container":
+        brand = this.atari
+        break;
+      case "pc_barChart_container":
+        brand = this.pc
+        break;
+      default:
+        console.log("Unknown console : " + name)
+        break;
     }
 
-    setDataManager(dataManager) {
-      this.dataManager = dataManager
+    for (let e of brand) {
+      this.consoles_selected[e] = value
     }
 
-    update_brand(name, value) {
-      switch (name){
-        case "nintendo_barChart_container":
-          this.consoles_selected[0] = value;
-          break;
-        case "playstation_barChart_container":
-          this.consoles_selected[1] = value;
-          break;
-        case "xbox_barChart_container":
-          this.consoles_selected[2] = value;
-          break;
-        case "atari_barChart_container":
-          this.consoles_selected[3] = value;
-          break;
-        case "pc_barChart_container":
-          this.consoles_selected[4] = value;
-          break;
-        default:
-          console.log("Unknown console : " + name)
-          break;
-      }
+    let platforms = this.consoles.reduce(
+      (res, platform) => {
+        if (this.consoles_selected[platform]) {
+          return res.concat(platform)
+        }
+        return res
+      }, [])
 
+    this.dataManager.setPlatform(platforms)
+  }
 
-      let platforms = []
-      if (this.consoles_selected[0] ) {
-        platforms = platforms.concat(this.nintendo)
-      }
-      if (this.consoles_selected[1]) {
-        platforms = platforms.concat(this.playstation)
-      }
-      if (this.consoles_selected[2]) {
-        platforms = platforms.concat(this.xbox)
-      }
-      if (this.consoles_selected[3]) {
-        platforms = platforms.concat(this.atari)
-      }
-      if (this.consoles_selected[4]) {
-        platforms = platforms.concat(this.pc)
-      }
+  update_console(platform, value) {
+    this.consoles_selected[platform] = value
 
-      this.dataManager.setPlatform(platforms)
-    }
+    let platforms = this.consoles.reduce(
+      (res, platform) => {
+        if (this.consoles_selected[platform]) {
+          return res.concat(platform)
+        }
+        return res
+      }, [])
+
+    this.dataManager.setPlatform(platforms)
+  }
 }
