@@ -13,14 +13,14 @@ import DataManager from "./modules/DataManager/DataManager.js";
 import LoadingScreen from "./modules/LoadingScreen/LoadingScreen.js";
 
 // Initialize Loading Screen
-let loadingScreen = new LoadingScreen();
-loadingScreen.setProgress(0.0);
+//let loadingScreen = new LoadingScreen(); // TODO uncomment
+//loadingScreen.setProgress(0.0); // TODO uncomment
 
 // Load CSV Data
 let data = [];
 d3.csv("./data/Video_Games_Sales_as_at_22_Dec_2016.csv", (parsed_data) => {
   parsed_data.forEach((line) => data.push(line));
-  loadingScreen.setProgress(0.2);
+  //loadingScreen.setProgress(0.2); // TODO uncomment
   setTimeout(() => initialize(), 550);
 });
 
@@ -272,14 +272,15 @@ function initialize() {
 
   }
 
+  // TODO : uncomment
   // Loading Screen Timing
-  consoleWarInit();
-  loadingScreen.setProgress(0.7);
-  setTimeout(() => {
-    publisherWarInit();
-    loadingScreen.setProgress(1);
-    setTimeout(() => loadingScreen.hide(), 400);
-  }, 550);
+  // consoleWarInit();
+  // loadingScreen.setProgress(0.7);
+  // setTimeout(() => {
+  //   publisherWarInit();
+  //   loadingScreen.setProgress(1);
+  //   setTimeout(() => loadingScreen.hide(), 400);
+  // }, 550);
 
   // ---------------------------------------------------------------------------
   // GAME ANALYSIS
@@ -317,7 +318,7 @@ function initialize() {
 
   //let main_genre_list = dataProcessor.getGenreDistribution(Object.keys(order_stack_game_type))
   let genreBar = new GenreBar("genreBar_container", colorsGameType)
-  let scatterPlot = new ScatterPlot("scatterPlot_container", data, "Number of Sales", "Critics Score");
+  let scatterPlot = new ScatterPlot("scatterPlot_container", "Number of Sales", "Critics Score");
 
   let dataManager = new DataManager(data, [scatterPlot, genreBar],
     dataProcessor.getGenreList(),
