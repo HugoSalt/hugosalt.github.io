@@ -25,6 +25,11 @@ export default class ScatterPlot {
     // ---------------------------------------------------------------------------
     // Create our SVG canvas
     // ---------------------------------------------------------------------------
+    this.tooltip = d3.select("#" + container_id)
+                     .append("div")
+                     .attr("class", "tooltip")
+                     .style("opacity", 0.0);
+
     this.svg = d3.select('#' + container_id)
                 .append("svg")
                 .attr("width", this.width + this.padding*2)
@@ -35,11 +40,6 @@ export default class ScatterPlot {
 
     this.x_group = this.svg.append("g");
     this.y_group = this.svg.append("g");
-
-    this.tooltip = d3.select("#" + container_id)
-                     .append("div")
-                     .attr("class", "tooltip")
-                     .style("opacity", 0.0);
   }
 
 
@@ -47,13 +47,14 @@ export default class ScatterPlot {
     // -------------------------------------------------------------------
     //  Compute Scaling functions
     // -------------------------------------------------------------------
+    var padding = 2*this.padding;
 
     var tooltip = this.tooltip
                       .html('I am a tooltip')
                       .style('border', '1px solid steelblue')
                       .style('padding', '5px')
-                      .style('position', 'absolute')
-                      .style('opacity', 1);
+                      .style('position', 'relative')
+                      .style('opacity', 0);
 
     let colorsPublishers = {
       "Nintendo": "#c22020",
@@ -158,13 +159,15 @@ export default class ScatterPlot {
         d3.select(this)
         .transition()
         .duration(700)
-        .attr("fill", "orange")
-        .attr("r", 2*radius);
+        .attr("r", 2*radius)
+        .attr("fill", "orange");
 
         tooltip.transition()
                .duration(400)
                .style("opacity", 0.9);
         tooltip.html(game.Name)
+               .style("left", (d3.event.pageX - padding) + "px")
+               .style("top", (d3.event.pageY - padding) + "px");
                /*.style("left", xScale(game.Global_Sales) + "px")
                .style("top", yScale(game.Critic_Score) - 20 + "px")*/;
 
@@ -181,36 +184,16 @@ export default class ScatterPlot {
         d3.select(this)
         .transition()
         .duration(700)
-        .attr("fill", "black")
-        .attr("r", radius);
+        .attr("r", radius)
+        .attr("fill", "black");
 
         tooltip.transition()
                 .duration(400)
-                .style("opacity", 0.9);
+                .style("opacity", 0.0);
      });
-
-
-
-
      // On Click, we want to add data to the array and chart
-    /*.on("click", function() {
-      var coords = d3.mouse(this);
+     /*.on("click", function() {
 
-      // Normally we go from data to pixels, but here we're doing pixels to data
-      var newData= {
-        x: Math.round( xScale.invert(coords[0])),  // Takes the pixel number to convert to number
-        y: Math.round( yScale.invert(coords[1]))
-      };
-
-      dataset.push(newData);   // Push data to our array
-
-      svg.selectAll("circle")  // For new circle, go through the update process
-        .data(dataset)
-        .enter()
-        .append("circle")
-        .attr(circleAttrs)  // Get attributes from circleAttrs var
-        .on("mouseover", handleMouseOver)
-        .on("mouseout", handleMouseOut);
-    });*/
+     });*/
   }
 }
