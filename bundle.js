@@ -38,179 +38,6 @@ function ascendingComparator(f) {
 }
 
 var ascendingBisect = bisector(ascending);
-var bisectRight = ascendingBisect.right;
-
-function pair(a, b) {
-  return [a, b];
-}
-
-var number = function(x) {
-  return x === null ? NaN : +x;
-};
-
-var extent = function(values, valueof) {
-  var n = values.length,
-      i = -1,
-      value,
-      min,
-      max;
-
-  if (valueof == null) {
-    while (++i < n) { // Find the first comparable value.
-      if ((value = values[i]) != null && value >= value) {
-        min = max = value;
-        while (++i < n) { // Compare the remaining values.
-          if ((value = values[i]) != null) {
-            if (min > value) min = value;
-            if (max < value) max = value;
-          }
-        }
-      }
-    }
-  }
-
-  else {
-    while (++i < n) { // Find the first comparable value.
-      if ((value = valueof(values[i], i, values)) != null && value >= value) {
-        min = max = value;
-        while (++i < n) { // Compare the remaining values.
-          if ((value = valueof(values[i], i, values)) != null) {
-            if (min > value) min = value;
-            if (max < value) max = value;
-          }
-        }
-      }
-    }
-  }
-
-  return [min, max];
-};
-
-var identity = function(x) {
-  return x;
-};
-
-var sequence = function(start, stop, step) {
-  start = +start, stop = +stop, step = (n = arguments.length) < 2 ? (stop = start, start = 0, 1) : n < 3 ? 1 : +step;
-
-  var i = -1,
-      n = Math.max(0, Math.ceil((stop - start) / step)) | 0,
-      range = new Array(n);
-
-  while (++i < n) {
-    range[i] = start + i * step;
-  }
-
-  return range;
-};
-
-var e10 = Math.sqrt(50);
-var e5 = Math.sqrt(10);
-var e2 = Math.sqrt(2);
-
-var ticks = function(start, stop, count) {
-  var reverse,
-      i = -1,
-      n,
-      ticks,
-      step;
-
-  stop = +stop, start = +start, count = +count;
-  if (start === stop && count > 0) return [start];
-  if (reverse = stop < start) n = start, start = stop, stop = n;
-  if ((step = tickIncrement(start, stop, count)) === 0 || !isFinite(step)) return [];
-
-  if (step > 0) {
-    start = Math.ceil(start / step);
-    stop = Math.floor(stop / step);
-    ticks = new Array(n = Math.ceil(stop - start + 1));
-    while (++i < n) ticks[i] = (start + i) * step;
-  } else {
-    start = Math.floor(start * step);
-    stop = Math.ceil(stop * step);
-    ticks = new Array(n = Math.ceil(start - stop + 1));
-    while (++i < n) ticks[i] = (start - i) / step;
-  }
-
-  if (reverse) ticks.reverse();
-
-  return ticks;
-};
-
-function tickIncrement(start, stop, count) {
-  var step = (stop - start) / Math.max(0, count),
-      power = Math.floor(Math.log(step) / Math.LN10),
-      error = step / Math.pow(10, power);
-  return power >= 0
-      ? (error >= e10 ? 10 : error >= e5 ? 5 : error >= e2 ? 2 : 1) * Math.pow(10, power)
-      : -Math.pow(10, -power) / (error >= e10 ? 10 : error >= e5 ? 5 : error >= e2 ? 2 : 1);
-}
-
-function tickStep(start, stop, count) {
-  var step0 = Math.abs(stop - start) / Math.max(0, count),
-      step1 = Math.pow(10, Math.floor(Math.log(step0) / Math.LN10)),
-      error = step0 / step1;
-  if (error >= e10) step1 *= 10;
-  else if (error >= e5) step1 *= 5;
-  else if (error >= e2) step1 *= 2;
-  return stop < start ? -step1 : step1;
-}
-
-var sturges = function(values) {
-  return Math.ceil(Math.log(values.length) / Math.LN2) + 1;
-};
-
-var threshold = function(values, p, valueof) {
-  if (valueof == null) valueof = number;
-  if (!(n = values.length)) return;
-  if ((p = +p) <= 0 || n < 2) return +valueof(values[0], 0, values);
-  if (p >= 1) return +valueof(values[n - 1], n - 1, values);
-  var n,
-      i = (n - 1) * p,
-      i0 = Math.floor(i),
-      value0 = +valueof(values[i0], i0, values),
-      value1 = +valueof(values[i0 + 1], i0 + 1, values);
-  return value0 + (value1 - value0) * (i - i0);
-};
-
-var min = function(values, valueof) {
-  var n = values.length,
-      i = -1,
-      value,
-      min;
-
-  if (valueof == null) {
-    while (++i < n) { // Find the first comparable value.
-      if ((value = values[i]) != null && value >= value) {
-        min = value;
-        while (++i < n) { // Compare the remaining values.
-          if ((value = values[i]) != null && min > value) {
-            min = value;
-          }
-        }
-      }
-    }
-  }
-
-  else {
-    while (++i < n) { // Find the first comparable value.
-      if ((value = valueof(values[i], i, values)) != null && value >= value) {
-        min = value;
-        while (++i < n) { // Compare the remaining values.
-          if ((value = valueof(values[i], i, values)) != null && min > value) {
-            min = value;
-          }
-        }
-      }
-    }
-  }
-
-  return min;
-};
-
-function length(d) {
-  return d.length;
-}
 
 var noop = {value: function() {}};
 
@@ -359,7 +186,7 @@ var matcher$1 = matcher;
 
 var filterEvents = {};
 
-var event = null;
+
 
 if (typeof document !== "undefined") {
   var element$1 = document.documentElement;
@@ -380,12 +207,10 @@ function filterContextListener(listener, index, group) {
 
 function contextListener(listener, index, group) {
   return function(event1) {
-    var event0 = event; // Events can be reentrant (e.g., focus).
-    event = event1;
     try {
       listener.call(this, this.__data__, index, group);
     } finally {
-      event = event0;
+      
     }
   };
 }
@@ -1657,14 +1482,6 @@ define(Cubehelix, cubehelix, extend(Color, {
   }
 }));
 
-function basis(t1, v0, v1, v2, v3) {
-  var t2 = t1 * t1, t3 = t2 * t1;
-  return ((1 - 3 * t1 + 3 * t2 - t3) * v0
-      + (4 - 6 * t2 + 3 * t3) * v1
-      + (1 + 3 * t1 + 3 * t2 - 3 * t3) * v2
-      + t3 * v3) / 6;
-}
-
 var constant$3 = function(x) {
   return function() {
     return x;
@@ -1721,54 +1538,9 @@ var interpolateRgb = (function rgbGamma(y) {
   return rgb$$1;
 })(1);
 
-var array$1 = function(a, b) {
-  var nb = b ? b.length : 0,
-      na = a ? Math.min(nb, a.length) : 0,
-      x = new Array(nb),
-      c = new Array(nb),
-      i;
-
-  for (i = 0; i < na; ++i) x[i] = interpolateValue(a[i], b[i]);
-  for (; i < nb; ++i) c[i] = b[i];
-
-  return function(t) {
-    for (i = 0; i < na; ++i) c[i] = x[i](t);
-    return c;
-  };
-};
-
-var date = function(a, b) {
-  var d = new Date;
-  return a = +a, b -= a, function(t) {
-    return d.setTime(a + b * t), d;
-  };
-};
-
 var reinterpolate = function(a, b) {
   return a = +a, b -= a, function(t) {
     return a + b * t;
-  };
-};
-
-var object = function(a, b) {
-  var i = {},
-      c = {},
-      k;
-
-  if (a === null || typeof a !== "object") a = {};
-  if (b === null || typeof b !== "object") b = {};
-
-  for (k in b) {
-    if (k in a) {
-      i[k] = interpolateValue(a[k], b[k]);
-    } else {
-      c[k] = b[k];
-    }
-  }
-
-  return function(t) {
-    for (k in i) c[k] = i[k](t);
-    return c;
   };
 };
 
@@ -1833,24 +1605,6 @@ var interpolateString = function(a, b) {
           for (var i = 0, o; i < b; ++i) s[(o = q[i]).i] = o.x(t);
           return s.join("");
         });
-};
-
-var interpolateValue = function(a, b) {
-  var t = typeof b, c;
-  return b == null || t === "boolean" ? constant$3(b)
-      : (t === "number" ? reinterpolate
-      : t === "string" ? ((c = color(b)) ? (b = c, interpolateRgb) : interpolateString)
-      : b instanceof color ? interpolateRgb
-      : b instanceof Date ? date
-      : Array.isArray(b) ? array$1
-      : typeof b.valueOf !== "function" && typeof b.toString !== "function" || isNaN(b) ? object
-      : reinterpolate)(a, b);
-};
-
-var interpolateRound = function(a, b) {
-  return a = +a, b -= a, function(t) {
-    return Math.round(a + b * t);
-  };
 };
 
 var degrees = 180 / Math.PI;
@@ -1964,6 +1718,8 @@ function interpolateTransform(parse, pxComma, pxParen, degParen) {
 
 var interpolateTransformCss = interpolateTransform(parseCss, "px, ", "px)", "deg)");
 var interpolateTransformSvg = interpolateTransform(parseSvg, ", ", ")", ")");
+
+var rho = Math.SQRT2;
 
 function cubehelix$1(hue$$1) {
   return (function cubehelixGamma(y) {
@@ -2618,15 +2374,15 @@ var transition_remove = function() {
   return this.on("end.remove", removeFunction(this._id));
 };
 
-var transition_select = function(select$$1) {
+var transition_select = function(select) {
   var name = this._name,
       id = this._id;
 
-  if (typeof select$$1 !== "function") select$$1 = selector(select$$1);
+  if (typeof select !== "function") select = selector(select);
 
   for (var groups = this._groups, m = groups.length, subgroups = new Array(m), j = 0; j < m; ++j) {
     for (var group = groups[j], n = group.length, subgroup = subgroups[j] = new Array(n), node, subnode, i = 0; i < n; ++i) {
-      if ((node = group[i]) && (subnode = select$$1.call(node, node.__data__, i, group))) {
+      if ((node = group[i]) && (subnode = select.call(node, node.__data__, i, group))) {
         if ("__data__" in node) subnode.__data__ = node.__data__;
         subgroup[i] = subnode;
         schedule(subgroup[i], name, id, i, subgroup, get$1(node, id));
@@ -2637,16 +2393,16 @@ var transition_select = function(select$$1) {
   return new Transition(subgroups, this._parents, name, id);
 };
 
-var transition_selectAll = function(select$$1) {
+var transition_selectAll = function(select) {
   var name = this._name,
       id = this._id;
 
-  if (typeof select$$1 !== "function") select$$1 = selectorAll(select$$1);
+  if (typeof select !== "function") select = selectorAll(select);
 
   for (var groups = this._groups, m = groups.length, subgroups = [], parents = [], j = 0; j < m; ++j) {
     for (var group = groups[j], n = group.length, node, i = 0; i < n; ++i) {
       if (node = group[i]) {
-        for (var children = select$$1.call(node, node.__data__, i, group), child, inherit = get$1(node, id), k = 0, l = children.length; k < l; ++k) {
+        for (var children = select.call(node, node.__data__, i, group), child, inherit = get$1(node, id), k = 0, l = children.length; k < l; ++k) {
           if (child = children[k]) {
             schedule(child, name, id, k, children, inherit);
           }
@@ -2834,126 +2590,9 @@ function cubicInOut(t) {
   return ((t *= 2) <= 1 ? t * t * t : (t -= 2) * t * t + 2) / 2;
 }
 
-var exponent = 3;
-
-var polyIn = (function custom(e) {
-  e = +e;
-
-  function polyIn(t) {
-    return Math.pow(t, e);
-  }
-
-  polyIn.exponent = custom;
-
-  return polyIn;
-})(exponent);
-
-var polyOut = (function custom(e) {
-  e = +e;
-
-  function polyOut(t) {
-    return 1 - Math.pow(1 - t, e);
-  }
-
-  polyOut.exponent = custom;
-
-  return polyOut;
-})(exponent);
-
-var polyInOut = (function custom(e) {
-  e = +e;
-
-  function polyInOut(t) {
-    return ((t *= 2) <= 1 ? Math.pow(t, e) : 2 - Math.pow(2 - t, e)) / 2;
-  }
-
-  polyInOut.exponent = custom;
-
-  return polyInOut;
-})(exponent);
-
-var overshoot = 1.70158;
-
-var backIn = (function custom(s) {
-  s = +s;
-
-  function backIn(t) {
-    return t * t * ((s + 1) * t - s);
-  }
-
-  backIn.overshoot = custom;
-
-  return backIn;
-})(overshoot);
-
-var backOut = (function custom(s) {
-  s = +s;
-
-  function backOut(t) {
-    return --t * t * ((s + 1) * t + s) + 1;
-  }
-
-  backOut.overshoot = custom;
-
-  return backOut;
-})(overshoot);
-
-var backInOut = (function custom(s) {
-  s = +s;
-
-  function backInOut(t) {
-    return ((t *= 2) < 1 ? t * t * ((s + 1) * t - s) : (t -= 2) * t * ((s + 1) * t + s) + 2) / 2;
-  }
-
-  backInOut.overshoot = custom;
-
-  return backInOut;
-})(overshoot);
+var pi = Math.PI;
 
 var tau = 2 * Math.PI;
-var amplitude = 1;
-var period = 0.3;
-
-var elasticIn = (function custom(a, p) {
-  var s = Math.asin(1 / (a = Math.max(1, a))) * (p /= tau);
-
-  function elasticIn(t) {
-    return a * Math.pow(2, 10 * --t) * Math.sin((s - t) / p);
-  }
-
-  elasticIn.amplitude = function(a) { return custom(a, p * tau); };
-  elasticIn.period = function(p) { return custom(a, p); };
-
-  return elasticIn;
-})(amplitude, period);
-
-var elasticOut = (function custom(a, p) {
-  var s = Math.asin(1 / (a = Math.max(1, a))) * (p /= tau);
-
-  function elasticOut(t) {
-    return 1 - a * Math.pow(2, -10 * (t = +t)) * Math.sin((t + s) / p);
-  }
-
-  elasticOut.amplitude = function(a) { return custom(a, p * tau); };
-  elasticOut.period = function(p) { return custom(a, p); };
-
-  return elasticOut;
-})(amplitude, period);
-
-var elasticInOut = (function custom(a, p) {
-  var s = Math.asin(1 / (a = Math.max(1, a))) * (p /= tau);
-
-  function elasticInOut(t) {
-    return ((t = t * 2 - 1) < 0
-        ? a * Math.pow(2, 10 * t) * Math.sin((s - t) / p)
-        : 2 - a * Math.pow(2, -10 * t) * Math.sin((s + t) / p)) / 2;
-  }
-
-  elasticInOut.amplitude = function(a) { return custom(a, p * tau); };
-  elasticInOut.period = function(p) { return custom(a, p); };
-
-  return elasticInOut;
-})(amplitude, period);
 
 var defaultTiming = {
   time: null, // Set on use.
@@ -3023,137 +2662,7 @@ function type(t) {
 
 var pi$1 = Math.PI;
 
-var tau$1 = pi$1 * 2;
-var max$1 = Math.max;
-
 var pi$2 = Math.PI;
-var tau$2 = 2 * pi$2;
-var epsilon$1 = 1e-6;
-var tauEpsilon = tau$2 - epsilon$1;
-
-function Path() {
-  this._x0 = this._y0 = // start of current subpath
-  this._x1 = this._y1 = null; // end of current subpath
-  this._ = "";
-}
-
-function path() {
-  return new Path;
-}
-
-Path.prototype = path.prototype = {
-  constructor: Path,
-  moveTo: function(x, y) {
-    this._ += "M" + (this._x0 = this._x1 = +x) + "," + (this._y0 = this._y1 = +y);
-  },
-  closePath: function() {
-    if (this._x1 !== null) {
-      this._x1 = this._x0, this._y1 = this._y0;
-      this._ += "Z";
-    }
-  },
-  lineTo: function(x, y) {
-    this._ += "L" + (this._x1 = +x) + "," + (this._y1 = +y);
-  },
-  quadraticCurveTo: function(x1, y1, x, y) {
-    this._ += "Q" + (+x1) + "," + (+y1) + "," + (this._x1 = +x) + "," + (this._y1 = +y);
-  },
-  bezierCurveTo: function(x1, y1, x2, y2, x, y) {
-    this._ += "C" + (+x1) + "," + (+y1) + "," + (+x2) + "," + (+y2) + "," + (this._x1 = +x) + "," + (this._y1 = +y);
-  },
-  arcTo: function(x1, y1, x2, y2, r) {
-    x1 = +x1, y1 = +y1, x2 = +x2, y2 = +y2, r = +r;
-    var x0 = this._x1,
-        y0 = this._y1,
-        x21 = x2 - x1,
-        y21 = y2 - y1,
-        x01 = x0 - x1,
-        y01 = y0 - y1,
-        l01_2 = x01 * x01 + y01 * y01;
-
-    // Is the radius negative? Error.
-    if (r < 0) throw new Error("negative radius: " + r);
-
-    // Is this path empty? Move to (x1,y1).
-    if (this._x1 === null) {
-      this._ += "M" + (this._x1 = x1) + "," + (this._y1 = y1);
-    }
-
-    // Or, is (x1,y1) coincident with (x0,y0)? Do nothing.
-    else if (!(l01_2 > epsilon$1)) {}
-
-    // Or, are (x0,y0), (x1,y1) and (x2,y2) collinear?
-    // Equivalently, is (x1,y1) coincident with (x2,y2)?
-    // Or, is the radius zero? Line to (x1,y1).
-    else if (!(Math.abs(y01 * x21 - y21 * x01) > epsilon$1) || !r) {
-      this._ += "L" + (this._x1 = x1) + "," + (this._y1 = y1);
-    }
-
-    // Otherwise, draw an arc!
-    else {
-      var x20 = x2 - x0,
-          y20 = y2 - y0,
-          l21_2 = x21 * x21 + y21 * y21,
-          l20_2 = x20 * x20 + y20 * y20,
-          l21 = Math.sqrt(l21_2),
-          l01 = Math.sqrt(l01_2),
-          l = r * Math.tan((pi$2 - Math.acos((l21_2 + l01_2 - l20_2) / (2 * l21 * l01))) / 2),
-          t01 = l / l01,
-          t21 = l / l21;
-
-      // If the start tangent is not coincident with (x0,y0), line to.
-      if (Math.abs(t01 - 1) > epsilon$1) {
-        this._ += "L" + (x1 + t01 * x01) + "," + (y1 + t01 * y01);
-      }
-
-      this._ += "A" + r + "," + r + ",0,0," + (+(y01 * x20 > x01 * y20)) + "," + (this._x1 = x1 + t21 * x21) + "," + (this._y1 = y1 + t21 * y21);
-    }
-  },
-  arc: function(x, y, r, a0, a1, ccw) {
-    x = +x, y = +y, r = +r;
-    var dx = r * Math.cos(a0),
-        dy = r * Math.sin(a0),
-        x0 = x + dx,
-        y0 = y + dy,
-        cw = 1 ^ ccw,
-        da = ccw ? a0 - a1 : a1 - a0;
-
-    // Is the radius negative? Error.
-    if (r < 0) throw new Error("negative radius: " + r);
-
-    // Is this path empty? Move to (x0,y0).
-    if (this._x1 === null) {
-      this._ += "M" + x0 + "," + y0;
-    }
-
-    // Or, is (x0,y0) not coincident with the previous point? Line to (x0,y0).
-    else if (Math.abs(this._x1 - x0) > epsilon$1 || Math.abs(this._y1 - y0) > epsilon$1) {
-      this._ += "L" + x0 + "," + y0;
-    }
-
-    // Is this arc empty? We’re done.
-    if (!r) return;
-
-    // Does the angle go the wrong way? Flip the direction.
-    if (da < 0) da = da % tau$2 + tau$2;
-
-    // Is this a complete circle? Draw two arcs to complete the circle.
-    if (da > tauEpsilon) {
-      this._ += "A" + r + "," + r + ",0,1," + cw + "," + (x - dx) + "," + (y - dy) + "A" + r + "," + r + ",0,1," + cw + "," + (this._x1 = x0) + "," + (this._y1 = y0);
-    }
-
-    // Is this arc non-empty? Draw an arc!
-    else if (da > epsilon$1) {
-      this._ += "A" + r + "," + r + ",0," + (+(da >= pi$2)) + "," + cw + "," + (this._x1 = x + r * Math.cos(a1)) + "," + (this._y1 = y + r * Math.sin(a1));
-    }
-  },
-  rect: function(x, y, w, h) {
-    this._ += "M" + (this._x0 = this._x1 = +x) + "," + (this._y0 = this._y1 = +y) + "h" + (+w) + "v" + (+h) + "h" + (-w) + "Z";
-  },
-  toString: function() {
-    return this._;
-  }
-};
 
 var prefix = "$";
 
@@ -3674,7 +3183,7 @@ var tree_remove = function(d) {
   if (next = node.next) delete node.next;
 
   // If there are multiple coincident points, remove just the point.
-  if (previous) return (next ? previous.next = next : delete previous.next), this;
+  if (previous) return next ? previous.next = next : delete previous.next, this;
 
   // If this is the root point, remove it.
   if (!parent) return this._root = next, this;
@@ -3821,6 +3330,8 @@ treeProto.visit = tree_visit;
 treeProto.visitAfter = tree_visitAfter;
 treeProto.x = tree_x;
 treeProto.y = tree_y;
+
+var initialAngle = Math.PI * (3 - Math.sqrt(5));
 
 // Computes the decimal coefficient and exponent of the specified number x with
 // significant digits p, where x is positive and p is in [1, 21] or undefined.
@@ -4105,7 +3616,7 @@ var formatLocale = function(locale) {
   };
 };
 
-var locale$1;
+var locale;
 var format;
 var formatPrefix;
 
@@ -4117,10 +3628,10 @@ defaultLocale({
 });
 
 function defaultLocale(definition) {
-  locale$1 = formatLocale(definition);
-  format = locale$1.format;
-  formatPrefix = locale$1.formatPrefix;
-  return locale$1;
+  locale = formatLocale(definition);
+  format = locale.format;
+  formatPrefix = locale.formatPrefix;
+  return locale;
 }
 
 // Adds floating point numbers with twice the normal precision.
@@ -4164,129 +3675,11 @@ function add$1(adder, a, b) {
   adder.t = (a - av) + (b - bv);
 }
 
-var epsilon$2 = 1e-6;
-
 var pi$3 = Math.PI;
-var halfPi$2 = pi$3 / 2;
-var quarterPi = pi$3 / 4;
-var tau$3 = pi$3 * 2;
-
-
-var radians = pi$3 / 180;
-
-var abs = Math.abs;
-
-var atan2 = Math.atan2;
-var cos$1 = Math.cos;
-
-
-
-
-
-var sin$1 = Math.sin;
-
-var sqrt = Math.sqrt;
-
-
-function acos(x) {
-  return x > 1 ? 0 : x < -1 ? pi$3 : Math.acos(x);
-}
-
-function asin(x) {
-  return x > 1 ? halfPi$2 : x < -1 ? -halfPi$2 : Math.asin(x);
-}
-
-function noop$1() {}
-
-function streamGeometry(geometry, stream) {
-  if (geometry && streamGeometryType.hasOwnProperty(geometry.type)) {
-    streamGeometryType[geometry.type](geometry, stream);
-  }
-}
-
-var streamObjectType = {
-  Feature: function(object, stream) {
-    streamGeometry(object.geometry, stream);
-  },
-  FeatureCollection: function(object, stream) {
-    var features = object.features, i = -1, n = features.length;
-    while (++i < n) streamGeometry(features[i].geometry, stream);
-  }
-};
-
-var streamGeometryType = {
-  Sphere: function(object, stream) {
-    stream.sphere();
-  },
-  Point: function(object, stream) {
-    object = object.coordinates;
-    stream.point(object[0], object[1], object[2]);
-  },
-  MultiPoint: function(object, stream) {
-    var coordinates = object.coordinates, i = -1, n = coordinates.length;
-    while (++i < n) object = coordinates[i], stream.point(object[0], object[1], object[2]);
-  },
-  LineString: function(object, stream) {
-    streamLine(object.coordinates, stream, 0);
-  },
-  MultiLineString: function(object, stream) {
-    var coordinates = object.coordinates, i = -1, n = coordinates.length;
-    while (++i < n) streamLine(coordinates[i], stream, 0);
-  },
-  Polygon: function(object, stream) {
-    streamPolygon(object.coordinates, stream);
-  },
-  MultiPolygon: function(object, stream) {
-    var coordinates = object.coordinates, i = -1, n = coordinates.length;
-    while (++i < n) streamPolygon(coordinates[i], stream);
-  },
-  GeometryCollection: function(object, stream) {
-    var geometries = object.geometries, i = -1, n = geometries.length;
-    while (++i < n) streamGeometry(geometries[i], stream);
-  }
-};
-
-function streamLine(coordinates, stream, closed) {
-  var i = -1, n = coordinates.length - closed, coordinate;
-  stream.lineStart();
-  while (++i < n) coordinate = coordinates[i], stream.point(coordinate[0], coordinate[1], coordinate[2]);
-  stream.lineEnd();
-}
-
-function streamPolygon(coordinates, stream) {
-  var i = -1, n = coordinates.length;
-  stream.polygonStart();
-  while (++i < n) streamLine(coordinates[i], stream, 1);
-  stream.polygonEnd();
-}
-
-var geoStream = function(object, stream) {
-  if (object && streamObjectType.hasOwnProperty(object.type)) {
-    streamObjectType[object.type](object, stream);
-  } else {
-    streamGeometry(object, stream);
-  }
-};
 
 var areaRingSum = adder();
 
 var areaSum = adder();
-var lambda00;
-var phi00;
-var lambda0;
-var cosPhi0;
-var sinPhi0;
-
-function cartesian(spherical) {
-  var lambda = spherical[0], phi = spherical[1], cosPhi = cos$1(phi);
-  return [cosPhi * cos$1(lambda), cosPhi * sin$1(lambda), sin$1(phi)];
-}
-
-
-
-function cartesianCross(a, b) {
-  return [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
-}
 
 // TODO return a
 
@@ -4294,763 +3687,24 @@ function cartesianCross(a, b) {
 
 
 // TODO return d
-function cartesianNormalizeInPlace(d) {
-  var l = sqrt(d[0] * d[0] + d[1] * d[1] + d[2] * d[2]);
-  d[0] /= l, d[1] /= l, d[2] /= l;
-}
 
-var lambda0$1;
-var phi0;
-var lambda1;
-var phi1;
-var lambda2;
-var lambda00$1;
-var phi00$1;
-var p0;
 var deltaSum = adder();
-var ranges;
-var range;
-
-var W0;
-var X0;
-var Y0;
-var Z0; // previous point
 
 // Generates a circle centered at [0°, 0°], with a given radius and precision.
 
-var pointEqual = function(a, b) {
-  return abs(a[0] - b[0]) < epsilon$2 && abs(a[1] - b[1]) < epsilon$2;
-};
-
-function Intersection(point, points, other, entry) {
-  this.x = point;
-  this.z = points;
-  this.o = other; // another intersection
-  this.e = entry; // is an entry?
-  this.v = false; // visited
-  this.n = this.p = null; // next & previous
-}
-
-function link$1(array) {
-  if (!(n = array.length)) return;
-  var n,
-      i = 0,
-      a = array[0],
-      b;
-  while (++i < n) {
-    a.n = b = array[i];
-    b.p = a;
-    a = b;
-  }
-  a.n = b = array[0];
-  b.p = a;
-}
-
 var sum$1 = adder();
 
-var polygonContains = function(polygon, point) {
-  var lambda = point[0],
-      phi = point[1],
-      normal = [sin$1(lambda), -cos$1(lambda), 0],
-      angle = 0,
-      winding = 0;
-
-  sum$1.reset();
-
-  for (var i = 0, n = polygon.length; i < n; ++i) {
-    if (!(m = (ring = polygon[i]).length)) continue;
-    var ring,
-        m,
-        point0 = ring[m - 1],
-        lambda0 = point0[0],
-        phi0 = point0[1] / 2 + quarterPi,
-        sinPhi0 = sin$1(phi0),
-        cosPhi0 = cos$1(phi0);
-
-    for (var j = 0; j < m; ++j, lambda0 = lambda1, sinPhi0 = sinPhi1, cosPhi0 = cosPhi1, point0 = point1) {
-      var point1 = ring[j],
-          lambda1 = point1[0],
-          phi1 = point1[1] / 2 + quarterPi,
-          sinPhi1 = sin$1(phi1),
-          cosPhi1 = cos$1(phi1),
-          delta = lambda1 - lambda0,
-          sign$$1 = delta >= 0 ? 1 : -1,
-          absDelta = sign$$1 * delta,
-          antimeridian = absDelta > pi$3,
-          k = sinPhi0 * sinPhi1;
-
-      sum$1.add(atan2(k * sign$$1 * sin$1(absDelta), cosPhi0 * cosPhi1 + k * cos$1(absDelta)));
-      angle += antimeridian ? delta + sign$$1 * tau$3 : delta;
-
-      // Are the longitudes either side of the point’s meridian (lambda),
-      // and are the latitudes smaller than the parallel (phi)?
-      if (antimeridian ^ lambda0 >= lambda ^ lambda1 >= lambda) {
-        var arc = cartesianCross(cartesian(point0), cartesian(point1));
-        cartesianNormalizeInPlace(arc);
-        var intersection = cartesianCross(normal, arc);
-        cartesianNormalizeInPlace(intersection);
-        var phiArc = (antimeridian ^ delta >= 0 ? -1 : 1) * asin(intersection[2]);
-        if (phi > phiArc || phi === phiArc && (arc[0] || arc[1])) {
-          winding += antimeridian ^ delta >= 0 ? 1 : -1;
-        }
-      }
-    }
-  }
-
-  // First, determine whether the South pole is inside or outside:
-  //
-  // It is inside if:
-  // * the polygon winds around it in a clockwise direction.
-  // * the polygon does not (cumulatively) wind around it, but has a negative
-  //   (counter-clockwise) area.
-  //
-  // Second, count the (signed) number of times a segment crosses a lambda
-  // from the point to the South pole.  If it is zero, then the point is the
-  // same side as the South pole.
-
-  return (angle < -epsilon$2 || angle < epsilon$2 && sum$1 < -epsilon$2) ^ (winding & 1);
-};
-
 var lengthSum = adder();
-var lambda0$2;
-var sinPhi0$1;
-var cosPhi0$1;
-
-var lengthStream = {
-  sphere: noop$1,
-  point: noop$1,
-  lineStart: lengthLineStart,
-  lineEnd: noop$1,
-  polygonStart: noop$1,
-  polygonEnd: noop$1
-};
-
-function lengthLineStart() {
-  lengthStream.point = lengthPointFirst;
-  lengthStream.lineEnd = lengthLineEnd;
-}
-
-function lengthLineEnd() {
-  lengthStream.point = lengthStream.lineEnd = noop$1;
-}
-
-function lengthPointFirst(lambda, phi) {
-  lambda *= radians, phi *= radians;
-  lambda0$2 = lambda, sinPhi0$1 = sin$1(phi), cosPhi0$1 = cos$1(phi);
-  lengthStream.point = lengthPoint;
-}
-
-function lengthPoint(lambda, phi) {
-  lambda *= radians, phi *= radians;
-  var sinPhi = sin$1(phi),
-      cosPhi = cos$1(phi),
-      delta = abs(lambda - lambda0$2),
-      cosDelta = cos$1(delta),
-      sinDelta = sin$1(delta),
-      x = cosPhi * sinDelta,
-      y = cosPhi0$1 * sinPhi - sinPhi0$1 * cosPhi * cosDelta,
-      z = sinPhi0$1 * sinPhi + cosPhi0$1 * cosPhi * cosDelta;
-  lengthSum.add(atan2(sqrt(x * x + y * y), z));
-  lambda0$2 = lambda, sinPhi0$1 = sinPhi, cosPhi0$1 = cosPhi;
-}
-
-var length$1 = function(object) {
-  lengthSum.reset();
-  geoStream(object, lengthStream);
-  return +lengthSum;
-};
-
-var coordinates = [null, null];
-var object$1 = {type: "LineString", coordinates: coordinates};
-
-var distance = function(a, b) {
-  coordinates[0] = a;
-  coordinates[1] = b;
-  return length$1(object$1);
-};
-
-var containsGeometryType = {
-  Sphere: function() {
-    return true;
-  },
-  Point: function(object, point) {
-    return containsPoint(object.coordinates, point);
-  },
-  MultiPoint: function(object, point) {
-    var coordinates = object.coordinates, i = -1, n = coordinates.length;
-    while (++i < n) if (containsPoint(coordinates[i], point)) return true;
-    return false;
-  },
-  LineString: function(object, point) {
-    return containsLine(object.coordinates, point);
-  },
-  MultiLineString: function(object, point) {
-    var coordinates = object.coordinates, i = -1, n = coordinates.length;
-    while (++i < n) if (containsLine(coordinates[i], point)) return true;
-    return false;
-  },
-  Polygon: function(object, point) {
-    return containsPolygon(object.coordinates, point);
-  },
-  MultiPolygon: function(object, point) {
-    var coordinates = object.coordinates, i = -1, n = coordinates.length;
-    while (++i < n) if (containsPolygon(coordinates[i], point)) return true;
-    return false;
-  },
-  GeometryCollection: function(object, point) {
-    var geometries = object.geometries, i = -1, n = geometries.length;
-    while (++i < n) if (containsGeometry(geometries[i], point)) return true;
-    return false;
-  }
-};
-
-function containsGeometry(geometry, point) {
-  return geometry && containsGeometryType.hasOwnProperty(geometry.type)
-      ? containsGeometryType[geometry.type](geometry, point)
-      : false;
-}
-
-function containsPoint(coordinates, point) {
-  return distance(coordinates, point) === 0;
-}
-
-function containsLine(coordinates, point) {
-  var ab = distance(coordinates[0], coordinates[1]),
-      ao = distance(coordinates[0], point),
-      ob = distance(point, coordinates[1]);
-  return ao + ob <= ab + epsilon$2;
-}
-
-function containsPolygon(coordinates, point) {
-  return !!polygonContains(coordinates.map(ringRadians), pointRadians(point));
-}
-
-function ringRadians(ring) {
-  return ring = ring.map(pointRadians), ring.pop(), ring;
-}
-
-function pointRadians(point) {
-  return [point[0] * radians, point[1] * radians];
-}
 
 var areaSum$1 = adder();
 var areaRingSum$1 = adder();
-var x00;
-var y00;
-var x0$1;
-var y0$1;
-
-// TODO Enforce positive area for exterior, negative area for interior?
-
-var X0$1 = 0;
-var Y0$1 = 0;
-var Z0$1 = 0;
 
 var lengthSum$1 = adder();
-var lengthRing;
-var x00$2;
-var y00$2;
-var x0$4;
-var y0$4;
-
-var cosMinDistance = cos$1(30 * radians); // cos(minimum angular distance)
-
-function azimuthalRaw(scale) {
-  return function(x, y) {
-    var cx = cos$1(x),
-        cy = cos$1(y),
-        k = scale(cx * cy);
-    return [
-      k * cy * sin$1(x),
-      k * sin$1(y)
-    ];
-  }
-}
-
-function azimuthalInvert(angle) {
-  return function(x, y) {
-    var z = sqrt(x * x + y * y),
-        c = angle(z),
-        sc = sin$1(c),
-        cc = cos$1(c);
-    return [
-      atan2(x * sc, z * cc),
-      asin(z && y * sc / z)
-    ];
-  }
-}
-
-var azimuthalEqualAreaRaw = azimuthalRaw(function(cxcy) {
-  return sqrt(2 / (1 + cxcy));
-});
-
-azimuthalEqualAreaRaw.invert = azimuthalInvert(function(z) {
-  return 2 * asin(z / 2);
-});
-
-var azimuthalEquidistantRaw = azimuthalRaw(function(c) {
-  return (c = acos(c)) && c / sin$1(c);
-});
-
-azimuthalEquidistantRaw.invert = azimuthalInvert(function(z) {
-  return z;
-});
-
-function count(node) {
-  var sum = 0,
-      children = node.children,
-      i = children && children.length;
-  if (!i) sum = 1;
-  else while (--i >= 0) sum += children[i].value;
-  node.value = sum;
-}
-
-var node_count = function() {
-  return this.eachAfter(count);
-};
-
-var node_each = function(callback) {
-  var node = this, current, next = [node], children, i, n;
-  do {
-    current = next.reverse(), next = [];
-    while (node = current.pop()) {
-      callback(node), children = node.children;
-      if (children) for (i = 0, n = children.length; i < n; ++i) {
-        next.push(children[i]);
-      }
-    }
-  } while (next.length);
-  return this;
-};
-
-var node_eachBefore = function(callback) {
-  var node = this, nodes = [node], children, i;
-  while (node = nodes.pop()) {
-    callback(node), children = node.children;
-    if (children) for (i = children.length - 1; i >= 0; --i) {
-      nodes.push(children[i]);
-    }
-  }
-  return this;
-};
-
-var node_eachAfter = function(callback) {
-  var node = this, nodes = [node], next = [], children, i, n;
-  while (node = nodes.pop()) {
-    next.push(node), children = node.children;
-    if (children) for (i = 0, n = children.length; i < n; ++i) {
-      nodes.push(children[i]);
-    }
-  }
-  while (node = next.pop()) {
-    callback(node);
-  }
-  return this;
-};
-
-var node_sum = function(value) {
-  return this.eachAfter(function(node) {
-    var sum = +value(node.data) || 0,
-        children = node.children,
-        i = children && children.length;
-    while (--i >= 0) sum += children[i].value;
-    node.value = sum;
-  });
-};
-
-var node_sort = function(compare) {
-  return this.eachBefore(function(node) {
-    if (node.children) {
-      node.children.sort(compare);
-    }
-  });
-};
-
-var node_path = function(end) {
-  var start = this,
-      ancestor = leastCommonAncestor(start, end),
-      nodes = [start];
-  while (start !== ancestor) {
-    start = start.parent;
-    nodes.push(start);
-  }
-  var k = nodes.length;
-  while (end !== ancestor) {
-    nodes.splice(k, 0, end);
-    end = end.parent;
-  }
-  return nodes;
-};
-
-function leastCommonAncestor(a, b) {
-  if (a === b) return a;
-  var aNodes = a.ancestors(),
-      bNodes = b.ancestors(),
-      c = null;
-  a = aNodes.pop();
-  b = bNodes.pop();
-  while (a === b) {
-    c = a;
-    a = aNodes.pop();
-    b = bNodes.pop();
-  }
-  return c;
-}
-
-var node_ancestors = function() {
-  var node = this, nodes = [node];
-  while (node = node.parent) {
-    nodes.push(node);
-  }
-  return nodes;
-};
-
-var node_descendants = function() {
-  var nodes = [];
-  this.each(function(node) {
-    nodes.push(node);
-  });
-  return nodes;
-};
-
-var node_leaves = function() {
-  var leaves = [];
-  this.eachBefore(function(node) {
-    if (!node.children) {
-      leaves.push(node);
-    }
-  });
-  return leaves;
-};
-
-var node_links = function() {
-  var root = this, links = [];
-  root.each(function(node) {
-    if (node !== root) { // Don’t include the root’s parent, if any.
-      links.push({source: node.parent, target: node});
-    }
-  });
-  return links;
-};
-
-function hierarchy(data, children) {
-  var root = new Node(data),
-      valued = +data.value && (root.value = data.value),
-      node,
-      nodes = [root],
-      child,
-      childs,
-      i,
-      n;
-
-  if (children == null) children = defaultChildren;
-
-  while (node = nodes.pop()) {
-    if (valued) node.value = +node.data.value;
-    if ((childs = children(node.data)) && (n = childs.length)) {
-      node.children = new Array(n);
-      for (i = n - 1; i >= 0; --i) {
-        nodes.push(child = node.children[i] = new Node(childs[i]));
-        child.parent = node;
-        child.depth = node.depth + 1;
-      }
-    }
-  }
-
-  return root.eachBefore(computeHeight);
-}
-
-function node_copy() {
-  return hierarchy(this).eachBefore(copyData);
-}
-
-function defaultChildren(d) {
-  return d.children;
-}
-
-function copyData(node) {
-  node.data = node.data.data;
-}
-
-function computeHeight(node) {
-  var height = 0;
-  do node.height = height;
-  while ((node = node.parent) && (node.height < ++height));
-}
-
-function Node(data) {
-  this.data = data;
-  this.depth =
-  this.height = 0;
-  this.parent = null;
-}
-
-Node.prototype = hierarchy.prototype = {
-  constructor: Node,
-  count: node_count,
-  each: node_each,
-  eachAfter: node_eachAfter,
-  eachBefore: node_eachBefore,
-  sum: node_sum,
-  sort: node_sort,
-  path: node_path,
-  ancestors: node_ancestors,
-  descendants: node_descendants,
-  leaves: node_leaves,
-  links: node_links,
-  copy: node_copy
-};
-
-function enclosesNot(a, b) {
-  var dr = a.r - b.r, dx = b.x - a.x, dy = b.y - a.y;
-  return dr < 0 || dr * dr < dx * dx + dy * dy;
-}
-
-function enclosesWeak(a, b) {
-  var dr = a.r - b.r + 1e-6, dx = b.x - a.x, dy = b.y - a.y;
-  return dr > 0 && dr * dr > dx * dx + dy * dy;
-}
-
-function enclosesWeakAll(a, B) {
-  for (var i = 0; i < B.length; ++i) {
-    if (!enclosesWeak(a, B[i])) {
-      return false;
-    }
-  }
-  return true;
-}
-
-function encloseBasis2(a, b) {
-  var x1 = a.x, y1 = a.y, r1 = a.r,
-      x2 = b.x, y2 = b.y, r2 = b.r,
-      x21 = x2 - x1, y21 = y2 - y1, r21 = r2 - r1,
-      l = Math.sqrt(x21 * x21 + y21 * y21);
-  return {
-    x: (x1 + x2 + x21 / l * r21) / 2,
-    y: (y1 + y2 + y21 / l * r21) / 2,
-    r: (l + r1 + r2) / 2
-  };
-}
-
-function encloseBasis3(a, b, c) {
-  var x1 = a.x, y1 = a.y, r1 = a.r,
-      x2 = b.x, y2 = b.y, r2 = b.r,
-      x3 = c.x, y3 = c.y, r3 = c.r,
-      a2 = x1 - x2,
-      a3 = x1 - x3,
-      b2 = y1 - y2,
-      b3 = y1 - y3,
-      c2 = r2 - r1,
-      c3 = r3 - r1,
-      d1 = x1 * x1 + y1 * y1 - r1 * r1,
-      d2 = d1 - x2 * x2 - y2 * y2 + r2 * r2,
-      d3 = d1 - x3 * x3 - y3 * y3 + r3 * r3,
-      ab = a3 * b2 - a2 * b3,
-      xa = (b2 * d3 - b3 * d2) / (ab * 2) - x1,
-      xb = (b3 * c2 - b2 * c3) / ab,
-      ya = (a3 * d2 - a2 * d3) / (ab * 2) - y1,
-      yb = (a2 * c3 - a3 * c2) / ab,
-      A = xb * xb + yb * yb - 1,
-      B = 2 * (r1 + xa * xb + ya * yb),
-      C = xa * xa + ya * ya - r1 * r1,
-      r = -(A ? (B + Math.sqrt(B * B - 4 * A * C)) / (2 * A) : C / B);
-  return {
-    x: x1 + xa + xb * r,
-    y: y1 + ya + yb * r,
-    r: r
-  };
-}
-
-var treemapDice = function(parent, x0, y0, x1, y1) {
-  var nodes = parent.children,
-      node,
-      i = -1,
-      n = nodes.length,
-      k = parent.value && (x1 - x0) / parent.value;
-
-  while (++i < n) {
-    node = nodes[i], node.y0 = y0, node.y1 = y1;
-    node.x0 = x0, node.x1 = x0 += node.value * k;
-  }
-};
-
-function TreeNode(node, i) {
-  this._ = node;
-  this.parent = null;
-  this.children = null;
-  this.A = null; // default ancestor
-  this.a = this; // ancestor
-  this.z = 0; // prelim
-  this.m = 0; // mod
-  this.c = 0; // change
-  this.s = 0; // shift
-  this.t = null; // thread
-  this.i = i; // number
-}
-
-TreeNode.prototype = Object.create(Node.prototype);
-
-var treemapSlice = function(parent, x0, y0, x1, y1) {
-  var nodes = parent.children,
-      node,
-      i = -1,
-      n = nodes.length,
-      k = parent.value && (y1 - y0) / parent.value;
-
-  while (++i < n) {
-    node = nodes[i], node.x0 = x0, node.x1 = x1;
-    node.y0 = y0, node.y1 = y0 += node.value * k;
-  }
-};
-
-function squarifyRatio(ratio, parent, x0, y0, x1, y1) {
-  var rows = [],
-      nodes = parent.children,
-      row,
-      nodeValue,
-      i0 = 0,
-      i1 = 0,
-      n = nodes.length,
-      dx, dy,
-      value = parent.value,
-      sumValue,
-      minValue,
-      maxValue,
-      newRatio,
-      minRatio,
-      alpha,
-      beta;
-
-  while (i0 < n) {
-    dx = x1 - x0, dy = y1 - y0;
-
-    // Find the next non-empty node.
-    do sumValue = nodes[i1++].value; while (!sumValue && i1 < n);
-    minValue = maxValue = sumValue;
-    alpha = Math.max(dy / dx, dx / dy) / (value * ratio);
-    beta = sumValue * sumValue * alpha;
-    minRatio = Math.max(maxValue / beta, beta / minValue);
-
-    // Keep adding nodes while the aspect ratio maintains or improves.
-    for (; i1 < n; ++i1) {
-      sumValue += nodeValue = nodes[i1].value;
-      if (nodeValue < minValue) minValue = nodeValue;
-      if (nodeValue > maxValue) maxValue = nodeValue;
-      beta = sumValue * sumValue * alpha;
-      newRatio = Math.max(maxValue / beta, beta / minValue);
-      if (newRatio > minRatio) { sumValue -= nodeValue; break; }
-      minRatio = newRatio;
-    }
-
-    // Position and record the row orientation.
-    rows.push(row = {value: sumValue, dice: dx < dy, children: nodes.slice(i0, i1)});
-    if (row.dice) treemapDice(row, x0, y0, x1, value ? y0 += dy * sumValue / value : y1);
-    else treemapSlice(row, x0, y0, value ? x0 += dx * sumValue / value : x1, y1);
-    value -= sumValue, i0 = i1;
-  }
-
-  return rows;
-}
 
 // Returns the 2D cross product of AB and AC vectors, i.e., the z-component of
 // the 3D cross product in a quadrant I Cartesian coordinate system (+x is
 // right, +y is up). Returns a positive value if ABC is counter-clockwise,
 // negative if clockwise, and zero if the points are collinear.
-var cross$1 = function(a, b, c) {
-  return (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]);
-};
-
-function lexicographicOrder(a, b) {
-  return a[0] - b[0] || a[1] - b[1];
-}
-
-// Computes the upper convex hull per the monotone chain algorithm.
-// Assumes points.length >= 3, is sorted by x, unique in y.
-// Returns an array of indices into points in left-to-right order.
-function computeUpperHullIndexes(points) {
-  var n = points.length,
-      indexes = [0, 1],
-      size = 2;
-
-  for (var i = 2; i < n; ++i) {
-    while (size > 1 && cross$1(points[indexes[size - 2]], points[indexes[size - 1]], points[i]) <= 0) --size;
-    indexes[size++] = i;
-  }
-
-  return indexes.slice(0, size); // remove popped points
-}
-
-var slice$4 = [].slice;
-
-var noabort = {};
-
-function poke$1(q) {
-  if (!q._start) {
-    try { start$1(q); } // let the current task complete
-    catch (e) {
-      if (q._tasks[q._ended + q._active - 1]) abort(q, e); // task errored synchronously
-      else if (!q._data) throw e; // await callback errored synchronously
-    }
-  }
-}
-
-function start$1(q) {
-  while (q._start = q._waiting && q._active < q._size) {
-    var i = q._ended + q._active,
-        t = q._tasks[i],
-        j = t.length - 1,
-        c = t[j];
-    t[j] = end(q, i);
-    --q._waiting, ++q._active;
-    t = c.apply(null, t);
-    if (!q._tasks[i]) continue; // task finished synchronously
-    q._tasks[i] = t || noabort;
-  }
-}
-
-function end(q, i) {
-  return function(e, r) {
-    if (!q._tasks[i]) return; // ignore multiple callbacks
-    --q._active, ++q._ended;
-    q._tasks[i] = null;
-    if (q._error != null) return; // ignore secondary errors
-    if (e != null) {
-      abort(q, e);
-    } else {
-      q._data[i] = r;
-      if (q._waiting) poke$1(q);
-      else maybeNotify(q);
-    }
-  };
-}
-
-function abort(q, e) {
-  var i = q._tasks.length, t;
-  q._error = e; // ignore active callbacks
-  q._data = undefined; // allow gc
-  q._waiting = NaN; // prevent starting
-
-  while (--i >= 0) {
-    if (t = q._tasks[i]) {
-      q._tasks[i] = null;
-      if (t.abort) {
-        try { t.abort(); }
-        catch (e) { /* ignore */ }
-      }
-    }
-  }
-
-  q._active = NaN; // allow notification
-  maybeNotify(q);
-}
-
-function maybeNotify(q) {
-  if (!q._active && q._call) {
-    var d = q._data;
-    q._data = undefined; // allow gc
-    q._call(q._error, d);
-  }
-}
 
 var request = function(url, callback) {
   var request,
@@ -5235,154 +3889,6 @@ function responseOf(parse, row) {
 }
 
 var csv$1 = dsv$1("text/csv", csvParse);
-
-var array$2 = Array.prototype;
-
-var map$3 = array$2.map;
-var slice$5 = array$2.slice;
-
-var implicit = {name: "implicit"};
-
-var constant$9 = function(x) {
-  return function() {
-    return x;
-  };
-};
-
-var number$2 = function(x) {
-  return +x;
-};
-
-var unit = [0, 1];
-
-function deinterpolateLinear(a, b) {
-  return (b -= (a = +a))
-      ? function(x) { return (x - a) / b; }
-      : constant$9(b);
-}
-
-function deinterpolateClamp(deinterpolate) {
-  return function(a, b) {
-    var d = deinterpolate(a = +a, b = +b);
-    return function(x) { return x <= a ? 0 : x >= b ? 1 : d(x); };
-  };
-}
-
-function reinterpolateClamp(reinterpolate$$1) {
-  return function(a, b) {
-    var r = reinterpolate$$1(a = +a, b = +b);
-    return function(t) { return t <= 0 ? a : t >= 1 ? b : r(t); };
-  };
-}
-
-function bimap(domain, range, deinterpolate, reinterpolate$$1) {
-  var d0 = domain[0], d1 = domain[1], r0 = range[0], r1 = range[1];
-  if (d1 < d0) d0 = deinterpolate(d1, d0), r0 = reinterpolate$$1(r1, r0);
-  else d0 = deinterpolate(d0, d1), r0 = reinterpolate$$1(r0, r1);
-  return function(x) { return r0(d0(x)); };
-}
-
-function polymap(domain, range, deinterpolate, reinterpolate$$1) {
-  var j = Math.min(domain.length, range.length) - 1,
-      d = new Array(j),
-      r = new Array(j),
-      i = -1;
-
-  // Reverse descending domains.
-  if (domain[j] < domain[0]) {
-    domain = domain.slice().reverse();
-    range = range.slice().reverse();
-  }
-
-  while (++i < j) {
-    d[i] = deinterpolate(domain[i], domain[i + 1]);
-    r[i] = reinterpolate$$1(range[i], range[i + 1]);
-  }
-
-  return function(x) {
-    var i = bisectRight(domain, x, 1, j) - 1;
-    return r[i](d[i](x));
-  };
-}
-
-
-
-// deinterpolate(a, b)(x) takes a domain value x in [a,b] and returns the corresponding parameter t in [0,1].
-// reinterpolate(a, b)(t) takes a parameter t in [0,1] and returns the corresponding domain value x in [a,b].
-function continuous(deinterpolate, reinterpolate$$1) {
-  var domain = unit,
-      range = unit,
-      interpolate = interpolateValue,
-      clamp = false,
-      piecewise,
-      output,
-      input;
-
-  function rescale() {
-    piecewise = Math.min(domain.length, range.length) > 2 ? polymap : bimap;
-    output = input = null;
-    return scale;
-  }
-
-  function scale(x) {
-    return (output || (output = piecewise(domain, range, clamp ? deinterpolateClamp(deinterpolate) : deinterpolate, interpolate)))(+x);
-  }
-
-  scale.invert = function(y) {
-    return (input || (input = piecewise(range, domain, deinterpolateLinear, clamp ? reinterpolateClamp(reinterpolate$$1) : reinterpolate$$1)))(+y);
-  };
-
-  scale.domain = function(_) {
-    return arguments.length ? (domain = map$3.call(_, number$2), rescale()) : domain.slice();
-  };
-
-  scale.range = function(_) {
-    return arguments.length ? (range = slice$5.call(_), rescale()) : range.slice();
-  };
-
-  scale.rangeRound = function(_) {
-    return range = slice$5.call(_), interpolate = interpolateRound, rescale();
-  };
-
-  scale.clamp = function(_) {
-    return arguments.length ? (clamp = !!_, rescale()) : clamp;
-  };
-
-  scale.interpolate = function(_) {
-    return arguments.length ? (interpolate = _, rescale()) : interpolate;
-  };
-
-  return rescale();
-}
-
-function deinterpolate(a, b) {
-  return (b = Math.log(b / a))
-      ? function(x) { return Math.log(x / a) / b; }
-      : constant$9(b);
-}
-
-function reinterpolate$1(a, b) {
-  return a < 0
-      ? function(t) { return -Math.pow(-b, t) * Math.pow(-a, 1 - t); }
-      : function(t) { return Math.pow(b, t) * Math.pow(a, 1 - t); };
-}
-
-function pow10(x) {
-  return isFinite(x) ? +("1e" + x) : x < 0 ? 0 : x;
-}
-
-function powp(base) {
-  return base === 10 ? pow10
-      : base === Math.E ? Math.exp
-      : function(x) { return Math.pow(base, x); };
-}
-
-function logp(base) {
-  return base === Math.E ? Math.log
-      : base === 10 && Math.log10
-      || base === 2 && Math.log2
-      || (base = Math.log(base), function(x) { return Math.log(x) / base; });
-}
 
 var t0$1 = new Date;
 var t1$1 = new Date;
@@ -6184,7 +4690,7 @@ function formatLiteralPercent() {
   return "%";
 }
 
-var locale$2;
+var locale$1;
 var timeFormat;
 var timeParse;
 var utcFormat;
@@ -6202,12 +4708,12 @@ defaultLocale$1({
 });
 
 function defaultLocale$1(definition) {
-  locale$2 = formatLocale$1(definition);
-  timeFormat = locale$2.format;
-  timeParse = locale$2.parse;
-  utcFormat = locale$2.utcFormat;
-  utcParse = locale$2.utcParse;
-  return locale$2;
+  locale$1 = formatLocale$1(definition);
+  timeFormat = locale$1.format;
+  timeParse = locale$1.parse;
+  utcFormat = locale$1.utcFormat;
+  utcParse = locale$1.utcParse;
+  return locale$1;
 }
 
 var isoSpecifier = "%Y-%m-%dT%H:%M:%S.%LZ";
@@ -6251,51 +4757,22 @@ var cool = cubehelixLong(cubehelix(260, 0.75, 0.35), cubehelix(80, 1.50, 0.8));
 
 var rainbow = cubehelix();
 
-var constant$10 = function(x) {
-  return function constant() {
-    return x;
+function ramp(range) {
+  var n = range.length;
+  return function(t) {
+    return range[Math.max(0, Math.min(n - 1, Math.floor(t * n)))];
   };
-};
-
-function Linear(context) {
-  this._context = context;
 }
 
-Linear.prototype = {
-  areaStart: function() {
-    this._line = 0;
-  },
-  areaEnd: function() {
-    this._line = NaN;
-  },
-  lineStart: function() {
-    this._point = 0;
-  },
-  lineEnd: function() {
-    if (this._line || (this._line !== 0 && this._point === 1)) this._context.closePath();
-    this._line = 1 - this._line;
-  },
-  point: function(x, y) {
-    x = +x, y = +y;
-    switch (this._point) {
-      case 0: this._point = 1; this._line ? this._context.lineTo(x, y) : this._context.moveTo(x, y); break;
-      case 1: this._point = 2; // proceed
-      default: this._context.lineTo(x, y); break;
-    }
-  }
-};
+ramp(colors("44015444025645045745055946075a46085c460a5d460b5e470d60470e6147106347116447136548146748166848176948186a481a6c481b6d481c6e481d6f481f70482071482173482374482475482576482677482878482979472a7a472c7a472d7b472e7c472f7d46307e46327e46337f463480453581453781453882443983443a83443b84433d84433e85423f854240864241864142874144874045884046883f47883f48893e49893e4a893e4c8a3d4d8a3d4e8a3c4f8a3c508b3b518b3b528b3a538b3a548c39558c39568c38588c38598c375a8c375b8d365c8d365d8d355e8d355f8d34608d34618d33628d33638d32648e32658e31668e31678e31688e30698e306a8e2f6b8e2f6c8e2e6d8e2e6e8e2e6f8e2d708e2d718e2c718e2c728e2c738e2b748e2b758e2a768e2a778e2a788e29798e297a8e297b8e287c8e287d8e277e8e277f8e27808e26818e26828e26828e25838e25848e25858e24868e24878e23888e23898e238a8d228b8d228c8d228d8d218e8d218f8d21908d21918c20928c20928c20938c1f948c1f958b1f968b1f978b1f988b1f998a1f9a8a1e9b8a1e9c891e9d891f9e891f9f881fa0881fa1881fa1871fa28720a38620a48621a58521a68522a78522a88423a98324aa8325ab8225ac8226ad8127ad8128ae8029af7f2ab07f2cb17e2db27d2eb37c2fb47c31b57b32b67a34b67935b77937b87838b9773aba763bbb753dbc743fbc7340bd7242be7144bf7046c06f48c16e4ac16d4cc26c4ec36b50c46a52c56954c56856c66758c7655ac8645cc8635ec96260ca6063cb5f65cb5e67cc5c69cd5b6ccd5a6ece5870cf5773d05675d05477d1537ad1517cd2507fd34e81d34d84d44b86d54989d5488bd6468ed64590d74393d74195d84098d83e9bd93c9dd93ba0da39a2da37a5db36a8db34aadc32addc30b0dd2fb2dd2db5de2bb8de29bade28bddf26c0df25c2df23c5e021c8e020cae11fcde11dd0e11cd2e21bd5e21ad8e219dae319dde318dfe318e2e418e5e419e7e419eae51aece51befe51cf1e51df4e61ef6e620f8e621fbe723fde725"));
 
-var curveLinear = function(context) {
-  return new Linear(context);
-};
+var magma = ramp(colors("00000401000501010601010802010902020b02020d03030f03031204041405041606051806051a07061c08071e0907200a08220b09240c09260d0a290e0b2b100b2d110c2f120d31130d34140e36150e38160f3b180f3d19103f1a10421c10441d11471e114920114b21114e22115024125325125527125829115a2a115c2c115f2d11612f116331116533106734106936106b38106c390f6e3b0f703d0f713f0f72400f74420f75440f764510774710784910784a10794c117a4e117b4f127b51127c52137c54137d56147d57157e59157e5a167e5c167f5d177f5f187f601880621980641a80651a80671b80681c816a1c816b1d816d1d816e1e81701f81721f817320817521817621817822817922827b23827c23827e24828025828125818326818426818627818827818928818b29818c29818e2a81902a81912b81932b80942c80962c80982d80992d809b2e7f9c2e7f9e2f7fa02f7fa1307ea3307ea5317ea6317da8327daa337dab337cad347cae347bb0357bb2357bb3367ab5367ab73779b83779ba3878bc3978bd3977bf3a77c03a76c23b75c43c75c53c74c73d73c83e73ca3e72cc3f71cd4071cf4070d0416fd2426fd3436ed5446dd6456cd8456cd9466bdb476adc4869de4968df4a68e04c67e24d66e34e65e44f64e55064e75263e85362e95462ea5661eb5760ec5860ed5a5fee5b5eef5d5ef05f5ef1605df2625df2645cf3655cf4675cf4695cf56b5cf66c5cf66e5cf7705cf7725cf8745cf8765cf9785df9795df97b5dfa7d5efa7f5efa815ffb835ffb8560fb8761fc8961fc8a62fc8c63fc8e64fc9065fd9266fd9467fd9668fd9869fd9a6afd9b6bfe9d6cfe9f6dfea16efea36ffea571fea772fea973feaa74feac76feae77feb078feb27afeb47bfeb67cfeb77efeb97ffebb81febd82febf84fec185fec287fec488fec68afec88cfeca8dfecc8ffecd90fecf92fed194fed395fed597fed799fed89afdda9cfddc9efddea0fde0a1fde2a3fde3a5fde5a7fde7a9fde9aafdebacfcecaefceeb0fcf0b2fcf2b4fcf4b6fcf6b8fcf7b9fcf9bbfcfbbdfcfdbf"));
 
-function x$3(p) {
-  return p[0];
-}
+var inferno = ramp(colors("00000401000501010601010802010a02020c02020e03021004031204031405041706041907051b08051d09061f0a07220b07240c08260d08290e092b10092d110a30120a32140b34150b37160b39180c3c190c3e1b0c411c0c431e0c451f0c48210c4a230c4c240c4f260c51280b53290b552b0b572d0b592f0a5b310a5c320a5e340a5f3609613809623909633b09643d09653e0966400a67420a68440a68450a69470b6a490b6a4a0c6b4c0c6b4d0d6c4f0d6c510e6c520e6d540f6d550f6d57106e59106e5a116e5c126e5d126e5f136e61136e62146e64156e65156e67166e69166e6a176e6c186e6d186e6f196e71196e721a6e741a6e751b6e771c6d781c6d7a1d6d7c1d6d7d1e6d7f1e6c801f6c82206c84206b85216b87216b88226a8a226a8c23698d23698f24699025689225689326679526679727669827669a28659b29649d29649f2a63a02a63a22b62a32c61a52c60a62d60a82e5fa92e5eab2f5ead305dae305cb0315bb1325ab3325ab43359b63458b73557b93556ba3655bc3754bd3853bf3952c03a51c13a50c33b4fc43c4ec63d4dc73e4cc83f4bca404acb4149cc4248ce4347cf4446d04545d24644d34743d44842d54a41d74b3fd84c3ed94d3dda4e3cdb503bdd513ade5238df5337e05536e15635e25734e35933e45a31e55c30e65d2fe75e2ee8602de9612bea632aeb6429eb6628ec6726ed6925ee6a24ef6c23ef6e21f06f20f1711ff1731df2741cf3761bf37819f47918f57b17f57d15f67e14f68013f78212f78410f8850ff8870ef8890cf98b0bf98c0af98e09fa9008fa9207fa9407fb9606fb9706fb9906fb9b06fb9d07fc9f07fca108fca309fca50afca60cfca80dfcaa0ffcac11fcae12fcb014fcb216fcb418fbb61afbb81dfbba1ffbbc21fbbe23fac026fac228fac42afac62df9c72ff9c932f9cb35f8cd37f8cf3af7d13df7d340f6d543f6d746f5d949f5db4cf4dd4ff4df53f4e156f3e35af3e55df2e661f2e865f2ea69f1ec6df1ed71f1ef75f1f179f2f27df2f482f3f586f3f68af4f88ef5f992f6fa96f8fb9af9fc9dfafda1fcffa4"));
 
-function y$3(p) {
-  return p[1];
-}
+var plasma = ramp(colors("0d088710078813078916078a19068c1b068d1d068e20068f2206902406912605912805922a05932c05942e05952f059631059733059735049837049938049a3a049a3c049b3e049c3f049c41049d43039e44039e46039f48039f4903a04b03a14c02a14e02a25002a25102a35302a35502a45601a45801a45901a55b01a55c01a65e01a66001a66100a76300a76400a76600a76700a86900a86a00a86c00a86e00a86f00a87100a87201a87401a87501a87701a87801a87a02a87b02a87d03a87e03a88004a88104a78305a78405a78606a68707a68808a68a09a58b0aa58d0ba58e0ca48f0da4910ea3920fa39410a29511a19613a19814a099159f9a169f9c179e9d189d9e199da01a9ca11b9ba21d9aa31e9aa51f99a62098a72197a82296aa2395ab2494ac2694ad2793ae2892b02991b12a90b22b8fb32c8eb42e8db52f8cb6308bb7318ab83289ba3388bb3488bc3587bd3786be3885bf3984c03a83c13b82c23c81c33d80c43e7fc5407ec6417dc7427cc8437bc9447aca457acb4679cc4778cc4977cd4a76ce4b75cf4c74d04d73d14e72d24f71d35171d45270d5536fd5546ed6556dd7566cd8576bd9586ada5a6ada5b69db5c68dc5d67dd5e66de5f65de6164df6263e06363e16462e26561e26660e3685fe4695ee56a5de56b5de66c5ce76e5be76f5ae87059e97158e97257ea7457eb7556eb7655ec7754ed7953ed7a52ee7b51ef7c51ef7e50f07f4ff0804ef1814df1834cf2844bf3854bf3874af48849f48948f58b47f58c46f68d45f68f44f79044f79143f79342f89441f89540f9973ff9983ef99a3efa9b3dfa9c3cfa9e3bfb9f3afba139fba238fca338fca537fca636fca835fca934fdab33fdac33fdae32fdaf31fdb130fdb22ffdb42ffdb52efeb72dfeb82cfeba2cfebb2bfebd2afebe2afec029fdc229fdc328fdc527fdc627fdc827fdca26fdcb26fccd25fcce25fcd025fcd225fbd324fbd524fbd724fad824fada24f9dc24f9dd25f8df25f8e125f7e225f7e425f6e626f6e826f5e926f5eb27f4ed27f3ee27f3f027f2f227f1f426f1f525f0f724f0f921"));
+
+var pi$4 = Math.PI;
 
 function sign$1(x) {
   return x < 0 ? -1 : 1;
@@ -6394,318 +4871,11 @@ ReflectContext.prototype = {
   bezierCurveTo: function(x1, y1, x2, y2, x, y) { this._context.bezierCurveTo(y1, x1, y2, x2, y, x); }
 };
 
-function createBorderEdge(left, v0, v1) {
-  var edge = [v0, v1];
-  edge.left = left;
-  return edge;
-}
-
-
-
-// Liang–Barsky line clipping.
-function clipEdge(edge, x0, y0, x1, y1) {
-  var a = edge[0],
-      b = edge[1],
-      ax = a[0],
-      ay = a[1],
-      bx = b[0],
-      by = b[1],
-      t0 = 0,
-      t1 = 1,
-      dx = bx - ax,
-      dy = by - ay,
-      r;
-
-  r = x0 - ax;
-  if (!dx && r > 0) return;
-  r /= dx;
-  if (dx < 0) {
-    if (r < t0) return;
-    if (r < t1) t1 = r;
-  } else if (dx > 0) {
-    if (r > t1) return;
-    if (r > t0) t0 = r;
-  }
-
-  r = x1 - ax;
-  if (!dx && r < 0) return;
-  r /= dx;
-  if (dx < 0) {
-    if (r > t1) return;
-    if (r > t0) t0 = r;
-  } else if (dx > 0) {
-    if (r < t0) return;
-    if (r < t1) t1 = r;
-  }
-
-  r = y0 - ay;
-  if (!dy && r > 0) return;
-  r /= dy;
-  if (dy < 0) {
-    if (r < t0) return;
-    if (r < t1) t1 = r;
-  } else if (dy > 0) {
-    if (r > t1) return;
-    if (r > t0) t0 = r;
-  }
-
-  r = y1 - ay;
-  if (!dy && r < 0) return;
-  r /= dy;
-  if (dy < 0) {
-    if (r > t1) return;
-    if (r > t0) t0 = r;
-  } else if (dy > 0) {
-    if (r < t0) return;
-    if (r < t1) t1 = r;
-  }
-
-  if (!(t0 > 0) && !(t1 < 1)) return true; // TODO Better check?
-
-  if (t0 > 0) edge[0] = [ax + t0 * dx, ay + t0 * dy];
-  if (t1 < 1) edge[1] = [ax + t1 * dx, ay + t1 * dy];
-  return true;
-}
-
-function connectEdge(edge, x0, y0, x1, y1) {
-  var v1 = edge[1];
-  if (v1) return true;
-
-  var v0 = edge[0],
-      left = edge.left,
-      right = edge.right,
-      lx = left[0],
-      ly = left[1],
-      rx = right[0],
-      ry = right[1],
-      fx = (lx + rx) / 2,
-      fy = (ly + ry) / 2,
-      fm,
-      fb;
-
-  if (ry === ly) {
-    if (fx < x0 || fx >= x1) return;
-    if (lx > rx) {
-      if (!v0) v0 = [fx, y0];
-      else if (v0[1] >= y1) return;
-      v1 = [fx, y1];
-    } else {
-      if (!v0) v0 = [fx, y1];
-      else if (v0[1] < y0) return;
-      v1 = [fx, y0];
-    }
-  } else {
-    fm = (lx - rx) / (ry - ly);
-    fb = fy - fm * fx;
-    if (fm < -1 || fm > 1) {
-      if (lx > rx) {
-        if (!v0) v0 = [(y0 - fb) / fm, y0];
-        else if (v0[1] >= y1) return;
-        v1 = [(y1 - fb) / fm, y1];
-      } else {
-        if (!v0) v0 = [(y1 - fb) / fm, y1];
-        else if (v0[1] < y0) return;
-        v1 = [(y0 - fb) / fm, y0];
-      }
-    } else {
-      if (ly < ry) {
-        if (!v0) v0 = [x0, fm * x0 + fb];
-        else if (v0[0] >= x1) return;
-        v1 = [x1, fm * x1 + fb];
-      } else {
-        if (!v0) v0 = [x1, fm * x1 + fb];
-        else if (v0[0] < x0) return;
-        v1 = [x0, fm * x0 + fb];
-      }
-    }
-  }
-
-  edge[0] = v0;
-  edge[1] = v1;
-  return true;
-}
-
-function cellHalfedgeStart(cell, edge) {
-  return edge[+(edge.left !== cell.site)];
-}
-
-function cellHalfedgeEnd(cell, edge) {
-  return edge[+(edge.left === cell.site)];
-}
-
-var epsilon$4 = 1e-6;
-
-
-var cells;
-
-var edges;
-
-function triangleArea(a, b, c) {
-  return (a[0] - c[0]) * (b[1] - a[1]) - (a[0] - b[0]) * (c[1] - a[1]);
-}
-
 // Eg at http://c3js.org/samples/chart_area_stacked.html
-class StackedAreaChart {
-
-  constructor(container_id, x_name, y_name, y_max, columns, types, groups, colors, order_stack) {
-    document.getElementById(container_id).style.transition = "all 0.4s ease-in-out";
-    this.chart = c3.generate({
-      bindto: '#' + container_id,
-      data: {
-        x: x_name,
-        columns: columns,
-        types: types,
-        groups: groups,
-        colors: colors,
-        order: function(t1, t2) {
-          return order_stack[t1.id] < order_stack[t2.id]  ? 1 : -1;
-        }
-      },
-      tooltip: {
-        show: false
-      },
-      axis: {
-        x: {
-          label: x_name
-        },
-        y: {
-          label: y_name,
-          max: y_max
-        },
-      }
-    });
-  }
-
-  update(columns) {
-    this.chart.load({
-      columns: columns
-    });
-  }
-
-  update_full(container_id, x_name, y_name, y_max, columns, types, groups, colors, order_stack) {
-    //let container = document.getElementById(container_id);
-    //container.style.opacity = "0.0";
-    setTimeout(() => {
-      //this.chart.destroy();
-      this.chart = c3.generate({
-        bindto: '#' + container_id,
-        data: {
-          x: x_name,
-          columns: columns,
-          types: types,
-          groups: groups,
-          colors: colors,
-          order: function(t1, t2) {
-            return order_stack[t1.id] < order_stack[t2.id]  ? 1 : -1;
-          }
-        },
-        tooltip: {
-          show: false
-        },
-        axis: {
-          x: {
-            label: x_name
-          },
-          y: {
-            label: y_name,
-            max: y_max
-          },
-        }
-      });
-    }, 300);
-    //setTimeout(() => {
-    //  container.style.opacity = "1.0";
-    //}, 401);
-  }
-
-}
 
 // Eg at http://c3js.org/samples/chart_bar_stacked.html
-class StackedAreaChart$1 {
-
-  constructor(container_id, x_name, y_name, y_categories, columns, groups) {
-    this.chart = c3.generate({
-      bindto: '#' + container_id,
-      data: {
-        columns: columns,
-        type: "bar",
-        groups: groups
-      },
-      tooltip: {
-        show: false
-      },
-      axis: {
-        x: {
-          label: x_name,
-          type: 'category',
-          categories: y_categories
-        },
-        y: {
-          label: y_name
-        },
-      }
-    });
-  }
-
-  update(columns) {
-    this.chart.load({
-      columns: columns
-    });
-  }
-
-  showOnly(column_name) {
-    this.chart.hide();
-    this.chart.show(column_name);
-  }
-
-}
 
 // Eg at http://c3js.org/samples/chart_bar.html
-class BarChart {
-
-  constructor(container_id, x_name, y_name, y_categories, columns, colors) {
-    this.chart = c3.generate({
-      bindto: '#' + container_id,
-      data: {
-        columns: columns,
-        type: "bar",
-        colors: colors
-      },
-      legend: {
-        show: false
-      },
-      tooltip: {
-        show: false
-      },
-      interaction: {
-        enabled: false
-      },
-      axis: {
-        x: {
-          label: x_name,
-          type: 'category',
-          categories: y_categories
-        },
-        y: {
-          label: y_name
-        },
-      }
-    });
-  }
-
-  update(categories, columns) {
-    this.chart.load({
-      columns: columns,
-      categories : categories
-    });
-  }
-
-  showOnly(column_name) {
-    this.chart.hide();
-    this.chart.show(column_name);
-  }
-
-}
 
 // This Class contains all methods that process the Data
 class DataProcessor {
@@ -6871,12 +5041,6 @@ class DataProcessor {
 
 
 
-
-
-
-
-
-
   getConsoleList() {
     return this.data.reduce(
       (platform_list, game) => {
@@ -6888,12 +5052,10 @@ class DataProcessor {
   getGenreList() {
     return this.data.reduce(
       (genre_list, game) => {
-        if (!genre_list.includes(game.Genre)) genre_list.push(game.Genre);
+        if (game.Genre != "" && !genre_list.includes(game.Genre)) genre_list.push(game.Genre);
         return genre_list;
       }, []);
   }
-
-
 }
 
 class Menu {
@@ -6916,10 +5078,10 @@ class Menu {
 class Banner {
 
   constructor(container_id) {
-    xml("./modules/Banner/banner.svg").mimeType("image/svg+xml").get((error, xml$$1) => {
+    xml("./modules/Banner/banner.svg").mimeType("image/svg+xml").get((error, xml) => {
 
       if (error) throw error;
-      document.getElementById(container_id).appendChild(xml$$1.documentElement);
+      document.getElementById(container_id).appendChild(xml.documentElement);
 
       let spaceInvaders = select(`#${container_id} #space_invaders`);
       myTrans();
@@ -6940,50 +5102,874 @@ class Banner {
 
 }
 
-class RegionSelector {
+class GenreBar {
 
-  constructor(container_id) {
+  constructor(container_id, colors) {
+    this.margin = {top: 10, right: 10, bottom: 50, left: 50};
+    let container_width = document.getElementById('genreBar_container').offsetWidth;
+    this.width = container_width - this.margin.left - this.margin.right;
+    this.height = 190 - this.margin.top - this.margin.bottom;
+    this.svg = d3.select('#' + container_id)
+                 .append("svg")
+                 .attr("width", this.width + this.margin.left + this.margin.right)
+                 .attr("height", this.height + this.margin.top + this.margin.bottom)
+                 .append("g")
+                 .attr("transform",
+                         "translate(" + this.margin.left + "," + this.margin.top + ")");
+    this.x_group = this.svg.append("g");
+    this.y_group = this.svg.append("g");
+    this.colors = colors;
+    this.data = {};
+
+    this.tip = d3.tip()
+                 .attr('class', 'genre_tip')
+                 .offset([-10, 0])
+                 .html(function(d) {
+                   return parseFloat(d[1]*100).toFixed(1) + "%";
+                 });
+  }
+
+  update(newData) {
+    this.data = this.getGenreDistribution(newData);
+
+    //let x = d3.scaleBand().rangeRound([0, this.width]).paddingInner(0.1)
+    let x = d3.scale.ordinal().rangeRoundBands([0, this.width], 0.1);
+    let y = d3.scale.linear().range([this.height, 0]);
+
+    let xAxis = d3.svg.axis()
+                      .scale(x)
+                      .orient("bottom");
+
+    let yAxis = d3.svg.axis()
+                      .scale(y)
+                      .orient("left")
+                      .ticks(5);
+
+    x.domain(this.data.map(function(d) { return d[0]; }));
+    y.domain([0, d3.max(this.data, function(d) { return d[1]; })]);
+
+    this.svg.call(this.tip);
+
+    this.x_group.attr("class", "x axis")
+                .attr("transform", "translate(0," + this.height + ")")
+                .call(xAxis)
+                .selectAll("text")
+                .attr("dy", function(d, i) {
+                  if (i % 2 == 1) {
+                    return "2.2em"
+                  }
+                  return "1em"
+                });
+
+    this.y_group.attr("class", "y axis")
+                .call(yAxis);
+
+    let height = this.height;
+
+    this.svg.selectAll(".rect_bar")
+            .remove();
+
+    this.svg.selectAll("bar").data(this.data)
+                  .enter()
+                  .append("rect")
+                  .attr('class', 'rect_bar')
+                  .style("fill", "steelblue")
+                  .attr("x", function(d) { return x(d[0]); })
+                  .attr("width", x.rangeBand())
+                  .attr("y", function(d) { return y(d[1]); })
+                  .attr("height", function(d) { return height - y(d[1]); })
+                  .on('mouseover', this.tip.show)
+                  .on('mouseout', this.tip.hide);
+  }
+
+  /*
+    For each genre specified, compute the percentage of existing games with
+    respect to all genre specified, such that the sum of each percentage is 1.
+  */
+  getGenreDistribution(newData) {
+      let genre_sort_rule = {
+        "Sports": 1,
+        "Platform": 2,
+        "Racing": 3,
+        "Role-Playing": 4,
+        "Puzzle": 5,
+        "Misc": 6,
+        "Shooter": 7,
+        "Simulation": 8,
+        "Action": 9,
+        "Fighting": 10,
+        "Adventure": 11,
+        "Strategy": 12,
+      };
+
+      let data = newData.reduce(
+        (genre_list, game) => {
+        let found = false;
+        for (let e of genre_list) {
+          if (e[0] == game.Genre) {
+            e[1] += 1;
+            found = true;
+          }
+        }
+        if (! found) {
+          genre_list.push([game.Genre, 1]);
+        }
+        return genre_list
+      }, []);
+
+      for (let e of data) {
+        e[1] /= newData.length;
+      }
+
+      // We sort
+      data.sort(function(a, b) {
+        return genre_sort_rule[a[0]] - genre_sort_rule[b[0]]
+      });
+
+      return data
+  }
+}
+
+class GenreBarButtons {
+
+  constructor(container_id, genres, dataManager) {
+    this.genres = genres;
+    this.dataManager = dataManager;
+    this.genres_selected = [];
+    for (let i = 0 ; i < this.genres.length ; ++i) {
+      this.genres_selected[i] = true;
+    }
+    this.margin = {top: 10, right: 20, bottom: 20, left: 10}, this.width = 250 - this.margin.left - this.margin.right, this.height = 200 - this.margin.top - this.margin.bottom;
+    this.svg = d3.select('#' + container_id)
+                 .append("svg")
+                 .attr("width", this.width + this.margin.left + this.margin.right)
+                 .attr("height", this.height + this.margin.top + this.margin.bottom)
+                 .append("g")
+                 .attr('id', 'buttons')
+                 .attr("transform",
+                         "translate(" + this.margin.left + "," + this.margin.top + ")");
+
+    let data = [];
+    for (let i = 0 ; i < genres.length ; ++i) {
+      data.push({label: genres[i], x: 0, y: i*26});
+    }
+
+    let genres_length = this.genres.length;
+    let self = this;
+    let buttons = this.svg.selectAll('button_not_selected')
+                          .data(data)
+                          .enter()
+                          .append('g')
+                          .attr('id', function(d) { return 'button_' + d.label })
+                          .attr('class', 'button_selected')
+                          .on("click", function(d, i) {
+                            let button = d3.select('#button_' + d.label);
+                            let classList = button[0][0].classList;
+                            if (classList.contains('button_not_selected')) {
+                              button.attr('class', 'button_selected button_hovered');
+                              self.update_genre(i, true);
+                            }
+                            else {
+                              button.attr('class', 'button_not_selected button_hovered');
+                              self.update_genre(i, false);
+                            }
+                            self.update_genre_list();
+                          })
+                          .on("mouseover", function(d) {
+                            let button = d3.select('#button_' + d.label);
+                            let classList = button[0][0].classList;
+                            if (!classList.contains('button_hovered')) {
+                              let final_classes = "";
+                              classList.forEach(function(e) {
+                                final_classes += e;
+                                final_classes += " ";
+                              });
+                              final_classes += " button_hovered";
+                              button.attr('class', final_classes);
+                            }
+                            d3.event.stopPropagation();
+                          })
+                          .on("mouseout", function(d) {
+                            let button = d3.select('#button_' + d.label);
+                            let classList = button[0][0].classList;
+                            let final_classes = "";
+                            classList.forEach(function(e) {
+                              if (e != "button_hovered") {
+                                final_classes += e;
+                                final_classes += " ";
+                              }
+                            });
+                            final_classes.substring(0, final_classes.length - 1);
+                            button.attr('class', final_classes);
+
+                            d3.event.stopPropagation();
+                          });
+
+    let rect_width = 100;
+    let rect_height = 20;
+
+    buttons.append('rect')
+            .attr("x", function(d, i) {
+                return Math.floor(i / 6) * (rect_width + 10)
+            })
+            .attr("y", function(d, i) {
+              return (i%6) * 24
+            })
+            .attr("width", rect_width)
+            .attr("height", rect_height)
+            .attr('rx', 10)
+            .attr('ry', 10);
+
+    let button_all = this.svg.append('g')
+                             .attr('class', 'button_all_none');
+
+    let button_all_rect = button_all.append('rect')
+                                    .attr("x", 0)
+                                    .attr("y", 6*24 + 6)
+                                    .attr("width", rect_width)
+                                    .attr("height", rect_height)
+                                    .attr('rx', 10)
+                                    .attr('ry', 10)
+                                    .attr('class', 'button_all_none');
+
+    button_all.on('click', function() {
+              self.svg.selectAll('.button_not_selected')
+                      .attr('class', 'button_selected');
+              button_all.transition()
+                  .duration(50)
+                  .attr('class', 'button_all_none_selected')
+                  .transition()
+                  .duration(50)
+                  .attr('class', 'button_all_none_hovered');
+              for (let i = 0 ; i < genres_length ; ++i) {
+                self.update_genre(i, true);
+              }
+              self.update_genre_list();
+            })
+            .on('mouseover', function(){
+              button_all.attr('class', 'button_all_none_hovered');
+              d3.event.stopPropagation();
+            })
+            .on('mouseout', function(){
+              button_all.attr('class', 'button_all_none');
+              d3.event.stopPropagation();
+            });
+
+    button_all.append('text')
+            .attr('class', 'button_all_none_text')
+            .text("All")
+            .attr("x", function() {
+              return (rect_width/2) - (this.getBBox().width/2);
+            })
+            .attr("y", 16 + 6*24 + 6);
+
+    let button_none = this.svg.append('g')
+                              .attr('class', 'button_all_none');
+
+    let button_none_rect = button_none.append('rect')
+                                      .attr("x", rect_width + 10)
+                                      .attr("y", 6*24 + 6)
+                                      .attr("width", rect_width)
+                                      .attr("height", rect_height)
+                                      .attr('rx', 10)
+                                      .attr('ry', 10)
+                                      .attr('class', 'button_all_none');
+
+    button_none.on('click', function() {
+              self.svg.selectAll('.button_selected')
+                      .attr('class', 'button_not_selected');
+              button_none.transition()
+                  .duration(50)
+                  .attr('class', 'button_all_none_selected')
+                  .transition()
+                  .duration(50)
+                  .attr('class', 'button_all_none_hovered');
+              for (let i = 0 ; i < genres_length ; ++i) {
+                self.update_genre(i, false);
+              }
+              self.update_genre_list();
+            })
+            .on('mouseover', function(){
+              button_none.attr('class', 'button_all_none_hovered');
+              d3.event.stopPropagation();
+            })
+            .on('mouseout', function(){
+              button_none.attr('class', 'button_all_none');
+              d3.event.stopPropagation();
+            });
+
+    button_none.append('text')
+               .attr('class', 'button_all_none_text')
+               .text("None")
+               .attr("x", function() {
+                 return rect_width + 10 + (rect_width/2) - (this.getBBox().width/2);
+               })
+               .attr("y", 16 + 6*24 + 6);
+
+    let texts = buttons.append('text')
+                       .text(function(d) { return d.label })
+                       .attr("x", function (d, i) {
+                            let text_width = this.getBBox().width;
+                            let offset = Math.floor(i / 6) * (rect_width + 10);
+                            return offset + rect_width/2 - text_width/2; })
+                       .attr("y", function(d, i) { return 16+(i%6)*24} );
+  }
+
+  update_genre(index_genre, value) {
+    this.genres_selected[index_genre] = value;
+  }
+
+  update_genre_list() {
+    let new_genres = [];
+    for (let i = 0 ; i < this.genres.length ; ++i) {
+      if (this.genres_selected[i]) {
+        new_genres.push(this.genres[i]);
+      }
+    }
+    this.dataManager.setGenre(new_genres);
+  }
+}
+
+class BrandBarChart {
+
+  constructor(parent, consoles, container_id, name, data) {
     this.container_id = container_id;
-    let container = document.getElementById(container_id);
-    // Create one button for each region
-    for (let region of ["WORLD", "NA", "EU", "JP", "OTHER"]) {
-      let btn = document.createElement("button");
-      btn.id = region + "_button";
-      btn.classList.add('region_selector_button');
-      btn.classList.add('col-xs');
-      btn.style['background-image'] = `url(./modules/RegionSelector/${region}.svg)`;
-      btn.onclick = () => this.toggle(region);
-      container.appendChild(btn);
+    this.parent = parent;
+    this.consoles = consoles;
+    this.consoles_selected = {};
+    for (let e of this.consoles) {
+      this.consoles_selected[e] = true;
     }
-    // Initially WORLD is selected
-    this.toggle("WORLD");
+
+    this.margin = {top: 5, right: 20, bottom: 5, left: 60};
+    this.svg_width = 140;
+    this.svg_height = 140;
+    this.height = this.svg_width - this.margin.top - this.margin.bottom;
+    this.width = this.svg_height - this.margin.left - this.margin.right;
+    this.svg = d3.select('#' + container_id)
+                 .append("svg")
+                 .attr("id", "svg_" + container_id)
+                 .attr("class", "brand_chart brand_chart_selected")
+                 .attr("width", this.svg_width)
+                 .attr("height", this.svg_height);
+
+    let svg = this.svg;
+
+    this.brand_bar_width = 150;
+    this.bar_svg = d3.select('#' + container_id)
+                     .append("svg")
+                     .attr("class", "brand_bar")
+                     .attr("width", this.brand_bar_width)
+                     .attr("height", this.svg_height);
+
+    this.group = this.svg.append('g')
+                         .attr("transform",
+                                "translate(" + this.margin.left + "," + 20 + ")");
+
+    this.x_group = this.group.append("g");
+    this.y_group = this.group.append("g");
+
+    this.brand_name = this.svg.append("text")
+                             .attr("class", "brand_title_selected")
+                             .attr("x", (this.svg_width / 2))
+                             .attr("y", 12 + this.margin.top)
+                             .attr("text-anchor", "middle")
+                             .text(name);
+    let brand_name = this.brand_name;
+    let consoles_selected = this.consoles_selected;
+    let y_group = this.y_group;
+
+    brand_name.on("mouseover", function() {
+      if (brand_name[0][0].classList.contains('brand_title_selected')) {
+        brand_name.attr('class', 'brand_title_selected brand_title_hovered');
+      }
+      else {
+        brand_name.attr('class', 'brand_title_not_selected brand_title_hovered');
+      }
+    })
+    .on("mouseout", function() {
+      if (brand_name[0][0].classList.contains('brand_title_selected')) {
+        brand_name.attr('class', 'brand_title_selected');
+      }
+      else {
+        brand_name.attr('class', 'brand_title_not_selected');
+      }
+    })
+    .on("click", function () {
+      let classList = d3.select('#svg_' + container_id)[0][0].classList;
+      if (classList.contains('brand_chart_selected')) {
+        svg.attr('class', 'brand_chart brand_chart_not_selected');
+        brand_name.attr('class', 'brand_title_not_selected brand_title_hovered');
+        parent.update_brand(container_id, false);
+        for (let e of consoles) {
+          consoles_selected[e] = false;
+        }
+        y_group.selectAll('text').attr('class', 'console_not_selected');
+      }
+      else {
+        svg.attr('class', 'brand_chart brand_chart_selected');
+        brand_name.attr('class', 'brand_title_selected brand_title_hovered');
+        parent.update_brand(container_id, true);
+        for (let e of consoles) {
+          consoles_selected[e] = true;
+        }
+        y_group.selectAll('text').attr('class', 'console_selected');
+      }
+    });
+
+    this.tooltip = d3.select("body")
+                     .append("div")
+                     .attr("class", "tooltip")
+                     .style("opacity", 0);
   }
 
-  // Region is either : "WORLD","NA","EU","JP" or "OTHER"
-  toggle(region) {
-    this.selected_region = region;
-    // Deslect all buttons
-    for (let region of ["WORLD", "NA", "EU", "JP", "OTHER"]) {
-      let button = document.querySelector(`#${this.container_id} #${region}_button`);
-      button.classList.remove("selected");
+  update(newData, scoreBrand, maxBrand, game_count) {
+    this.data = newData;
+
+    this.height = 12 * this.data.length + 60 - this.margin.top - this.margin.bottom;
+    this.svg.attr("height", this.height);
+    this.bar_svg.attr("height", this.height);
+    this.svg_height = this.height;
+    let svg = this.svg;
+
+    let x = d3.scale.linear().range([0, this.width]);
+    let y = d3.scale.ordinal().rangeRoundBands([0, this.height-20], 0.1);
+
+    let xAxis = d3.svg.axis()
+                      .scale(x)
+                      .orient("bottom")
+                      .ticks(2);
+
+    let yAxis = d3.svg.axis()
+                      .scale(y)
+                      .orient("left")
+                      .outerTickSize(0);
+
+    x.domain([0, d3.max(this.data, function(d) { return d[1]; })]);
+    y.domain(this.data.map(function(d) { return d[0]; }));
+
+    this.x_group.attr("class", "x axis")
+                .attr("transform", "translate(0," + this.height + ")")
+                .call(xAxis);
+
+    this.y_group.attr("class", "y axis")
+                .call(yAxis);
+
+    let consoles_selected = this.consoles_selected;
+    let parent = this.parent;
+    let brand_name = this.brand_name;
+    this.y_group.selectAll('text')
+                .on('mouseover', function(text) {
+                  if (consoles_selected[text]) {
+                    d3.select(this).attr('class', 'console_selected console_hovered');
+                  }
+                  else {
+                    d3.select(this).attr('class', 'console_not_selected console_hovered');
+                  }
+                })
+                .on('mouseout', function(text) {
+                  if (consoles_selected[text]) {
+                    d3.select(this).attr('class', 'console_selected');
+                  }
+                  else {
+                    d3.select(this).attr('class', 'console_not_selected');
+                  }
+                })
+                .on('click' , function(text) {
+                  consoles_selected[text] = !consoles_selected[text];
+                  if (consoles_selected[text]) {
+                    d3.select(this).attr('class', 'console_selected console_hovered');
+                    svg.attr('class', 'brand_chart brand_chart_selected');
+                    brand_name.attr('class', 'brand_title_selected');
+                    parent.update_console(text, true);
+                  }
+                  else {
+                    if (!Object.values(consoles_selected).includes(true)) {
+                      brand_name.attr('class', 'brand_title_not_selected');
+                      svg.attr('class', 'brand_chart brand_chart_not_selected');
+                    }
+                    d3.select(this).attr('class', 'console_not_selected console_hovered');
+                    parent.update_console(text, false);
+                  }
+                });
+
+    let width = this.width;
+
+    this.group.selectAll(".rect_bar")
+              .remove();
+
+    this.bar_svg.selectAll(".rect_brand_bar")
+              .remove();
+
+    let tooltip = this.tooltip;
+    this.group.selectAll("bar").data(this.data)
+                .enter()
+                .append("rect")
+                .attr('class', 'rect_bar')
+                .style("fill", "steelblue")
+                .attr("x", 0)
+                .attr("height", 10)
+                .attr("y", function(d) { return y(d[0]) +y.rangeBand()/2 - 5; })
+                .attr("width", function(d) { return x(d[1]); })
+                .on("mouseover", function(d) {
+                  tooltip.transition()
+                      .duration(200)
+                      .style("opacity", .9);
+                  tooltip.html(d[1] + " games<br/>" + (d[1]*100/scoreBrand).toFixed(1) + "%")
+                      .style("left", (d3.event.pageX-60) + "px")
+                      .style("top", (d3.event.pageY-42) + "px");
+                  })
+                .on("mousemove", function () {
+                    tooltip.style("left", (d3.event.pageX-60) + "px")
+                           .style("top", (d3.event.pageY-42) + "px");
+                    })
+                .on("mouseout", function(d) {
+                    tooltip.transition()
+                           .duration(500)
+                           .style("opacity", 0);
+                    });
+
+    let svg_height = this.svg_height;
+    let bar_width = this.brand_bar_width * (scoreBrand/maxBrand);
+    if (!isNaN(bar_width)) {
+      this.bar_svg.append("rect")
+                  .attr('class', 'rect_brand_bar')
+                  .style("fill", "steelblue")
+                  .attr("x", 0)
+                  .attr("height", 60)
+                  .attr("y", svg_height/2-30)
+                  .attr("width", bar_width)
+                  .on("mouseover", function() {
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", .9);
+                    tooltip.html(scoreBrand + " games</br>" +
+                                 (scoreBrand*100/game_count).toFixed(1) + "%")
+                        .style("left", (d3.event.pageX-60) + "px")
+                        .style("top", (d3.event.pageY-42) + "px");
+                    })
+                  .on("mousemove", function () {
+                      tooltip.style("left", (d3.event.pageX-60) + "px")
+                             .style("top", (d3.event.pageY-42) + "px");
+                      })
+                  .on("mouseout", function() {
+                      tooltip.transition()
+                             .duration(500)
+                             .style("opacity", 0);
+                      });
     }
-    // Select button
-    let button = document.querySelector(`#${this.container_id} #${region}_button`);
-    button.classList.add("selected");
-    // Notify with callback
-    this.selectedRegion(region);
+  }
+}
+
+class ConsoleBar {
+
+  constructor(container_id, dataManager) {
+    this.nintendo = ["NES", "SNES", "N64", "GC", "Wii", "WiiU", "GB", "DS", "GBA", "3DS"];
+    this.playstation = ["PS", "PS2", "PS3", "PS4", "PSP"];
+    this.xbox = ["X360", "XOne", "XB"];
+    this.atari = ["2600"];
+    this.pc = ["PC"];
+
+    // Creation of a dictionary representing the selected consoles
+    this.consoles = this.nintendo.concat(this.playstation)
+                            .concat(this.xbox)
+                            .concat(this.atari)
+                            .concat(this.pc);
+    this.consoles_selected = {};
+    for (let e of this.consoles) {
+      this.consoles_selected[e] = true;
+    }
+
+    this.margin = {top: 20, right: 20, bottom: 30, left: 200}, this.width = 500 - this.margin.left - this.margin.right, this.height = 600 - this.margin.top - this.margin.bottom;
+
+    this.total_distribution = [];
+    this.sum_brand_distribution = [];
+
+    this.nintendoBarChart = new BrandBarChart(this, this.nintendo, "nintendo_barChart_container",
+                                       "Nintendo",
+                                       this.get_brand_distribution(this.nintendo));
+
+    this.playstationBarChart = new BrandBarChart(this, this.playstation, "playstation_barChart_container",
+                                       "Playstation",
+                                       this.get_brand_distribution(this.nintendo));
+
+    this.xboxBarChart = new BrandBarChart(this, this.xbox, "xbox_barChart_container",
+                                       "Xbox",
+                                       this.get_brand_distribution(this.nintendo));
+
+    this.atariBarChart = new BrandBarChart(this, this.atari, "atari_barChart_container",
+                                       "Atari",
+                                       this.get_brand_distribution(this.nintendo));
+
+    this.pcBarChart = new BrandBarChart(this, this.pc, "pc_barChart_container",
+                                       "PC",
+                                       this.get_brand_distribution(this.nintendo));
+
+    this.tooltip = d3.select("body")
+                     .append("div")
+                     .attr("class", "tooltip")
+                     .style("opacity", 0);
   }
 
-  // Callback called when a region is selected
-  selectedRegion(region) {}
+  update(newData) {
+    this.computeConsoleDistribution(newData);
+
+    let values = this.sum_brand_distribution.map(e => e[1]);
+    let max_brand = Math.max(...values);
+    let game_count = values.reduce((a, b) => a + b, 0);
+    this.nintendoBarChart.update(this.get_brand_distribution(this.nintendo),
+                                 this.sum_brand_distribution[0][1],
+                                 max_brand,
+                                 game_count);
+    this.playstationBarChart.update(this.get_brand_distribution(this.playstation),
+                                    this.sum_brand_distribution[1][1],
+                                    max_brand,
+                                    game_count);
+    this.xboxBarChart.update(this.get_brand_distribution(this.xbox),
+                                    this.sum_brand_distribution[2][1],
+                                    max_brand,
+                                    game_count);
+    this.atariBarChart.update(this.get_brand_distribution(this.atari),
+                                    this.sum_brand_distribution[3][1],
+                                    max_brand,
+                                    game_count);
+    this.pcBarChart.update(this.get_brand_distribution(this.pc),
+                                    this.sum_brand_distribution[4][1],
+                                    max_brand,
+                                    game_count);
+  }
+
+  /*
+    For each platform specified, compute the number of existing games
+  */
+  computeConsoleDistribution(newData) {
+    let nintendo = 0;
+    let playstation = 0;
+    let atari = 0;
+    let xbox = 0;
+    let pc = 0;
+
+    let keys = this.nintendo.concat(this.playstation)
+                            .concat(this.xbox)
+                            .concat(this.atari)
+                            .concat(this.pc);
+
+    let distribution_dict = {};
+
+    for (let e of keys) {
+      distribution_dict[e] = 0;
+    }
+
+    for (let e of newData) {
+      distribution_dict[e.Platform] += 1;
+    }
+
+    let distribution = [];
+
+    for (let i = 0 ; i < keys.length ; ++i) {
+      distribution.push([keys[i], distribution_dict[keys[i]]]);
+    }
+
+    for (let e of distribution) {
+      if (e[0] == "NES" ||
+          e[0] == "SNES" ||
+          e[0] == "N64" ||
+          e[0] == "GC" ||
+          e[0] == "Wii" ||
+          e[0] == "WiiU" ||
+          e[0] == "GB" ||
+          e[0] == "DS" ||
+          e[0] == "GBA" ||
+          e[0] == "3DS") {
+        nintendo += e[1];
+      }
+      else if (e[0] == "PS" ||
+               e[0] == "PS2" ||
+               e[0] == "PS3" ||
+               e[0] == "PS4" ||
+               e[0] == "PSP") {
+        playstation += e[1];
+      }
+      else if (e[0] == "2600"){
+        atari += e[1];
+      }
+      else if (e[0] == "X360" ||
+               e[0] == "XOne" ||
+               e[0] == "XB") {
+        xbox += e[1];
+      }
+      else if (e[0] == "PC") {
+        pc += e[1];
+      }
+    }
+
+    this.total_distribution = distribution;
+    this.sum_brand_distribution = [["Nintendo", nintendo],
+                                   ["Playstation", playstation],
+                                   ["XBox", xbox],
+                                   ["Atari", atari],
+                                   ["PC", pc]];
+  }
+
+  get_brand_distribution(brand) {
+    return this.total_distribution.filter(e => brand.includes(e[0]) )
+  }
+
+  setDataManager(dataManager) {
+    this.dataManager = dataManager;
+  }
+
+  update_brand(name, value) {
+    let brand = null;
+    switch (name){
+      case "nintendo_barChart_container":
+        brand = this.nintendo;
+        break;
+      case "playstation_barChart_container":
+        brand = this.playstation;
+        break;
+      case "xbox_barChart_container":
+        brand = this.xbox;
+        break;
+      case "atari_barChart_container":
+        brand = this.atari;
+        break;
+      case "pc_barChart_container":
+        brand = this.pc;
+        break;
+      default:
+        console.log("Unknown console : " + name);
+        break;
+    }
+
+    for (let e of brand) {
+      this.consoles_selected[e] = value;
+    }
+
+    let platforms = this.consoles.reduce(
+      (res, platform) => {
+        if (this.consoles_selected[platform]) {
+          return res.concat(platform)
+        }
+        return res
+      }, []);
+
+    this.dataManager.setPlatform(platforms);
+  }
+
+  update_console(platform, value) {
+    this.consoles_selected[platform] = value;
+
+    let platforms = this.consoles.reduce(
+      (res, platform) => {
+        if (this.consoles_selected[platform]) {
+          return res.concat(platform)
+        }
+        return res
+      }, []);
+
+    this.dataManager.setPlatform(platforms);
+  }
+}
+
+class DataManager {
+
+  constructor(data, components_to_update, genres, platforms, publishers, timeInterval) {
+    this.data = data;
+    this.components_to_update = components_to_update;
+    this.genres = genres;
+    this.platforms = platforms;
+    this.publishers = publishers;
+    this.timeInterval = timeInterval;
+    this.filter();
+    this.updateComponents();
+  }
+
+  /*
+  * The functions below are used to filter our data given a particular feature.
+  */
+
+  setGenre(genres) {
+    this.genres = genres;
+    this.filter();
+    this.updateComponents();
+  }
+
+  setPlatform(platforms) {
+    this.platforms = platforms;
+    this.filter();
+    this.updateComponents();
+  }
+
+  setTimeInterval(timeInterval) {
+    this.timeInterval = timeInterval;
+    this.filter();
+    this.updateComponents();
+  }
+
+  setPublisher(publishers) {
+    this.publishers = publishers;
+    this.filter();
+    this.updateComponents();
+  }
+
+  /*
+  *  Notify all the components to update themselves by giving them
+  *  the new filtered dataset.
+  */
+  updateComponents() {
+    for(let component of this.components_to_update) {
+      component.update(this.filteredData);
+    }
+  }
+
+  /*
+    Update filteredData according to the new constraints
+  */
+  filter() {
+    this.filteredData = [];
+    for (let game of this.data) {
+      if (game.Genre != "" &&
+          this.genres.includes(game.Genre) &&
+          this.platforms.includes(game.Platform) &&
+          this.timeInterval[0] <= game.Year_of_Release &&
+          game.Year_of_Release <= this.timeInterval[1] &&
+          this.publishers.includes(game.Publisher)) {
+            this.filteredData.push(game);
+          }
+    }
+    return this.filteredData
+  }
+}
+
+class LoadingScreen {
+
+  constructor() {}
+
+  // percentage = float of progress (eg 0.77)
+  setProgress(percentage) {
+    let bar = document.getElementById("loading_bar");
+    bar.style.width = percentage * 400 + "px";
+  }
+
+  hide() {
+    let loadingScreen = document.getElementById("loading_screen");
+    loadingScreen.style.transform = "translateY(-100%)";
+    setTimeout(() => loadingScreen.remove(), 5000);
+  }
 
 }
+
+// Initialize Loading Screen
+let loadingScreen = new LoadingScreen();
+loadingScreen.setProgress(0.0);
 
 // Load CSV Data
 let data = [];
 csv$1("./data/Video_Games_Sales_as_at_22_Dec_2016.csv", (parsed_data) => {
-  parsed_data.forEach((line$$1) => data.push(line$$1));
-  initialize();
+  parsed_data.forEach((line) => data.push(line));
+  loadingScreen.setProgress(0.2);
+  setTimeout(() => initialize(), 550);
 });
 
 // Load website
@@ -7005,232 +5991,170 @@ function initialize() {
   // ---------------------------------------------------------------------------
   // CONSOLE WAR
   // ---------------------------------------------------------------------------
-  // ------------------------ Releases over years ------------------------------
-  // Get data Releases
-  let platformList = ["2600", "NES", "SNES", "N64", "GC", "Wii", "WiiU", "GB", "DS", "GBA", "3DS", "PS", "PS2", "PS3", "PS4", "PSP", "X360", "XOne", "XB", "PC"];
-  let console_release_data = dataProcessor.getConsoleReleaseYears(platformList);
-  let typesConsoles = {};
-  for (let platform of platformList) typesConsoles[platform] = 'area-spline';
-  let colorsConsole = {
-    "NES": "#632920",
-    "SNES": "#6e0f01",
-    "N64": "#792215",
-    "GC": "#831e0e",
-    "Wii": "#932513",
-    "WiiU": "#a3200a",
-    "GB": "#b9260d",
-    "DS": "#d02407",
-    "GBA": "#e33316",
-    "3DS": "#f54123",
-    "PS": "#025485",
-    "PS2": "#046195",
-    "PS3": "#036eac",
-    "PS4": "#0b90dd",
-    "PSP": "#0481c9",
-    "2600": "#77007a",
-    "X360": "#047e09",
-    "XOne": "#009506",
-    "XB": "#026705",
-    "PC": "#606060"
-  };
-  let order_stack_consoles = {
-    "NES": 1,
-    "SNES": 2,
-    "N64": 3,
-    "GC": 4,
-    "Wii": 5,
-    "WiiU": 6,
-    "GB": 7,
-    "DS": 8,
-    "GBA": 9,
-    "3DS": 10,
-    "PS": 11,
-    "PS2": 12,
-    "PS3": 13,
-    "PS4": 14,
-    "PSP": 15,
-    "2600": 16,
-    "X360": 17,
-    "XOne": 18,
-    "XB": 19,
-    "PC": 20
-  };
-  // Set Up Release Games Graph
-  let consoleReleaseYears = new StackedAreaChart("consoleReleaseYears_container", "Year", "Number of games released that year", 1600, console_release_data, typesConsoles, [platformList], colorsConsole, order_stack_consoles);
+  function consoleWarInit() {
+    // ------------------------ Releases over years ------------------------------
+    // Get data Releases
+    let platformList = ["2600", "NES", "SNES", "N64", "GC", "Wii", "WiiU", "GB", "DS", "GBA", "3DS", "PS", "PS2", "PS3", "PS4", "PSP", "X360", "XOne", "XB", "PC"];
+    let console_release_data = dataProcessor.getConsoleReleaseYears(platformList);
+    
+  /*
+    not in list :
 
-  //------------------------- Sales over years ---------------------------------
-  // Get Data Release
-  let console_sales_data_WORLD = dataProcessor.getConsoleSalesYears(platformList, "Global");
-  let console_sales_data_NA = dataProcessor.getConsoleSalesYears(platformList, "NA");
-  let console_sales_data_EU = dataProcessor.getConsoleSalesYears(platformList, "EU");
-  let console_sales_data_JP = dataProcessor.getConsoleSalesYears(platformList, "JP");
-  let console_sales_data_OTHER = dataProcessor.getConsoleSalesYears(platformList, "Other");
-  // Set Up Sales Games Graph
-  let consoleSalesYears = new StackedAreaChart("consoleSalesYears_container", "Year", "Sales of games released that year", 700, console_sales_data_WORLD, typesConsoles, [platformList], colorsConsole, order_stack_consoles);
-  // Set Up Region Selector
-  let consoleWarRegionSelector = new RegionSelector("console_sales_region_selector");
-  consoleWarRegionSelector.selectedRegion = (region) => {
-    switch (region) {
-      case "WORLD":
-        consoleSalesYears.update(console_sales_data_WORLD);
-        break;
-      case "NA":
-        consoleSalesYears.update(console_sales_data_NA);
-        break;
-      case "EU":
-        consoleSalesYears.update(console_sales_data_EU);
-        break;
-      case "JP":
-        consoleSalesYears.update(console_sales_data_JP);
-        break;
-      case "OTHER":
-        consoleSalesYears.update(console_sales_data_OTHER);
-        break;
+    GEN : Mega Drive                  (SEGA)
+    DC : Dreamcast                    (SEGA)
+    PSV : PlayStation Vita            (PlayStation) (SONY)
+    SAT : Saturn                      (SEGA)
+    SCD : Sega CD (Mega CD)           (SEGA)
+    WS : WonderSwan                   (Bandai)
+    NG : Neo-Geo AES                  (SNK)
+    TG16 : PC Engine                  (NEC Corporation)
+    3DO : 3DO Interactive Multiplayer (Panasonic)
+    GG : Game Gear                    (SEGA)
+    PCFX : PC-FX                      (NEC)
+  */
+
+    /*// Set Up Release Games Graph
+    let consoleReleaseYears = new StackedAreaChart("consoleReleaseYears_container", "Year", "Number of games released that year", 1600, console_release_data, typesConsoles, [platformList], colorsConsole, order_stack_consoles);
+
+
+    //------------------------- Sales over years ---------------------------------
+    // Get Data Release
+    let console_sales_data_WORLD = dataProcessor.getConsoleSalesYears(platformList, "Global");
+    let console_sales_data_NA = dataProcessor.getConsoleSalesYears(platformList, "NA");
+    let console_sales_data_EU = dataProcessor.getConsoleSalesYears(platformList, "EU");
+    let console_sales_data_JP = dataProcessor.getConsoleSalesYears(platformList, "JP");
+    let console_sales_data_OTHER = dataProcessor.getConsoleSalesYears(platformList, "Other");
+    // Set Up Sales Games Graph
+    let consoleSalesYears = new StackedAreaChart("consoleSalesYears_container", "Year", "Sales of games released that year", 700, console_sales_data_WORLD, typesConsoles, [platformList], colorsConsole, order_stack_consoles);
+    // Set Up Region Selector
+    let consoleWarRegionSelector = new RegionSelector("console_sales_region_selector")
+    consoleWarRegionSelector.selectedRegion = (region) => {
+      switch (region) {
+        case "WORLD":
+          consoleSalesYears.update(console_sales_data_WORLD)
+          break;
+        case "NA":
+          consoleSalesYears.update(console_sales_data_NA)
+          break;
+        case "EU":
+          consoleSalesYears.update(console_sales_data_EU)
+          break;
+        case "JP":
+          consoleSalesYears.update(console_sales_data_JP)
+          break;
+        case "OTHER":
+          consoleSalesYears.update(console_sales_data_OTHER)
+          break;
+      }
     }
-  };
-  //----------------------- Genre Sales per Console ----------------------------
-  // Get Data Genre
-  let genreList = ["Sports", "Platform", "Racing", "Role-Playing", "Puzzle", "Misc", "Shooter", "Simulation", "Action", "Fighting", "Adventure", "Strategy"];
-  let console_genre_data = dataProcessor.getConsoleGenreSales(genreList, platformList);
-  // Set Up Graph Genre
-  let consoleGenreSales = new StackedAreaChart$1("consoleGenre_container", "Consoles", "All-Time Sales", platformList, console_genre_data, [genreList]);
-  // Set Up text interactivity
-  let sportGamesTextButton = document.getElementById('sport_games_text_button');
-  sportGamesTextButton.onclick = () => consoleGenreSales.showOnly("Sports");
-  let puzzleGamesTextButton = document.getElementById('puzzle_games_text_button');
-  puzzleGamesTextButton.onclick = () => consoleGenreSales.showOnly("Puzzle");
-  let shooterGamesTextButton = document.getElementById('shooter_games_text_button');
-  shooterGamesTextButton.onclick = () => consoleGenreSales.showOnly("Shooter");
-  let strategyGamesTextButton = document.getElementById('strategy_games_text_button');
-  strategyGamesTextButton.onclick = () => consoleGenreSales.showOnly("Strategy");
+    //----------------------- Genre Sales per Console ----------------------------
+    // Get Data Genre
+    let genreList = ["Sports", "Platform", "Racing", "Role-Playing", "Puzzle", "Misc", "Shooter", "Simulation", "Action", "Fighting", "Adventure", "Strategy"]
+    let console_genre_data = dataProcessor.getConsoleGenreSales(genreList, platformList);
+    // Set Up Graph Genre
+    let consoleGenreSales = new StackedBarChart("consoleGenre_container", "Consoles", "All-Time Sales", platformList, console_genre_data, [genreList]);
+    // Set Up text interactivity
+    let sportGamesTextButton = document.getElementById('sport_games_text_button');
+    sportGamesTextButton.onclick = () => consoleGenreSales.showOnly("Sports");
+    let puzzleGamesTextButton = document.getElementById('puzzle_games_text_button');
+    puzzleGamesTextButton.onclick = () => consoleGenreSales.showOnly("Puzzle");
+    let shooterGamesTextButton = document.getElementById('shooter_games_text_button');
+    shooterGamesTextButton.onclick = () => consoleGenreSales.showOnly("Shooter");
+    let strategyGamesTextButton = document.getElementById('strategy_games_text_button');
+    strategyGamesTextButton.onclick = () => consoleGenreSales.showOnly("Strategy");
+    */
+  }
 
   // ---------------------------------------------------------------------------
   // PUBLISHER WAR
   // ---------------------------------------------------------------------------
-  //--------------------- Top Publisher by Sales -------------------------------
-  // Get Data Sales Top10
-  let publishers_sales_top10_data_WORLD = dataProcessor.getTop10PublisherSales("Global");
-  let publishers_sales_top10_data_NA = dataProcessor.getTop10PublisherSales("NA");
-  let publishers_sales_top10_data_EU = dataProcessor.getTop10PublisherSales("EU");
-  let publishers_sales_top10_data_JP = dataProcessor.getTop10PublisherSales("JP");
-  let publishers_sales_top10_data_OTHER = dataProcessor.getTop10PublisherSales("Other");
-  // Set Up Publishers Sales Top 10 graph
-  let publisherWarSalesTop10 = new BarChart("publisherSalesTop10_container", "Publishers", "All-Time Sales", publishers_sales_top10_data_WORLD[0], [publishers_sales_top10_data_WORLD[1]], {
-    Sales: "#3c3c3c"
-  });
-  // Get Data Sales over year
-  let top10_publishers_sales_year_data_WORLD = dataProcessor.getPublisherSalesYear("Global", publishers_sales_top10_data_WORLD[0]);
-  let top10_publishers_sales_year_data_NA = dataProcessor.getPublisherSalesYear("NA", publishers_sales_top10_data_NA[0]);
-  let top10_publishers_sales_year_data_EU = dataProcessor.getPublisherSalesYear("EU", publishers_sales_top10_data_EU[0]);
-  let top10_publishers_sales_year_data_JP = dataProcessor.getPublisherSalesYear("JP", publishers_sales_top10_data_JP[0]);
-  let top10_publishers_sales_year_data_OTHER = dataProcessor.getPublisherSalesYear("Other", publishers_sales_top10_data_OTHER[0]);
-  // Set Up Publisher Sales Year
-  let typesPublishers_WORLD = {};
-  for (let publisher of publishers_sales_top10_data_WORLD[0]) typesPublishers_WORLD[publisher] = 'area-spline';
-  let typesPublishers_NA = {};
-  for (let publisher of publishers_sales_top10_data_NA[0]) typesPublishers_NA[publisher] = 'area-spline';
-  let typesPublishers_EU = {};
-  for (let publisher of publishers_sales_top10_data_WORLD[0]) typesPublishers_EU[publisher] = 'area-spline';
-  let typesPublishers_JP = {};
-  for (let publisher of publishers_sales_top10_data_WORLD[0]) typesPublishers_JP[publisher] = 'area-spline';
-  let typesPublishers_OTHER = {};
-  for (let publisher of publishers_sales_top10_data_WORLD[0]) typesPublishers_OTHER[publisher] = 'area-spline';
-  let colorsPublishers = {
-    "Nintendo": "#c22020",
-    "Electronic Arts": "#4557a2",
-    "Activision" : "#4b402f",
-    "Sony Computer Entertainment" : "#00bbff",
-    "Ubisoft": "#9bb4bf",
-    "Take-Two Interactive": "#d1cb42",
-    "THQ": "#b85901",
-    "Konami Digital Entertainment" : "#385b33",
-    "Sega" : "#331a49",
-    "Namco Bandai Games" : "#ff0060",
-    "Microsoft Game Studios" : "#16e800",
-    "Atari" : "#9f249c",
-    "Capcom": "#80af97",
-    "Square Enix": "#000186",
-    "SquareSoft": "#c7be7f",
-    "Enix Corporation": "#7c5277",
-    "Tecmo Koei": "#4e4e4e"
-  };
-  let order_stack_publishers = {
-    "Nintendo": 1,
-    "Electronic Arts": 2,
-    "Activision" : 3,
-    "Sony Computer Entertainment" : 4,
-    "Ubisoft": 5,
-    "Take-Two Interactive": 6,
-    "THQ": 7,
-    "Konami Digital Entertainment" : 8,
-    "Sega" : 9,
-    "Namco Bandai Games" : 10,
-    "Microsoft Game Studios" : 11,
-    "Atari" : 12,
-    "Sega" : 13,
-    "Capcom": 14,
-    "Square Enix": 15,
-    "SquareSoft": 16,
-    "Enix Corporation": 17,
-    "Tecmo Koei": 18
-  };
-  let publisherWarSalesYears = new StackedAreaChart("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_WORLD, typesPublishers_WORLD, [publishers_sales_top10_data_WORLD[0]], colorsPublishers, order_stack_publishers);
+  consoleWarInit();
+  loadingScreen.setProgress(0.7);
+  setTimeout(() => {
+    loadingScreen.setProgress(1);
+    setTimeout(() => loadingScreen.hide(), 400);
+  }, 550);
 
+  // ---------------------------------------------------------------------------
+  // GAME ANALYSIS
+  // ---------------------------------------------------------------------------
 
-  // Set Up Region Selector
-  let publisherWarRegionSelector = new RegionSelector("publishers_war_region_selector");
-  publisherWarRegionSelector.selectedRegion = (region) => {
-    let container = document.getElementById("publisherSalesTop10_container");
-    switch (region) {
-      case "WORLD":
-        publisherWarSalesTop10.update(publishers_sales_top10_data_WORLD[0], [publishers_sales_top10_data_WORLD[1]]);
-        container.classList.add("WORLD");
-        container.classList.remove("NA");
-        container.classList.remove("EU");
-        container.classList.remove("JP");
-        container.classList.remove("OTHER");
-        setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_WORLD, typesPublishers_WORLD, [publishers_sales_top10_data_WORLD[0]], colorsPublishers, order_stack_publishers), 200);
-        break;
-      case "NA":
-        publisherWarSalesTop10.update(publishers_sales_top10_data_NA[0], [publishers_sales_top10_data_NA[1]]);
-        container.classList.remove("WORLD");
-        container.classList.add("NA");
-        container.classList.remove("EU");
-        container.classList.remove("JP");
-        container.classList.remove("OTHER");
-        setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_NA, typesPublishers_NA, [publishers_sales_top10_data_NA[0]], colorsPublishers, order_stack_publishers), 200);
-        break;
-      case "EU":
-        publisherWarSalesTop10.update(publishers_sales_top10_data_EU[0], [publishers_sales_top10_data_EU[1]]);
-        container.classList.remove("WORLD");
-        container.classList.remove("NA");
-        container.classList.add("EU");
-        container.classList.remove("JP");
-        container.classList.remove("OTHER");
-        setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_EU, typesPublishers_EU, [publishers_sales_top10_data_EU[0]], colorsPublishers, order_stack_publishers), 200);
-        break;
-      case "JP":
-        publisherWarSalesTop10.update(publishers_sales_top10_data_JP[0], [publishers_sales_top10_data_JP[1]]);
-        container.classList.remove("WORLD");
-        container.classList.remove("NA");
-        container.classList.remove("EU");
-        container.classList.add("JP");
-        container.classList.remove("OTHER");
-        setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_JP, typesPublishers_JP, [publishers_sales_top10_data_JP[0]], colorsPublishers, order_stack_publishers), 200);
-        break;
-      case "OTHER":
-        publisherWarSalesTop10.update(publishers_sales_top10_data_OTHER[0], [publishers_sales_top10_data_OTHER[1]]);
-        container.classList.remove("WORLD");
-        container.classList.remove("NA");
-        container.classList.remove("EU");
-        container.classList.remove("JP");
-        container.classList.add("OTHER");
-        setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_OTHER, typesPublishers_OTHER, [publishers_sales_top10_data_OTHER[0]], colorsPublishers, order_stack_publishers), 200);
-        break;
+  let colorsGameType = {
+    "Sports": "#632920",
+    "Platform": "#6e0f01",
+    "Racing": "#792215",
+    "Role-Playing": "#831e0e",
+    "Puzzle": "#932513",
+    "Misc": "#a3200a",
+    "Shooter": "#b9260d",
+    "Simulation": "#d02407",
+    "Action": "#e33316",
+    "Fighting": "#f54123",
+    "Adventure": "#025485",
+    "Strategy": "#046195",
+  };
+
+  let genreList = ["Sports",
+                    "Platform",
+                    "Racing",
+                    "Role-Playing",
+                    "Puzzle",
+                    "Misc",
+                    "Shooter",
+                    "Simulation",
+                    "Action",
+                    "Fighting",
+                    "Adventure",
+                    "Strategy"];
+/*
+  let platformList = [
+                      "NES",
+                      "SNES",
+                      "N64",
+                      "GC",
+                      "Wii",
+                      "WiiU",
+                      "GB",
+                      "DS",
+                      "GBA",
+                      "3DS",
+                      "PS",
+                      "PS2",
+                      "PS3",
+                      "PS4",
+                      "PSP",
+                      "2600",
+                      "X360",
+                      "XOne",
+                      "XB",
+                      "PC",
+                      "GEN",
+                      "DC",
+                      "PSV",
+                      "SAT",
+                      "SCD",
+                      "GG"]
     }
-  };
+*/
+  let genreBar = new GenreBar("genreBar_container", colorsGameType);
 
+  let consoleBar = new ConsoleBar();
 
+  let platformList = ["2600", "NES", "SNES", "N64", "GC", "Wii", "WiiU", "GB", "DS", "GBA", "3DS", "PS", "PS2", "PS3", "PS4", "PSP", "X360", "XOne", "XB", "PC"];
+  let dataManager = new DataManager(data,
+                                    [genreBar, consoleBar],
+                                    genreList,
+                                    platformList,
+                                    dataProcessor.getPublisherList(),
+                                    [1980, 2015]);
+
+  consoleBar.setDataManager(dataManager);
+
+  let genreBarButtons = new GenreBarButtons("genreBarButtons_container",
+    dataProcessor.getGenreList(),
+    dataManager);
+
+  //let scatterPlot = new ScatterPlot("scatterPlot_container", data, "Number of Sales", "Critics Score");
 }
 
 }());

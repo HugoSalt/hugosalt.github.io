@@ -1,0 +1,48 @@
+#loading_screen {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background-color: var(--swiss-white);
+  z-index: 1;
+  transition: all 0.5s;
+}
+
+#loading_text {
+  position: absolute;
+  left : 0;
+  right: 0;
+  text-align: center;
+  top: 100px;
+  font-family: "IBMPlex Sans";
+  font-weight: bold;
+  font-size: 1.8em;
+  color: var(--swiss-dark-grey);
+}
+
+#loading_bar{
+  position: absolute;
+  margin: auto;
+  background-color: var(--swiss-red);
+  width: 0px;
+  height: 5px;
+  left : 0;
+  right: 0;
+  top: 150px;
+  transition: all 0.5s;
+}
+
+#loading_bar_background{
+  position: absolute;
+  margin: auto;
+  background-color: var(--swiss-light-grey);
+  width: 400px;
+  height: 5px;
+  left : 0;
+  right: 0;
+  top: 150px;
+}
