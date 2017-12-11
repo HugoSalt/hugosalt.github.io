@@ -67,10 +67,10 @@
 
 .tooltip {
   position: absolute;
-  width: 42px;
-  height: 12px;
+  width: 80px;
+  height: 24px;
   padding: 10px;
-  font: 16px sans-serif;
+  font: 14px sans-serif;
   background: #999;
   border: 0px;
   border-radius: 8px;

@@ -184,13 +184,13 @@ export default class BrandBarChart {
                   tooltip.transition()
                       .duration(200)
                       .style("opacity", .9);
-                  tooltip.html(d[1])
-                      .style("left", (d3.event.pageX-10) + "px")
-                      .style("top", (d3.event.pageY-30) + "px");
+                  tooltip.html(d[1] + " games<br/>" + (d[1]*100/scoreBrand).toFixed(1) + "%")
+                      .style("left", (d3.event.pageX-60) + "px")
+                      .style("top", (d3.event.pageY-42) + "px");
                   })
                 .on("mousemove", function () {
-                    tooltip.style("left", (d3.event.pageX-10) + "px")
-                           .style("top", (d3.event.pageY-30) + "px")
+                    tooltip.style("left", (d3.event.pageX-60) + "px")
+                           .style("top", (d3.event.pageY-42) + "px")
                     })
                 .on("mouseout", function(d) {
                     tooltip.transition()
@@ -198,26 +198,28 @@ export default class BrandBarChart {
                            .style("opacity", 0);
                     });
 
+    let svg_height = this.svg_height
     let bar_width = this.brand_bar_width * (scoreBrand/maxBrand)
     if (!isNaN(bar_width)) {
       this.bar_svg.append("rect")
                   .attr('class', 'rect_brand_bar')
                   .style("fill", "steelblue")
                   .attr("x", 0)
-                  .attr("height", this.svg_height)
-                  .attr("y", 0)
+                  .attr("height", 60)
+                  .attr("y", svg_height/2-30)
                   .attr("width", bar_width)
                   .on("mouseover", function() {
                     tooltip.transition()
                         .duration(200)
                         .style("opacity", .9);
-                    tooltip.html((scoreBrand*100/game_count).toFixed(1) + "%")
-                        .style("left", (d3.event.pageX-10) + "px")
-                        .style("top", (d3.event.pageY-30) + "px");
+                    tooltip.html(scoreBrand + " games</br>" +
+                                 (scoreBrand*100/game_count).toFixed(1) + "%")
+                        .style("left", (d3.event.pageX-60) + "px")
+                        .style("top", (d3.event.pageY-42) + "px");
                     })
                   .on("mousemove", function () {
-                      tooltip.style("left", (d3.event.pageX-10) + "px")
-                             .style("top", (d3.event.pageY-30) + "px")
+                      tooltip.style("left", (d3.event.pageX-60) + "px")
+                             .style("top", (d3.event.pageY-42) + "px")
                       })
                   .on("mouseout", function() {
                       tooltip.transition()

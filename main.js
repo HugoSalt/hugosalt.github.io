@@ -355,7 +355,7 @@ function initialize() {
 */
   let genreBar = new GenreBar("genreBar_container", colorsGameType)
 
-  let consoleBar = new ConsoleBar("all_brands_barChart_container")
+  let consoleBar = new ConsoleBar()
 
   let dataManager = new DataManager(data,
                                     [genreBar, consoleBar],

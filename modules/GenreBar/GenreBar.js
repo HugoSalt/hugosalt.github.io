@@ -2,9 +2,10 @@
 export default class GenreBar {
 
   constructor(container_id, colors) {
-    this.margin = {top: 10, right: 0, bottom: 50, left: 50},
-    this.width = 700 - this.margin.left - this.margin.right,
-    this.height = 190 - this.margin.top - this.margin.bottom;
+    this.margin = {top: 10, right: 10, bottom: 50, left: 50}
+    let container_width = document.getElementById('genreBar_container').offsetWidth;
+    this.width = container_width - this.margin.left - this.margin.right
+    this.height = 190 - this.margin.top - this.margin.bottom
     this.svg = d3.select('#' + container_id)
                  .append("svg")
                  .attr("width", this.width + this.margin.left + this.margin.right)
