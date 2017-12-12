@@ -1,6 +1,7 @@
 #scatterPlot_container {
   width: 1060px;
   height: 560px;
+  position: relative;
 }
 
 .axis {
@@ -15,14 +16,17 @@
 }
 
 .tooltip {
-  position: relative;
+  position: absolute;
   text-align: center;
-  width: 150px;
-  height: 50px;
+
+  min-width: 100px; max-width: 150px;
+  min-height: 30px; max-height: 100px;
+
   padding: 2px;
   font: 12px sans-serif;
   background: lightsteelblue;
-  border: 0px;
+  border: 1px solid steelblue;
   border-radius: 8px;
-  /*pointer-events: none;
+  opacity: 0;
+  pointer-events: none;
 }

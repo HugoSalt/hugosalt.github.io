@@ -49,12 +49,7 @@ export default class ScatterPlot {
     // -------------------------------------------------------------------
     var padding = 2*this.padding;
 
-    var tooltip = this.tooltip
-                      .html('I am a tooltip')
-                      .style('border', '1px solid steelblue')
-                      .style('padding', '5px')
-                      .style('position', 'relative')
-                      .style('opacity', 0);
+    var tooltip = this.tooltip;
 
     let colorsPublishers = {
       "Nintendo": "#c22020",
@@ -160,24 +155,15 @@ export default class ScatterPlot {
         .transition()
         .duration(700)
         .attr("r", 2*radius)
-        .attr("fill", "orange");
+        .attr("fill", "orange")
+        .style("cursor", "pointer");
 
         tooltip.transition()
                .duration(400)
-               .style("opacity", 0.9);
+               .style("opacity", 0.7);
         tooltip.html(game.Name)
                .style("left", (d3.event.pageX - padding) + "px")
                .style("top", (d3.event.pageY - padding) + "px");
-               /*.style("left", xScale(game.Global_Sales) + "px")
-               .style("top", yScale(game.Critic_Score) - 20 + "px")*/;
-
-
-        /*.append("text")
-        .attr("class", "game_label")
-        .attr("x", game => { return xScale(game.Global_Sales) + 10;})
-        .attr("y", game => { return yScale(game.Critic_Score) - 10;})
-        .text(game => { return game.Name;})
-        .style("fill", "purple");*/
      })
      // Event handler when the mouse leaves the point
      .on("mouseout", function() {
@@ -188,12 +174,21 @@ export default class ScatterPlot {
         .attr("fill", "black");
 
         tooltip.transition()
-                .duration(400)
-                .style("opacity", 0.0);
-     });
+               .duration(400)
+               .style("opacity", 0.0);
+     })
      // On Click, we want to add data to the array and chart
-     /*.on("click", function() {
+     .on("click", function(game) {
+       tooltip.style("opacity", 1);
 
-     });*/
+       tooltip.html(game.Name + "<br/>" +
+                    "Year of Release:" + game.Year_of_Release + "<br/>" +
+                    "Genre: " + game.Genre + "<br/>" +
+                    "Publisher: " + game.Publisher
+                    /* etc...*/)
+                     /*.style("left", (d3.event.pageX - padding) + "px")
+                     .style("top", (d3.event.pageY - padding) + "px")*/;
+
+     });
   }
 }
