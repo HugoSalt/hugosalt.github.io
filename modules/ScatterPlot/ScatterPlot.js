@@ -14,7 +14,7 @@ export default class ScatterPlot {
     this.width = 1000;
     this.height = 500;
 
-    this.nbXticks = 10;
+    this.nbXticks = 20;
     this.nbYticks = 10;
 
     this.container_id = container_id;
@@ -32,8 +32,8 @@ export default class ScatterPlot {
 
     this.svg = d3.select('#' + container_id)
                 .append("svg")
-                .attr("width", this.width + this.padding*2)
-                .attr("height", this.height + this.padding*2)
+                .attr("width", this.width + 2*this.padding)
+                .attr("height", this.height + 2*this.padding)
                 .append("g")
                 .attr("transform",
                         "translate(" + this.padding + "," + this.padding + ")");
@@ -75,7 +75,7 @@ export default class ScatterPlot {
     // Compute scale of x
     let xScale = d3.scaleLinear()
                    .domain([0, d3.max(newData, game => { return game.Global_Sales; })])
-                   .range([this.padding, this.width + this.padding]);
+                   .range([this.padding, this.width - this.padding]);
 
     // Compute scale of y
     let yScale = d3.scaleLinear()
@@ -89,12 +89,12 @@ export default class ScatterPlot {
     // Set up x-axis
     let xAxis = d3.axisBottom()
                   .scale(xScale)
-                  /*.ticks(this.nbXticks)*/;
+                  .ticks(this.nbXticks);
 
     // Set up y-axis
     let yAxis = d3.axisLeft()
                   .scale(yScale)
-                  /*.ticks(this.nbYticks)*/;
+                  .ticks(this.nbYticks);
 
 
      // Create X axis and label it
@@ -146,7 +146,7 @@ export default class ScatterPlot {
      .attr("class", "circle")
      .attr("cx", game => { return xScale(game.Global_Sales);})
      .attr("cy", game => { return yScale(game.Critic_Score);})
-     .attr("fill", "black")
+     .attr("fill", function(game) { return colorsPublishers[game.Publisher];})
      .attr("r", radius)
 
      // Event handler when the mouse is over a point
@@ -155,7 +155,6 @@ export default class ScatterPlot {
         .transition()
         .duration(700)
         .attr("r", 2*radius)
-        .attr("fill", "orange")
         .style("cursor", "pointer");
 
         tooltip.transition()
@@ -166,28 +165,44 @@ export default class ScatterPlot {
                .style("top", (d3.event.pageY - padding) + "px");
      })
      // Event handler when the mouse leaves the point
-     .on("mouseout", function() {
-        d3.select(this)
-        .transition()
-        .duration(700)
-        .attr("r", radius)
-        .attr("fill", "black");
+      .on("mouseout", function() {
+        if(!d3.select(this).classed("selected")) {
+          d3.select(this)
+          .transition()
+          .duration(700)
+          .attr("r", radius)
+          .attr("fill", "black");
 
-        tooltip.transition()
-               .duration(400)
-               .style("opacity", 0.0);
+          tooltip.transition()
+                 .duration(400)
+                 .style("opacity", 0.0);
+        }
      })
      // On Click, we want to add data to the array and chart
-     .on("click", function(game) {
+      .on("click", function(game) {
+        // Find previously selected, unselect
+        d3.select(".selected")
+          .classed("selected", false);
+
+        // Select current item
+        d3.select(this).classed("selected", true);
+
+        d3.select(this).transition()
+          .duration(700)
+          .attr("r", 2*radius)
+          .attr("fill", "orange")
+          .style("cursor", "pointer");
+
        tooltip.style("opacity", 1);
 
        tooltip.html(game.Name + "<br/>" +
                     "Year of Release:" + game.Year_of_Release + "<br/>" +
                     "Genre: " + game.Genre + "<br/>" +
-                    "Publisher: " + game.Publisher
-                    /* etc...*/)
-                     /*.style("left", (d3.event.pageX - padding) + "px")
-                     .style("top", (d3.event.pageY - padding) + "px")*/;
+                    "Publisher: " + game.Publisher + "<br/>" +
+                    "Global Sales: " + game.Global_Sales + "<br/>" +
+                    "Critic Score: " + game.Critic_Score +
+                    "Max" + d3.max(newData, game => { return game.Global_Sales; })
+                    /* etc...*/);
 
      });
   }
