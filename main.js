@@ -7,6 +7,7 @@ import Menu from "./modules/Menu/Menu.js";
 import Banner from "./modules/Banner/Banner.js";
 import RegionSelector from "./modules/RegionSelector/RegionSelector.js"
 import ScatterPlot from "./modules/ScatterPlot/ScatterPlot.js"
+import TimeBrush from "./modules/TimeBrush/TimeBrush.js"
 import GenreBar from "./modules/GenreBar/GenreBar.js"
 import GenreBarButtons from "./modules/GenreBar/GenreBarButtons.js"
 import DataManager from "./modules/DataManager/DataManager.js";
@@ -328,6 +329,8 @@ function initialize() {
   let genreBarButtons = new GenreBarButtons("genreBarButtons_container",
     dataProcessor.getGenreList(),
     dataManager)
+
+  let timeBrush = new TimeBrush("timeBrush_container", [1980, 2015], dataManager);
 
   //dataManager.setGenre(["Sports", "Platform", "Racing"])
 

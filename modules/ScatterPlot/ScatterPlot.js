@@ -22,36 +22,7 @@ export default class ScatterPlot {
     this.x_name = x_name;
     this.y_name = y_name;
 
-    // ---------------------------------------------------------------------------
-    // Create our SVG canvas
-    // ---------------------------------------------------------------------------
-    this.tooltip = d3.select("#" + container_id)
-                     .append("div")
-                     .attr("class", "tooltip")
-                     .style("opacity", 0.0);
-
-    this.svg = d3.select('#' + container_id)
-                .append("svg")
-                .attr("width", this.width + 2*this.padding)
-                .attr("height", this.height + 2*this.padding)
-                .append("g")
-                .attr("transform",
-                        "translate(" + this.padding + "," + this.padding + ")");
-
-    this.x_group = this.svg.append("g");
-    this.y_group = this.svg.append("g");
-  }
-
-
-  update(newData) {
-    // -------------------------------------------------------------------
-    //  Compute Scaling functions
-    // -------------------------------------------------------------------
-    var padding = 2*this.padding;
-
-    var tooltip = this.tooltip;
-
-    let colorsPublishers = {
+    this.colorsPublishers = {
       "Nintendo": "#c22020",
       "Electronic Arts": "#4557a2",
       "Activision": "#4b402f",
@@ -71,16 +42,53 @@ export default class ScatterPlot {
       "Tecmo Koei": "#4e4e4e"
     }
 
+    // ---------------------------------------------------------------------------
+    // Create our SVG canvas
+    // ---------------------------------------------------------------------------
+    this.tooltip = d3.select("#" + container_id)
+      .append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0.0);
+
+    this.svg = d3.select('#' + container_id)
+      .append("svg")
+      .attr("width", this.width + 2 * this.padding)
+      .attr("height", this.height + 2 * this.padding)
+      .append("g")
+      .attr("transform",
+        "translate(" + this.padding + "," + this.padding + ")");
+
+    this.x_group = this.svg.append("g");
+    this.y_group = this.svg.append("g");
+  }
+
+
+  update(newData) {
+    // -------------------------------------------------------------------
+    //  Compute Scaling functions
+    // -------------------------------------------------------------------
+    var padding = 2 * this.padding;
+
+    var tooltip = this.tooltip;
+
+    let colorsPublishers = this.colorsPublishers;
+
     var radius = 3;
     // Compute scale of x
     let xScale = d3.scaleLinear()
-                   .domain([0, d3.max(newData, game => { return game.Global_Sales; })])
-                   .range([this.padding, this.width - this.padding]);
+      .domain([0, d3.max(newData, game => {
+        return game.Global_Sales;
+      })])
+      .range([this.padding, this.width - this.padding])
+      .nice();
 
     // Compute scale of y
     let yScale = d3.scaleLinear()
-                   .domain([0, d3.max(newData, game => { return game.Critic_Score; })])
-                   .range([this.height - this.padding, this.padding]);
+      .domain([0, d3.max(newData, game => {
+        return game.Critic_Score;
+      })])
+      .range([this.height - this.padding, this.padding])
+      .nice();
 
     // -------------------------------------------------------------------
     // Set up the axis
@@ -88,26 +96,26 @@ export default class ScatterPlot {
 
     // Set up x-axis
     let xAxis = d3.axisBottom()
-                  .scale(xScale)
-                  .ticks(this.nbXticks);
+      .scale(xScale)
+      .ticks(this.nbXticks);
 
     // Set up y-axis
     let yAxis = d3.axisLeft()
-                  .scale(yScale)
-                  .ticks(this.nbYticks);
+      .scale(yScale)
+      .ticks(this.nbYticks);
 
 
-     // Create X axis and label it
+    // Create X axis and label it
     this.x_group.attr("class", "x axis")
-                .attr("transform", "translate(0," + (this.height - this.padding) + ")")
-                .call(xAxis)
-                .append("text")
-                .attr("class", "label")
-                .attr("x", this.width - 2*this.padding)
-                .attr("y", -this.padding)
-                .style("text-anchor", "end")
-                .text(this.x_name)
-                .style("fill", "black");
+      .attr("transform", "translate(0," + (this.height - this.padding) + ")")
+      .call(xAxis)
+      .append("text")
+      .attr("class", "label")
+      .attr("x", this.width - 2 * this.padding)
+      .attr("y", -this.padding)
+      .style("text-anchor", "end")
+      .text(this.x_name)
+      .style("fill", "black");
 
     // Create Y axis and label it
     this.y_group.attr("class", "y axis")
@@ -122,63 +130,100 @@ export default class ScatterPlot {
                 .text(this.y_name)
                 .style("fill", "black");
 
-  // -------------------------------------------------------------------
-  //  Create the circles
-  // -------------------------------------------------------------------
+    // -------------------------------------------------------------------
+    //  Create the circles
+    // -------------------------------------------------------------------
 
     var circleAttrs = {
-      cx: game => { return xScale(game.Global_Sales); },
-      cy: game => { return yScale(game.Critic_Score); },
+      cx: game => {
+        return xScale(game.Global_Sales);
+      },
+      cy: game => {
+        return yScale(game.Critic_Score);
+      },
       fill: "black",
       r: radius
     };
 
     var circleAttrsHover = {
       fill: "orange",
-      r: radius*2
+      r: radius * 2
     };
+    //
 
     // Create a circle for each game
-    this.svg.selectAll("circle")
-     .data(newData)
-     .enter()
-     .append("circle")
-     .attr("class", "circle")
-     .attr("cx", game => { return xScale(game.Global_Sales);})
-     .attr("cy", game => { return yScale(game.Critic_Score);})
-     .attr("fill", function(game) { return colorsPublishers[game.Publisher];})
-     .attr("r", radius)
+    var circles = this.svg.selectAll("circle").data(newData, function(d) {
+      return d;
+    });
 
-     // Event handler when the mouse is over a point
-     .on("mouseover", function(game) {
+    // Remove old circles when updating
+    circles.exit()
+      /*.style("opacity", 1)
+      .attr("r", radius)
+      .transition()
+      .duration(700)
+      .attr("r", 2 * radius)
+      .transition()
+      .duration(700)
+      .attr("r", radius)
+      .style("opacity", 0)*/
+      .remove();
+
+
+    circles.attr("cx", game => {
+        return xScale(game.Global_Sales);
+      })
+      .attr("cy", game => {
+        return yScale(game.Critic_Score);
+      })
+      .attr("r", radius)
+      .attr("fill", function(game) {
+        return colorsPublishers[game.Publisher];
+      });
+
+
+    circles.enter()
+      .append("circle")
+      .attr("cx", game => {
+        return xScale(game.Global_Sales);
+      })
+      .attr("cy", game => {
+        return yScale(game.Critic_Score);
+      })
+      .attr("r", radius)
+      .attr("fill", function(game) {
+        return colorsPublishers[game.Publisher];
+      });
+
+    // Event handler when the mouse is over a point
+    circles.on("mouseover", function(game) {
         d3.select(this)
-        .transition()
-        .duration(700)
-        .attr("r", 2*radius)
-        .style("cursor", "pointer");
-
-        tooltip.transition()
-               .duration(400)
-               .style("opacity", 0.7);
-        tooltip.html(game.Name)
-               .style("left", (d3.event.pageX - padding) + "px")
-               .style("top", (d3.event.pageY - padding) + "px");
-     })
-     // Event handler when the mouse leaves the point
-      .on("mouseout", function() {
-        if(!d3.select(this).classed("selected")) {
-          d3.select(this)
           .transition()
           .duration(700)
-          .attr("r", radius)
-          .attr("fill", "black");
+          .attr("r", 2 * radius)
+          .style("cursor", "pointer");
+
+        tooltip.transition()
+          .duration(400)
+          .style("opacity", 0.7);
+        tooltip.html(game.Name)
+          .style("left", (d3.event.pageX - padding) + "px")
+          .style("top", (d3.event.pageY - padding) + "px");
+      })
+      // Event handler when the mouse leaves the point
+      .on("mouseout", function() {
+        if (!d3.select(this).classed("selected")) {
+          d3.select(this)
+            .transition()
+            .duration(700)
+            .attr("r", radius);
 
           tooltip.transition()
-                 .duration(400)
-                 .style("opacity", 0.0);
+            .duration(400)
+            .style("opacity", 0.0);
         }
-     })
-     // On Click, we want to add data to the array and chart
+      })
+      // On Click, we want to add data to the array and chart
       .on("click", function(game) {
         // Find previously selected, unselect
         d3.select(".selected")
@@ -189,21 +234,39 @@ export default class ScatterPlot {
 
         d3.select(this).transition()
           .duration(700)
-          .attr("r", 2*radius)
-          .attr("fill", "orange")
+          .attr("r", 2 * radius)
           .style("cursor", "pointer");
 
-       tooltip.style("opacity", 1);
+        tooltip.style("opacity", 1);
 
-       tooltip.html(game.Name + "<br/>" +
-                    "Year of Release:" + game.Year_of_Release + "<br/>" +
-                    "Genre: " + game.Genre + "<br/>" +
-                    "Publisher: " + game.Publisher + "<br/>" +
-                    "Global Sales: " + game.Global_Sales + "<br/>" +
-                    "Critic Score: " + game.Critic_Score +
-                    "Max" + d3.max(newData, game => { return game.Global_Sales; })
-                    /* etc...*/);
+        tooltip.html(game.Name + "<br/>" +
+          "Year of Release:" + game.Year_of_Release + "<br/>" +
+          "Genre: " + game.Genre + "<br/>" +
+          "Publisher: " + game.Publisher + "<br/>" +
+          "Global Sales: " + game.Global_Sales + "<br/>" +
+          "Critic Score: " + game.Critic_Score +
+          "Max" + d3.max(newData, game => {
+            return game.Global_Sales;
+          })
+          /* etc...*/
+        );
 
-     });
+      });
   }
+
+  computePublishersMean(newData) {
+    let colorsPublishers = this.colorsPublishers;
+    let games = newData;
+
+    // Group our games by publishers
+    var groupBy = function(games, key) {
+      return data.reduce(function(acc, game) {
+        (acc[x[key]] = rv[x[key]] || []).push(x);
+        return acc;
+      }, {});
+    };
+
+    console.log(groupBy(games, 'Publisher'));
+  }
+
 }
