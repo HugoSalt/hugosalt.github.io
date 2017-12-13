@@ -158,7 +158,7 @@ export default class ScatterPlot {
 
     // Remove old circles when updating
     circles.exit()
-      /*.style("opacity", 1)
+      .style("opacity", 1)
       .attr("r", radius)
       .transition()
       .duration(700)
@@ -166,10 +166,11 @@ export default class ScatterPlot {
       .transition()
       .duration(700)
       .attr("r", radius)
-      .style("opacity", 0)*/
+      .style("opacity", 0)
       .remove();
 
 
+    // Set the current circles position
     circles.attr("cx", game => {
         return xScale(game.Global_Sales);
       })
@@ -181,7 +182,7 @@ export default class ScatterPlot {
         return colorsPublishers[game.Publisher];
       });
 
-
+    // Add new circles for each data
     circles.enter()
       .append("circle")
       .attr("cx", game => {
@@ -193,10 +194,9 @@ export default class ScatterPlot {
       .attr("r", radius)
       .attr("fill", function(game) {
         return colorsPublishers[game.Publisher];
-      });
-
-    // Event handler when the mouse is over a point
-    circles.on("mouseover", function(game) {
+      })
+      // Event handler when the mouse is over a circle
+      .on("mouseover", function(game) {
         d3.select(this)
           .transition()
           .duration(700)
@@ -253,7 +253,7 @@ export default class ScatterPlot {
 
       });
   }
-
+/*
   computePublishersMean(newData) {
     let colorsPublishers = this.colorsPublishers;
     let games = newData;
@@ -267,6 +267,6 @@ export default class ScatterPlot {
     };
 
     console.log(groupBy(games, 'Publisher'));
-  }
+  }*/
 
 }

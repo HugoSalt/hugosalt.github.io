@@ -7,6 +7,7 @@
 .axis--x .domain,
 .axis--grid .tick line {
   stroke: #fff;
+  stroke-width: 2px;
 }
 
 .axis--grid .tick--minor line {

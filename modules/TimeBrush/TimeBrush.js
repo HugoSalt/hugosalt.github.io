@@ -12,12 +12,14 @@ export default class TimeBrush {
     // Set up parameters of our Time Brush
     // ---------------------------------------------------------------------------
 
-    this.margin = {top: 200, right: 40, bottom: 200, left: 40};
-    this.width = 960 - this.margin.left - this.margin.right;
-    this.height = 500 - this.margin.top - this.margin.bottom;
+    this.margin = {top: 0, right: 60, bottom: 40, left: 60};
+    this.width = 1000 - this.margin.left - this.margin.right;
+    this.height = 120 - this.margin.top - this.margin.bottom;
 
-    this.xScale = d3.scaleTime()
-                    .domain([new Date(2013, 7, 1), new Date(2013, 7, 15) - 1])
+    this.parseDate = d3.timeParse("%Y");
+
+    this.xScale = d3.scaleLinear()
+                    .domain(timeInterval)
                     .rangeRound([0, this.width]);
 
     this.svg = d3.select("#" + container_id)
@@ -31,34 +33,38 @@ export default class TimeBrush {
             .attr("class", "axis axis--grid")
             .attr("transform", "translate(0," + this.height + ")")
             .call(d3.axisBottom(this.xScale)
-            .ticks(d3.timeHour, 12)
+            .ticks(35)
             .tickSize(-this.height)
             .tickFormat(function() { return null; }))
             .selectAll(".tick")
-            .classed("tick--minor", function(d) { return d.getHours(); });
+            .classed("tick--minor", function(d) { return d; });
 
     this.svg.append("g")
             .attr("class", "axis axis--x")
             .attr("transform", "translate(0," + this.height + ")")
             .call(d3.axisBottom(this.xScale)
-            .ticks(d3.timeDay)
+            .ticks(17)
+            .tickFormat(d3.format("d"))
             .tickPadding(0))
             .attr("text-anchor", null)
             .selectAll("text")
-            .attr("x", 6);
+            .attr("x", -19)
+            .attr("y", 15);
 
     this.brushended = function() {
 
         if (!d3.event.sourceEvent) return; // Only transition after input.
         if (!d3.event.selection) return; // Ignore empty selections.
         var d0 = d3.event.selection.map(self.xScale.invert),
-            d1 = d0.map(d3.timeDay.round);
+            d1 = d0.map(Math.round);
 
         // If empty when rounded, use floor & ceil instead.
         if (d1[0] >= d1[1]) {
-          d1[0] = d3.timeDay.floor(d0[0]);
-          d1[1] = d3.timeDay.offset(d1[0]);
+          d1[0] = Math.floor(d0[0]);
+          d1[1] = Math.offset(d1[0]);
         }
+
+        dataManager.setTimeInterval(d1);
 
         d3.select(this).transition().call(d3.event.target.move, d1.map(self.xScale));
       }
