@@ -42,6 +42,12 @@ export default class ScatterPlot {
       "Tecmo Koei": "#4e4e4e"
     }
 
+    // -------------------------------------------------------------------
+    //  Compute Scaling functions
+    // -------------------------------------------------------------------
+
+    //this.xScale =
+
     // ---------------------------------------------------------------------------
     // Create our SVG canvas
     // ---------------------------------------------------------------------------
@@ -104,7 +110,6 @@ export default class ScatterPlot {
       .scale(yScale)
       .ticks(this.nbYticks);
 
-
     // Create X axis and label it
     this.x_group.attr("class", "x axis")
       .attr("transform", "translate(0," + (this.height - this.padding) + ")")
@@ -119,65 +124,58 @@ export default class ScatterPlot {
 
     // Create Y axis and label it
     this.y_group.attr("class", "y axis")
-                .attr("transform", "translate(" + this.padding + ",0)")
-                .call(yAxis)
-                .append("text")
-                .attr("class", "label")
-                .attr("transform", "rotate(-90)")
-                .attr("x", -this.padding)
-                .attr("y", this.padding)
-                .style("text-anchor", "end")
-                .text(this.y_name)
-                .style("fill", "black");
+      .attr("transform", "translate(" + this.padding + ",0)")
+      .call(yAxis)
+      .append("text")
+      .attr("class", "label")
+      .attr("transform", "rotate(-90)")
+      .attr("x", -this.padding)
+      .attr("y", this.padding)
+      .style("text-anchor", "end")
+      .text(this.y_name)
+      .style("fill", "black");
 
     // -------------------------------------------------------------------
     //  Create the circles
     // -------------------------------------------------------------------
 
-    var circleAttrs = {
-      cx: game => {
-        return xScale(game.Global_Sales);
-      },
-      cy: game => {
-        return yScale(game.Critic_Score);
-      },
-      fill: "black",
-      r: radius
-    };
-
-    var circleAttrsHover = {
-      fill: "orange",
-      r: radius * 2
-    };
-    //
-
     // Create a circle for each game
     var circles = this.svg.selectAll("circle").data(newData, function(d) {
-      return d;
+      return d.Name;
     });
 
     // Remove old circles when updating
     circles.exit()
-      .style("opacity", 1)
-      .attr("r", radius)
-      .transition()
-      .duration(700)
-      .attr("r", 2 * radius)
-      .transition()
-      .duration(700)
-      .attr("r", radius)
-      .style("opacity", 0)
-      .remove();
-
+    .style("opacity", 1)
+    .transition()
+    .delay(function(d) {
+      return Math.random() * 1000;
+    })
+    .ease(d3.easeBounce)
+    .duration(3000)
+    .attr("cx", game => {
+      return xScale(game.Global_Sales);
+    })
+    .attr("cy", game => {
+      return yScale(0);
+    })
+    .style("opacity", 0)
+    .remove();
 
     // Set the current circles position
-    circles.attr("cx", game => {
+    circles
+      .transition()
+      .delay(function(d) {
+        return Math.random() * 1000;
+      })
+      .ease(d3.easeElastic)
+      .duration(5000)
+      .attr("cx", game => {
         return xScale(game.Global_Sales);
       })
       .attr("cy", game => {
         return yScale(game.Critic_Score);
       })
-      .attr("r", radius)
       .attr("fill", function(game) {
         return colorsPublishers[game.Publisher];
       });
@@ -191,12 +189,19 @@ export default class ScatterPlot {
       .attr("cy", game => {
         return yScale(game.Critic_Score);
       })
+      .attr("r", 0)
+      .transition()
+      .delay(function(d) {
+        return Math.random() * 1000;
+      })
+      .ease(d3.easeElastic)
+      .duration(3000)
       .attr("r", radius)
       .attr("fill", function(game) {
         return colorsPublishers[game.Publisher];
-      })
-      // Event handler when the mouse is over a circle
-      .on("mouseover", function(game) {
+      });
+    // Event handler when the mouse is over a circle
+    circles.on("mouseover", function(game) {
         d3.select(this)
           .transition()
           .duration(700)
@@ -253,20 +258,20 @@ export default class ScatterPlot {
 
       });
   }
-/*
-  computePublishersMean(newData) {
-    let colorsPublishers = this.colorsPublishers;
-    let games = newData;
+  /*
+    computePublishersMean(newData) {
+      let colorsPublishers = this.colorsPublishers;
+      let games = newData;
 
-    // Group our games by publishers
-    var groupBy = function(games, key) {
-      return data.reduce(function(acc, game) {
-        (acc[x[key]] = rv[x[key]] || []).push(x);
-        return acc;
-      }, {});
-    };
+      // Group our games by publishers
+      var groupBy = function(games, key) {
+        return data.reduce(function(acc, game) {
+          (acc[x[key]] = rv[x[key]] || []).push(x);
+          return acc;
+        }, {});
+      };
 
-    console.log(groupBy(games, 'Publisher'));
-  }*/
+      console.log(groupBy(games, 'Publisher'));
+    }*/
 
 }
