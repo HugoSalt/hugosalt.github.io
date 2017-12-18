@@ -4,12 +4,12 @@ import * as d3 from "d3";
 
 export default class ScatterPlot {
 
-  constructor(container_id, x_name, y_name) {
+  constructor(container_id, colorsPublishers, x_name, y_name) {
     // ---------------------------------------------------------------------------
     // Set up parameters of our Scatter Plot
     // ---------------------------------------------------------------------------
-    // TODO: Create a Scatter Plot that is resizable with Screen size
-    this.padding = 20;
+    this.padding = 30;
+    this.radius = 3;
 
     this.width = 1000;
     this.height = 500;
@@ -17,11 +17,11 @@ export default class ScatterPlot {
     this.nbXticks = 20;
     this.nbYticks = 10;
 
-    this.container_id = container_id;
-
+    // Labels for the axis
     this.x_name = x_name;
     this.y_name = y_name;
 
+    // Colors for Publishers
     this.colorsPublishers = {
       "Nintendo": "#c22020",
       "Electronic Arts": "#4557a2",
@@ -42,11 +42,11 @@ export default class ScatterPlot {
       "Tecmo Koei": "#4e4e4e"
     }
 
+    this.data = [];
+
     // -------------------------------------------------------------------
     //  Compute Scaling functions
     // -------------------------------------------------------------------
-
-    //this.xScale =
 
     // ---------------------------------------------------------------------------
     // Create our SVG canvas
@@ -66,20 +66,37 @@ export default class ScatterPlot {
 
     this.x_group = this.svg.append("g");
     this.y_group = this.svg.append("g");
+
+    /*this.publishersButton = d3.select("#" + container_id)
+                              .append("input")
+                              .attr("type", "button")
+                              .attr("value", "Compute Mean Publishers")
+                              .attr("class", "publishers_button")
+                              .attr("transform", "translate(" + "500" + "," + -this.padding + ")")
+                              .on("click", computePublishersMean(this.data));*/
   }
 
 
+  /*zoom() {
+      this.svg.select(".x.axis").call(xAxis);
+      this.svg.select(".y.axis").call(yAxis);
+
+      this.svg.selectAll(".dot")
+          .attr("transform", transform);
+  }*/
+
   update(newData) {
+
+    var padding = 2 * this.padding;
+    var tooltip = this.tooltip;
+    let colorsPublishers = this.colorsPublishers;
+    var radius = this.radius;
+    this.data = newData;
+
     // -------------------------------------------------------------------
     //  Compute Scaling functions
     // -------------------------------------------------------------------
-    var padding = 2 * this.padding;
 
-    var tooltip = this.tooltip;
-
-    let colorsPublishers = this.colorsPublishers;
-
-    var radius = 3;
     // Compute scale of x
     let xScale = d3.scaleLinear()
       .domain([0, d3.max(newData, game => {
@@ -90,11 +107,17 @@ export default class ScatterPlot {
 
     // Compute scale of y
     let yScale = d3.scaleLinear()
-      .domain([0, d3.max(newData, game => {
+      .domain([0, (newData.length > 0)? d3.max(newData, game => {
         return game.Critic_Score;
-      })])
+      }) : 0])
       .range([this.height - this.padding, this.padding])
       .nice();
+
+    /*var zoomBeh = d3.behavior.zoom()
+      .x(xScale)
+      .y(yScale)
+      .scaleExtent([0, 500])
+      .on("zoom", zoom);*/
 
     // -------------------------------------------------------------------
     // Set up the axis
@@ -129,8 +152,8 @@ export default class ScatterPlot {
       .append("text")
       .attr("class", "label")
       .attr("transform", "rotate(-90)")
-      .attr("x", -this.padding)
-      .attr("y", this.padding)
+      .attr("x", -this.padding - 5)
+      .attr("y", -this.padding - 10)
       .style("text-anchor", "end")
       .text(this.y_name)
       .style("fill", "black");
@@ -146,30 +169,25 @@ export default class ScatterPlot {
 
     // Remove old circles when updating
     circles.exit()
-    .style("opacity", 1)
-    .transition()
-    .delay(function(d) {
-      return Math.random() * 1000;
-    })
-    .ease(d3.easeBounce)
-    .duration(3000)
-    .attr("cx", game => {
-      return xScale(game.Global_Sales);
-    })
-    .attr("cy", game => {
-      return yScale(0);
-    })
-    .style("opacity", 0)
-    .remove();
+      .style("opacity", 1)
+      .transition()
+      .delay(function(d) {
+        return Math.random() * 1000;
+      })
+      //.ease(d3.easeBounce)
+      .duration(500)
+      .attr("cy", yScale(0))
+      .style("opacity", 0)
+      .remove();
 
     // Set the current circles position
-    circles
-      .transition()
+    circles.transition()
       .delay(function(d) {
         return Math.random() * 1000;
       })
       .ease(d3.easeElastic)
       .duration(5000)
+      .style("opacity", 1)
       .attr("cx", game => {
         return xScale(game.Global_Sales);
       })
@@ -200,6 +218,7 @@ export default class ScatterPlot {
       .attr("fill", function(game) {
         return colorsPublishers[game.Publisher];
       });
+
     // Event handler when the mouse is over a circle
     circles.on("mouseover", function(game) {
         d3.select(this)
@@ -249,29 +268,24 @@ export default class ScatterPlot {
           "Genre: " + game.Genre + "<br/>" +
           "Publisher: " + game.Publisher + "<br/>" +
           "Global Sales: " + game.Global_Sales + "<br/>" +
-          "Critic Score: " + game.Critic_Score +
-          "Max" + d3.max(newData, game => {
-            return game.Global_Sales;
-          })
-          /* etc...*/
-        );
+          "Critic Score: " + game.Critic_Score);
 
       });
   }
-  /*
-    computePublishersMean(newData) {
-      let colorsPublishers = this.colorsPublishers;
-      let games = newData;
 
-      // Group our games by publishers
-      var groupBy = function(games, key) {
-        return data.reduce(function(acc, game) {
-          (acc[x[key]] = rv[x[key]] || []).push(x);
-          return acc;
-        }, {});
-      };
+  computePublishersMean(newData) {
+    let colorsPublishers = this.colorsPublishers;
+    let games = newData;
 
-      console.log(groupBy(games, 'Publisher'));
-    }*/
+    // Group our games by publishers
+    var groupBy = function(games, key) {
+      return data.reduce(function(acc, game) {
+        (acc[x[key]] = rv[x[key]] || []).push(x);
+        return acc;
+      }, {});
+    };
+
+    console.log(groupBy(games, 'Publisher'));
+  }
 
 }

@@ -20,7 +20,7 @@
   text-align: center;
 
   min-width: 100px; max-width: 150px;
-  min-height: 30px; max-height: 100px;
+  min-height: 30px; max-height: 200px;
 
   padding: 5px;
   font: 12px sans-serif;
@@ -29,4 +29,8 @@
   border-radius: 8px;
   opacity: 0;
   pointer-events: none;
+}
+
+.publishers_button {
+
 }
