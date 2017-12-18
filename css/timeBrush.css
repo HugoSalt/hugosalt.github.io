@@ -1,0 +1,15 @@
+
+.axis--grid .domain {
+  fill: #ddd;
+  stroke: none;
+}
+
+.axis--x .domain,
+.axis--grid .tick line {
+  stroke: #fff;
+  stroke-width: 2px;
+}
+
+.axis--grid .tick--minor line {
+  stroke-opacity: .5;
+}

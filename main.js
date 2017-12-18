@@ -6,6 +6,8 @@ import DataProcessor from "./modules/DataProcessor/DataProcessor.js";
 import Menu from "./modules/Menu/Menu.js";
 import Banner from "./modules/Banner/Banner.js";
 import RegionSelector from "./modules/RegionSelector/RegionSelector.js"
+import ScatterPlot from "./modules/ScatterPlot/ScatterPlot.js"
+import TimeBrush from "./modules/TimeBrush/TimeBrush.js"
 import GenreBar from "./modules/GenreBar/GenreBar.js"
 import GenreBarButtons from "./modules/GenreBar/GenreBarButtons.js"
 import ConsoleBar from "./modules/ConsoleBar/ConsoleBar.js"
@@ -13,14 +15,14 @@ import DataManager from "./modules/DataManager/DataManager.js";
 import LoadingScreen from "./modules/LoadingScreen/LoadingScreen.js";
 
 // Initialize Loading Screen
-let loadingScreen = new LoadingScreen();
-loadingScreen.setProgress(0.0);
+//let loadingScreen = new LoadingScreen(); // TODO uncomment
+//loadingScreen.setProgress(0.0); // TODO uncomment
 
 // Load CSV Data
 let data = [];
 d3.csv("./data/Video_Games_Sales_as_at_22_Dec_2016.csv", (parsed_data) => {
   parsed_data.forEach((line) => data.push(line));
-  loadingScreen.setProgress(0.2);
+  //loadingScreen.setProgress(0.2); // TODO uncomment
   setTimeout(() => initialize(), 550);
 });
 
@@ -290,14 +292,15 @@ function initialize() {
 */
   }
 
+  // TODO : uncomment
   // Loading Screen Timing
-  consoleWarInit();
-  loadingScreen.setProgress(0.7);
-  setTimeout(() => {
-    publisherWarInit();
-    loadingScreen.setProgress(1);
-    setTimeout(() => loadingScreen.hide(), 400);
-  }, 550);
+  // consoleWarInit();
+  // loadingScreen.setProgress(0.7);
+  // setTimeout(() => {
+  //   publisherWarInit();
+  //   loadingScreen.setProgress(1);
+  //   setTimeout(() => loadingScreen.hide(), 400);
+  // }, 550);
 
   // ---------------------------------------------------------------------------
   // GAME ANALYSIS
@@ -376,6 +379,7 @@ function initialize() {
     }
 */
   let genreBar = new GenreBar("genreBar_container", colorsGameType)
+  let scatterPlot = new ScatterPlot("scatterPlot_container", "Number of Sales", "Critics Score");
 
   let consoleBar = new ConsoleBar()
 
@@ -393,5 +397,6 @@ function initialize() {
     dataProcessor.getGenreList(),
     dataManager)
 
-  //let scatterPlot = new ScatterPlot("scatterPlot_container", data, "Number of Sales", "Critics Score");
+  let timeBrush = new TimeBrush("timeBrush_container", [1980, 2015], dataManager);
+  dataManager.setPlatform(dataProcessor.getConsoleList())
 }

@@ -1,75 +1,291 @@
-// Eg at https://bl.ocks.org/mbostock/3887118
+// Inspired from http://chimera.labs.oreilly.com/books/1230000000345/
+// un scatterplot zoomable qui serait joli à faire : http://bl.ocks.org/peterssonjonas/4a0e7cb8d23231243e0e
+import * as d3 from "d3";
+
 export default class ScatterPlot {
 
-  constructor(container_id, x_name, y_name, y_max) {
-    document.getElementById(container_id).style.transition = "all 0.4s ease-in-out";
+  constructor(container_id, colorsPublishers, x_name, y_name) {
+    // ---------------------------------------------------------------------------
+    // Set up parameters of our Scatter Plot
+    // ---------------------------------------------------------------------------
+    this.padding = 30;
+    this.radius = 3;
 
+    this.width = 1000;
+    this.height = 500;
+
+    this.nbXticks = 20;
+    this.nbYticks = 10;
+
+    // Labels for the axis
+    this.x_name = x_name;
+    this.y_name = y_name;
+
+    // Colors for Publishers
+    this.colorsPublishers = {
+      "Nintendo": "#c22020",
+      "Electronic Arts": "#4557a2",
+      "Activision": "#4b402f",
+      "Sony Computer Entertainment": "#00bbff",
+      "Ubisoft": "#9bb4bf",
+      "Take-Two Interactive": "#d1cb42",
+      "THQ": "#b85901",
+      "Konami Digital Entertainment": "#385b33",
+      "Sega": "#331a49",
+      "Namco Bandai Games": "#ff0060",
+      "Microsoft Game Studios": "#16e800",
+      "Atari": "#9f249c",
+      "Capcom": "#80af97",
+      "Square Enix": "#000186",
+      "SquareSoft": "#c7be7f",
+      "Enix Corporation": "#7c5277",
+      "Tecmo Koei": "#4e4e4e"
+    }
+
+    this.data = [];
+
+    // -------------------------------------------------------------------
+    //  Compute Scaling functions
+    // -------------------------------------------------------------------
+
+    // ---------------------------------------------------------------------------
+    // Create our SVG canvas
+    // ---------------------------------------------------------------------------
+    this.tooltip = d3.select("#" + container_id)
+      .append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0.0);
+
+    this.svg = d3.select('#' + container_id)
+      .append("svg")
+      .attr("width", this.width + 2 * this.padding)
+      .attr("height", this.height + 2 * this.padding)
+      .append("g")
+      .attr("transform",
+        "translate(" + this.padding + "," + this.padding + ")");
+
+    this.x_group = this.svg.append("g");
+    this.y_group = this.svg.append("g");
+
+    /*this.publishersButton = d3.select("#" + container_id)
+                              .append("input")
+                              .attr("type", "button")
+                              .attr("value", "Compute Mean Publishers")
+                              .attr("class", "publishers_button")
+                              .attr("transform", "translate(" + "500" + "," + -this.padding + ")")
+                              .on("click", computePublishersMean(this.data));*/
   }
 
-  // un joli scatterplot zoomable qui serait joli à faire : http://bl.ocks.org/peterssonjonas/4a0e7cb8d23231243e0e
 
-  var data = [[1, 4], [8, 9], [1, 2]];
+  /*zoom() {
+      this.svg.select(".x.axis").call(xAxis);
+      this.svg.select(".y.axis").call(yAxis);
 
-  // set the margins
-  var margin = {top: 20, right: 20, bottom: 30, left: 40},
-  width = 960 - margin.left - margin.right,
-  height = 500 - margin.top - margin.bottom;
+      this.svg.selectAll(".dot")
+          .attr("transform", transform);
+  }*/
 
-  // set some default mapping colors
-  var color = d3.scale.category10();
+  update(newData) {
 
-  var x = d3.scale.linear()
-  .range([0, width]);
-  // define the x-axis
-  var xAxis = d3.svg.axis()
-  .scale(x)
-  .orient("bottom");
+    var padding = 2 * this.padding;
+    var tooltip = this.tooltip;
+    let colorsPublishers = this.colorsPublishers;
+    var radius = this.radius;
+    this.data = newData;
 
-  var y = d3.scale.linear()
-  .range([height, 0]);
-  // define the y-axis
-  var yAxis = d3.svg.axis()
-  .scale(y)
-  .orient("left");
+    // -------------------------------------------------------------------
+    //  Compute Scaling functions
+    // -------------------------------------------------------------------
 
-  // create our SVG canvas
-  var svg = d3.select("body").append("svg")
-  .attr("width", width + margin.left + margin.right)
-  .attr("height", height + margin.top + margin.bottom)
-  .append("g") // group SVG shapes together
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    // Compute scale of x
+    let xScale = d3.scaleLinear()
+      .domain([0, d3.max(newData, game => {
+        return game.Global_Sales;
+      })])
+      .range([this.padding, this.width - this.padding])
+      .nice();
 
-  // label the x-axis
-  svg.append("g")
-  .attr("class", "x axis")
-  .attr("transform", "translate(0," + height + ")")
-  .call(xAxis)
-  .append("text")
-  .attr("class", "label")
-  .attr("x", width)
-  .attr("y", -6)
-  .style("text-anchor", "end")
-  .text("Number of sales");
+    // Compute scale of y
+    let yScale = d3.scaleLinear()
+      .domain([0, (newData.length > 0)? d3.max(newData, game => {
+        return game.Critic_Score;
+      }) : 0])
+      .range([this.height - this.padding, this.padding])
+      .nice();
 
-  // label the y-axis
-  svg.append("g")
-  .attr("class", "y axis")
-  .call(yAxis)
-  .append("text")
-  .attr("class", "label")
-  .attr("transform", "rotate(-90)")
-  .attr("y", 6)
-  .attr("dy", ".71em")
-  .style("text-anchor", "end")
-  .text("Score in reviews")
+    /*var zoomBeh = d3.behavior.zoom()
+      .x(xScale)
+      .y(yScale)
+      .scaleExtent([0, 500])
+      .on("zoom", zoom);*/
 
-  // map each point to a game
-  svg.selectAll(".dot")
-  .data(data)
-  .enter().append("circle")
-  .attr("class", "dot")
-  .attr("r", 3.5)
-  .attr("cx", function(d) { return x; })
-  .attr("cy", function(d) { return y; })
-  .style("fill", function(d) { return color(0); });
+    // -------------------------------------------------------------------
+    // Set up the axis
+    // -------------------------------------------------------------------
+
+    // Set up x-axis
+    let xAxis = d3.axisBottom()
+      .scale(xScale)
+      .ticks(this.nbXticks);
+
+    // Set up y-axis
+    let yAxis = d3.axisLeft()
+      .scale(yScale)
+      .ticks(this.nbYticks);
+
+    // Create X axis and label it
+    this.x_group.attr("class", "x axis")
+      .attr("transform", "translate(0," + (this.height - this.padding) + ")")
+      .call(xAxis)
+      .append("text")
+      .attr("class", "label")
+      .attr("x", this.width - 2 * this.padding)
+      .attr("y", -this.padding)
+      .style("text-anchor", "end")
+      .text(this.x_name)
+      .style("fill", "black");
+
+    // Create Y axis and label it
+    this.y_group.attr("class", "y axis")
+      .attr("transform", "translate(" + this.padding + ",0)")
+      .call(yAxis)
+      .append("text")
+      .attr("class", "label")
+      .attr("transform", "rotate(-90)")
+      .attr("x", -this.padding - 5)
+      .attr("y", -this.padding - 10)
+      .style("text-anchor", "end")
+      .text(this.y_name)
+      .style("fill", "black");
+
+    // -------------------------------------------------------------------
+    //  Create the circles
+    // -------------------------------------------------------------------
+
+    // Create a circle for each game
+    var circles = this.svg.selectAll("circle").data(newData, function(d) {
+      return d.Name;
+    });
+
+    // Remove old circles when updating
+    circles.exit()
+      .style("opacity", 1)
+      .transition()
+      .delay(function(d) {
+        return Math.random() * 1000;
+      })
+      //.ease(d3.easeBounce)
+      .duration(500)
+      .attr("cy", yScale(0))
+      .style("opacity", 0)
+      .remove();
+
+    // Set the current circles position
+    circles.transition()
+      .delay(function(d) {
+        return Math.random() * 1000;
+      })
+      .ease(d3.easeElastic)
+      .duration(5000)
+      .style("opacity", 1)
+      .attr("cx", game => {
+        return xScale(game.Global_Sales);
+      })
+      .attr("cy", game => {
+        return yScale(game.Critic_Score);
+      })
+      .attr("fill", function(game) {
+        return colorsPublishers[game.Publisher];
+      });
+
+    // Add new circles for each data
+    circles.enter()
+      .append("circle")
+      .attr("cx", game => {
+        return xScale(game.Global_Sales);
+      })
+      .attr("cy", game => {
+        return yScale(game.Critic_Score);
+      })
+      .attr("r", 0)
+      .transition()
+      .delay(function(d) {
+        return Math.random() * 1000;
+      })
+      .ease(d3.easeElastic)
+      .duration(3000)
+      .attr("r", radius)
+      .attr("fill", function(game) {
+        return colorsPublishers[game.Publisher];
+      });
+
+    // Event handler when the mouse is over a circle
+    circles.on("mouseover", function(game) {
+        d3.select(this)
+          .transition()
+          .duration(700)
+          .attr("r", 2 * radius)
+          .style("cursor", "pointer");
+
+        tooltip.transition()
+          .duration(400)
+          .style("opacity", 0.7);
+        tooltip.html(game.Name)
+          .style("left", (d3.event.pageX - padding) + "px")
+          .style("top", (d3.event.pageY - padding) + "px");
+      })
+      // Event handler when the mouse leaves the point
+      .on("mouseout", function() {
+        if (!d3.select(this).classed("selected")) {
+          d3.select(this)
+            .transition()
+            .duration(700)
+            .attr("r", radius);
+
+          tooltip.transition()
+            .duration(400)
+            .style("opacity", 0.0);
+        }
+      })
+      // On Click, we want to add data to the array and chart
+      .on("click", function(game) {
+        // Find previously selected, unselect
+        d3.select(".selected")
+          .classed("selected", false);
+
+        // Select current item
+        d3.select(this).classed("selected", true);
+
+        d3.select(this).transition()
+          .duration(700)
+          .attr("r", 2 * radius)
+          .style("cursor", "pointer");
+
+        tooltip.style("opacity", 1);
+
+        tooltip.html(game.Name + "<br/>" +
+          "Year of Release:" + game.Year_of_Release + "<br/>" +
+          "Genre: " + game.Genre + "<br/>" +
+          "Publisher: " + game.Publisher + "<br/>" +
+          "Global Sales: " + game.Global_Sales + "<br/>" +
+          "Critic Score: " + game.Critic_Score);
+
+      });
+  }
+
+  computePublishersMean(newData) {
+    let colorsPublishers = this.colorsPublishers;
+    let games = newData;
+
+    // Group our games by publishers
+    var groupBy = function(games, key) {
+      return data.reduce(function(acc, game) {
+        (acc[x[key]] = rv[x[key]] || []).push(x);
+        return acc;
+      }, {});
+    };
+
+    console.log(groupBy(games, 'Publisher'));
+  }
+
 }

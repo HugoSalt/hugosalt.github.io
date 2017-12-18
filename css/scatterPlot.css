@@ -1,0 +1,36 @@
+#scatterPlot_container {
+  width: 1040px;
+  height: 540px;
+  position: relative;
+}
+
+.axis {
+  font: 16px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.tooltip {
+  position: absolute;
+  text-align: center;
+
+  min-width: 100px; max-width: 150px;
+  min-height: 30px; max-height: 200px;
+
+  padding: 5px;
+  font: 12px sans-serif;
+  background: lightsteelblue;
+  border: 1px solid steelblue;
+  border-radius: 8px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.publishers_button {
+
+}
