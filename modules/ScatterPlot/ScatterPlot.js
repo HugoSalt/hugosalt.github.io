@@ -2,6 +2,15 @@
 // un scatterplot zoomable qui serait joli à faire : http://bl.ocks.org/peterssonjonas/4a0e7cb8d23231243e0e
 import * as d3 from "d3";
 
+/*
+
+  TODO : Find why when we compute the mean not all the circles move
+  TODO : Implement zoom
+  TODO : Implement mouseover/mousemove/mouseout on Mean circles
+  TODO : Move PublisherMeanButton
+
+*/
+
 export default class ScatterPlot {
 
   constructor(container_id, x_name, y_name) {
