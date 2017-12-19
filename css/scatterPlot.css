@@ -15,19 +15,30 @@
   shape-rendering: crispEdges;
 }
 
-.tooltip {
+/*.tooltip {
   position: absolute;
-  text-align: center;
+
 
   min-width: 100px; max-width: 150px;
-  min-height: 30px; max-height: 200px;
+  min-height: 30px; max-height: 300px;
+  height: auto;
 
-  padding: 5px;
-  font: 12px sans-serif;
-  background: lightsteelblue;
   border: 1px solid steelblue;
   border-radius: 8px;
   opacity: 0;
+  pointer-events: none;
+}*/
+
+.tooltip {
+  position: absolute;
+  text-align: center;
+  width: 100px;
+  height: auto;
+  padding: 10px;
+  font: 14px sans-serif;
+  background: #999;
+  border: 0px;
+  border-radius: 10px;
   pointer-events: none;
 }
 

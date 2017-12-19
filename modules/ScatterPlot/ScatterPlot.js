@@ -161,28 +161,28 @@ export default class ScatterPlot {
     // Set up x-axis
     let xAxis = d3.axisBottom()
       .scale(xScale)
-      .ticks(this.nbXticks);
+      .ticks(self.nbXticks);
 
     // Set up y-axis
     let yAxis = d3.axisLeft()
       .scale(yScale)
-      .ticks(this.nbYticks);
+      .ticks(self.nbYticks);
 
     // Create X axis and label it
-    this.x_group.attr("class", "x axis")
-      .attr("transform", "translate(0," + (this.height - this.padding) + ")")
+    self.x_group.attr("class", "x axis")
+      .attr("transform", "translate(0," + (self.height - self.padding) + ")")
       .call(xAxis)
       .append("text")
       .attr("class", "label")
-      .attr("x", this.width - this.padding)
+      .attr("x", self.width - self.padding)
       .attr("y", -15)
       .style("text-anchor", "end")
       .text(self.x_name)
       .style("fill", "black");
 
     // Create Y axis and label it
-    this.y_group.attr("class", "y axis")
-      .attr("transform", "translate(" + this.padding + ",0)")
+    self.y_group.attr("class", "y axis")
+      .attr("transform", "translate(" + self.padding + ",0)")
       .call(yAxis)
       .append("text")
       .attr("class", "label")
@@ -196,6 +196,7 @@ export default class ScatterPlot {
     // -------------------------------------------------------------------
 
     // Create a circle for each game
+    // Each game is identified uniquely with its NAME
     var circles = self.svg.selectAll("circle").data(self.data, function(d) {
       return d.Name;
     });
@@ -203,6 +204,7 @@ export default class ScatterPlot {
     // Remove old circles when updating
     circles.exit()
       .style("opacity", 1)
+      // Add a falling and fading transition animation
       .transition()
       .delay(function(d) {
         return Math.random() * 1000;
@@ -216,6 +218,7 @@ export default class ScatterPlot {
     circles.enter()
       .append("circle")
       .attr("class", "circle")
+      // Position the circles
       .attr("cx", game => {
         return xScale(game.Global_Sales);
       })
@@ -223,6 +226,7 @@ export default class ScatterPlot {
         return yScale(game.Critic_Score);
       })
       .attr("r", 0)
+      // Add a popping transition animation
       .transition()
       .delay(function(d) {
         return Math.random() * 1000;
@@ -230,11 +234,17 @@ export default class ScatterPlot {
       .ease(d3.easeElastic)
       .duration(3000)
       .attr("r", self.radius)
+      // Give color and correct opacity to circles
+      // Highlight the one whose Publisher is well known
       .attr("fill", function(game) {
         return (colorsPublishers[game.Publisher] == undefined)? "grey" : colorsPublishers[game.Publisher];
+      })
+      .attr("opacity", function(game) {
+        return (colorsPublishers[game.Publisher] == undefined)? 0.2 : 1;
       });
 
     // Set the current circles position
+    // Make them move when the data is updating
     circles.transition()
       .delay(function(d) {
         return Math.random() * 1000;
@@ -247,29 +257,34 @@ export default class ScatterPlot {
       })
       .attr("cy", game => {
         return yScale(game.Critic_Score);
-      })
-      .attr("fill", function(game) {
-        return (colorsPublishers[game.Publisher] == undefined)? "grey" : colorsPublishers[game.Publisher];
       });
 
     // Event handler when the mouse is over a circle
     circles.on("mouseover", function(game) {
-        d3.select(this)
-          .transition()
-          .duration(700)
-          .attr("r", 2 * self.radius)
-          .style("cursor", "pointer");
+        if (!d3.select(this).classed("selected")) {
+          // Make the circle swell when the mouse is on it
+          d3.select(this)
+            .transition()
+            .duration(500)
+            .attr("r", 2 * self.radius)
+            .style("cursor", "pointer");
 
-        tooltip.transition()
-          .duration(400)
-          .style("opacity", 0.7);
+          // Set tooltip transition
+          tooltip.transition()
+                  .duration(400)
+                  .style("opacity", 0.7)
+                  .style("width", "100px");
 
-        tooltip.html(game.Name)
-          .style("left", (d3.event.pageX - self.padding) + "px")
-          .style("top", (d3.event.pageY - self.padding) + "px");
+          // Set tooltip's text
+          tooltip.html(game.Name)
+            .style("left", (d3.event.pageX - self.padding) + "px")
+            .style("top", (d3.event.pageY - self.padding) + "px");
 
-        tooltip.style("height", "auto");
+          // Set tooltip's properties
+          tooltip.style("width", "100px");
+        }
       })
+      // Event handler when the mouse is moving on a circle
       .on("mousemove", function() {
           tooltip.style("left", (d3.event.pageX - self.padding) + "px")
                  .style("top", (d3.event.pageY - self.padding) + "px")
@@ -285,7 +300,7 @@ export default class ScatterPlot {
           tooltip.transition()
             .duration(400)
             .style("opacity", 0.0)
-            .style("width", "80px");
+            .style("width", "40px");
 
           tooltip.style("height", "auto");
         }
@@ -297,23 +312,26 @@ export default class ScatterPlot {
           .transition()
           .duration(400)
           .attr("r", self.radius);
-
         d3.select(".selected").classed("selected", false);
 
         // Select current item
         d3.select(this).classed("selected", true);
 
         d3.select(this).transition()
-          .duration(700)
-          .attr("r", 2 * self.radius)
-          .style("cursor", "pointer");
+                       .duration(700)
+                       .attr("r", 2 * self.radius)
+                       .style("cursor", "pointer");
 
-        tooltip.html(game.Name + "<br/>" +
-          "Year of Release:" + game.Year_of_Release + "<br/>" +
+        // Display further informations about that game
+        tooltip.html(game.Name.bold().italics() + "<br/>" +
+          "<br/><div id=\"game_info\">Year of Release: " + game.Year_of_Release + "<br/>" +
           "Genre: " + game.Genre + "<br/>" +
           "Publisher: " + game.Publisher + "<br/>" +
           "Global Sales: " + game.Global_Sales + "<br/>" +
-          "Critic Score: " + game.Critic_Score);
+          "Critic Score: " + game.Critic_Score + "</div>");
+
+        d3.select("#game_info").style("text-align", "left")
+                               .style("padding-left", "17px");
 
         tooltip.transition()
                .duration(400)
@@ -360,10 +378,10 @@ export default class ScatterPlot {
 
         // Move the current little circles to their mean
         circles.transition()
-                .duration(3000)
                 .delay(function(d) {
                   return Math.random() * 1000;
                 })
+                .duration(3000)
                 .attr("cx", function(game) {
                   return xScale(self.getMeanPublisherCoords(publishersAverage, game)[0]);
                 })
