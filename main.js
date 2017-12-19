@@ -378,6 +378,7 @@ function initialize() {
                       "GG"]
     }
 */
+
   let genreBar = new GenreBar("genreBar_container", colorsGameType)
   let scatterPlot = new ScatterPlot("scatterPlot_container", "Number of Sales", "Critics Score");
 
@@ -385,7 +386,7 @@ function initialize() {
 
   let platformList = ["2600", "NES", "SNES", "N64", "GC", "Wii", "WiiU", "GB", "DS", "GBA", "3DS", "PS", "PS2", "PS3", "PS4", "PSP", "X360", "XOne", "XB", "PC"];
   let dataManager = new DataManager(data,
-                                    [genreBar, consoleBar],
+                                    [scatterPlot, genreBar, consoleBar],
                                     genreList,
                                     platformList,
                                     dataProcessor.getPublisherList(),

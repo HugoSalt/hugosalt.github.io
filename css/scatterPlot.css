@@ -1,6 +1,6 @@
 #scatterPlot_container {
-  width: 1040px;
-  height: 540px;
+  width: 1000px;
+  height: 700px;
   position: relative;
 }
 
@@ -32,5 +32,14 @@
 }
 
 .publishers_button {
+  width: 200px;
+  height: auto;
+  background: grey;
+  border: black;
+  border-radius: 8px;
+  text-align: center;
+  padding: 5px;
+}
 
+.circle {
 }

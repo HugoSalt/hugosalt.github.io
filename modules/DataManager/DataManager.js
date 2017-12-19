@@ -1,12 +1,12 @@
 export default class DataManager {
 
   constructor(data, components_to_update, genres, platforms, publishers, timeInterval) {
-    this.data = data.reduce((acc, game) => {
+    this.data = (data.reduce((acc, game) => {
       if(game.Critic_Score != "") {
         acc.push(game);
       }
       return acc;
-    }, []);
+    }, [])).reverse();
     this.components_to_update = components_to_update;
     this.genres = genres;
     this.platforms = platforms;
