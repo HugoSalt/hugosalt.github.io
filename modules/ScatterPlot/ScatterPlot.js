@@ -8,6 +8,8 @@ import * as d3 from "d3";
   TODO : Implement zoom
   TODO : Implement mouseover/mousemove/mouseout on Mean circles
   TODO : Move PublisherMeanButton
+  TODO : Repair mouseover for small circles
+  TODO : Add color for Publishers in tooltip when clicking
 
 */
 
@@ -126,7 +128,7 @@ export default class ScatterPlot {
 
     // Compute scale of x
     let xScale = d3.scaleLinear()
-      .domain([0, (self.data.length > 0)? d3.max(self.data, game => {
+      .domain([0, (self.data.length > 0)? d3.max(self.data, function(game) {
         return game.Global_Sales;
       }) : 0])
       .range([self.padding, self.width - self.padding])
@@ -134,7 +136,7 @@ export default class ScatterPlot {
 
     // Compute scale of y
     let yScale = d3.scaleLinear()
-      .domain([0, (self.data.length > 0)? d3.max(self.data, game => {
+      .domain([0, (self.data.length > 0)? d3.max(self.data, function(game) {
         return game.Critic_Score;
       }) : 0])
       .range([self.height - self.padding, self.padding])
@@ -143,7 +145,7 @@ export default class ScatterPlot {
     // Compute scale of radius
     let rScale = d3.scaleLinear()
                     .domain([0, (self.data.length > 0)?
-                      d3.max(self.data, game => {
+                      d3.max(self.data, function(game) {
                         return game.Global_Sales;
                       }) : 0])
                     .range([1, 50])
@@ -151,17 +153,11 @@ export default class ScatterPlot {
 
     // Compute scale of opacity
     let oScale = d3.scaleLinear()
-                    .domain([0, d3.max(self.data, game => {
+                    .domain([0, d3.max(self.data, function(game) {
                       return game.Global_Sales;
                     })])
                     .range([0, 1])
                     .clamp(true);
-
-    /*var zoomBeh = d3.behavior.zoom()
-      .x(xScale)
-      .y(yScale)
-      .scaleExtent([0, 500])
-      .on("zoom", zoom);*/
 
     // -------------------------------------------------------------------
     // Set up the axis
@@ -200,15 +196,28 @@ export default class ScatterPlot {
       .text(self.y_name)
       .style("fill", "black");
 
-    // -------------------------------------------------------------------
-    //  Create the circles
-    // -------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    //    Create the circles
+    // -------------------------------------------------------------------------
 
     // Create a circle for each game
     // Each game is identified uniquely with its NAME
     var circles = self.svg.selectAll("circle").data(self.data, function(d) {
       return d.Name;
     });
+
+    circles.on("mouseover", function(game) {
+              self.onMouseOverEventHandler(this, self, game, tooltip);
+            })
+            .on("mousemove", function() {
+              self.setTooltipPosition(self, tooltip);
+            })
+            .on("mouseout", function() {
+              self.onMouseOutEventHandler(this, self, tooltip);
+            })
+            .on("click", function(game) {
+              self.onClickEventHandler(this, self, game, tooltip);
+            });
 
     // Remove old circles when updating
     circles.exit()
@@ -228,16 +237,16 @@ export default class ScatterPlot {
       .append("circle")
       .attr("class", "circle")
       // Position the circles
-      .attr("cx", game => {
+      .attr("cx", function(game) {
         return xScale(game.Global_Sales);
       })
-      .attr("cy", game => {
+      .attr("cy", function(game) {
         return yScale(game.Critic_Score);
       })
       .attr("r", 0)
       // Add a popping transition animation
       .transition()
-      .delay(function(d) {
+      .delay(function(game) {
         return Math.random() * 1000;
       })
       .ease(d3.easeElastic)
@@ -252,6 +261,7 @@ export default class ScatterPlot {
         return (colorsPublishers[game.Publisher] == undefined)? 0.2 : 1;
       });
 
+
     // Set the current circles position
     // Make them move when the data is updating
     circles.transition()
@@ -261,95 +271,31 @@ export default class ScatterPlot {
       .ease(d3.easeElastic)
       .duration(5000)
       .style("opacity", 1)
-      .attr("cx", game => {
+      .attr("cx", function(game) {
         return xScale(game.Global_Sales);
       })
-      .attr("cy", game => {
+      .attr("cy", function(game) {
         return yScale(game.Critic_Score);
       });
 
-    // Event handler when the mouse is over a circle
+    // -------------------------------------------------------------------------
+    //    Mouse's events
+    // -------------------------------------------------------------------------
+
     circles.on("mouseover", function(game) {
-        if (!d3.select(this).classed("selected")) {
-          // Make the circle swell when the mouse is on it
-          d3.select(this)
-            .transition()
-            .duration(500)
-            .attr("r", 2 * self.radius)
-            .style("cursor", "pointer");
+              self.onMouseOverEventHandler(this, self, game, tooltip);
+            })
+            .on("mousemove", function() {
+              self.setTooltipPosition(self, tooltip);
+            })
+            .on("mouseout", function() {
+              self.onMouseOutEventHandler(this, self, tooltip);
+            })
+            .on("click", function(game) {
+              self.onClickEventHandler(this, self, game, tooltip);
+            });
 
-          // Set tooltip transition
-          tooltip.transition()
-                  .duration(400)
-                  .style("opacity", 0.7)
-                  .style("width", "100px");
-
-          // Set tooltip's text
-          tooltip.html(game.Name)
-            .style("left", (d3.event.pageX - self.padding) + "px")
-            .style("top", (d3.event.pageY - self.padding) + "px");
-
-          // Set tooltip's properties
-          tooltip.style("width", "100px");
-        }
-      })
-      // Event handler when the mouse is moving on a circle
-      .on("mousemove", function() {
-          tooltip.style("left", (d3.event.pageX - self.padding) + "px")
-                 .style("top", (d3.event.pageY - self.padding) + "px")
-          })
-      // Event handler when the mouse leaves the point
-      .on("mouseout", function() {
-        if (!d3.select(this).classed("selected")) {
-          d3.select(this)
-            .transition()
-            .duration(700)
-            .attr("r", self.radius);
-
-          tooltip.transition()
-            .duration(400)
-            .style("opacity", 0.0)
-            .style("width", "40px");
-
-          tooltip.style("height", "auto");
-        }
-      })
-      // On Click, we want to add data to the array and chart
-      .on("click", function(game) {
-        // Find previously selected, unselect
-        d3.select(".selected")
-          .transition()
-          .duration(400)
-          .attr("r", self.radius);
-        d3.select(".selected").classed("selected", false);
-
-        // Select current item
-        d3.select(this).classed("selected", true);
-
-        d3.select(this).transition()
-                       .duration(700)
-                       .attr("r", 2 * self.radius)
-                       .style("cursor", "pointer");
-
-        // Display further informations about that game
-        tooltip.html(game.Name.bold().italics() + "<br/>" +
-          "<br/><div id=\"game_info\">Year of Release: " + game.Year_of_Release + "<br/>" +
-          "Genre: " + game.Genre + "<br/>" +
-          "Publisher: " + game.Publisher + "<br/>" +
-          "Global Sales: " + game.Global_Sales + "<br/>" +
-          "Critic Score: " + game.Critic_Score + "</div>");
-
-        d3.select("#game_info").style("text-align", "left")
-                               .style("padding-left", "17px");
-
-        tooltip.transition()
-               .duration(400)
-               .style("opacity", 1)
-               .style("width", "200px")
-               .style("height", "auto");
-
-      });
-
+      // Publishers Button's events
       publishersButton.on("mouseover", function() {
         d3.select(this).style("cursor", "pointer");
       })
@@ -367,7 +313,7 @@ export default class ScatterPlot {
         // Create one circle per Publisher
         meanCircles.enter()
         .append("circle")
-        .attr("cx", publisher => {
+        .attr("cx", function(publisher) {
           return xScale(publisher[1]);
         })
         .attr("cy", function(publisher) {
@@ -401,6 +347,95 @@ export default class ScatterPlot {
       })
       .on("mouseout", function() {
       });
+  }
+
+  // ---------------------------------------------------------------------------
+  //    Helpers Functions
+  // ---------------------------------------------------------------------------
+
+  // Event handler when we click on a circle corresponding to a game
+  onClickEventHandler(context, self, game, tooltip) {
+    // Find previously selected, unselect
+    d3.select(".selected")
+      .transition()
+      .duration(400)
+      .attr("r", self.radius);
+    d3.select(".selected").classed("selected", false);
+
+    // Select current item
+    d3.select(context).classed("selected", true);
+
+    d3.select(context).transition()
+                   .duration(700)
+                   .attr("r", 2 * self.radius)
+                   .style("cursor", "pointer");
+
+    // Display further informations about that game
+    tooltip.html(game.Name.bold().italics() + "<br/>" +
+      "<br/><div id=\"game_info\">Year of Release: " + game.Year_of_Release + "<br/>" +
+      "Genre: " + game.Genre + "<br/>" +
+      "Publisher: " + game.Publisher + "<br/>" +
+      "Global Sales: " + game.Global_Sales + "<br/>" +
+      "Critic Score: " + game.Critic_Score + "</div>");
+    self.setTooltipPosition(self, tooltip);
+
+    d3.select("#game_info").style("text-align", "left")
+                           .style("padding-left", "17px");
+
+    tooltip.transition()
+           .duration(400)
+           .style("opacity", 1)
+           .style("width", "200px")
+           .style("height", "auto");
+
+  }
+
+  // Event Handler when we pass the mouse over a circle
+  onMouseOverEventHandler(context, self, game, tooltip) {
+    if (!d3.select(context).classed("selected")) {
+      // Make the circle swell when the mouse is on it
+      d3.select(context)
+        .transition()
+        .duration(500)
+        .attr("r", 2 * self.radius)
+        .style("cursor", "pointer");
+
+      // Set tooltip transition
+      tooltip.transition()
+              .duration(400)
+              .style("opacity", 0.7)
+              .style("width", "100px");
+
+      // Set tooltip's text
+      tooltip.html(game.Name);
+      self.setTooltipPosition(self, tooltip);
+
+      // Set tooltip's properties
+      tooltip.style("width", "100px");
+    }
+  }
+
+  // Event Handler when the mouse leaves the area of a circle
+  onMouseOutEventHandler(context, self, tooltip) {
+    if (!d3.select(context).classed("selected")) {
+      d3.select(context)
+        .transition()
+        .duration(700)
+        .attr("r", self.radius);
+
+      tooltip.transition()
+        .duration(400)
+        .style("opacity", 0.0)
+        .style("width", "40px");
+
+      tooltip.style("height", "auto");
+    }
+  }
+
+  // Small helper function to set tooltip's position
+  setTooltipPosition(self, tooltip) {
+    tooltip.style("left", (d3.event.pageX - self.padding) + "px")
+           .style("top", (d3.event.pageY - self.padding) + "px");
   }
 
   // Compute the average score and sales by Publisher
