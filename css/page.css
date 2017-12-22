@@ -208,7 +208,7 @@ a:hover {
   }
 
   #timeBrush_container {
-    width: calc(100% - 300px);
+    width: calc(100%);
   }
 
   #consoleBar_container {
