@@ -15,8 +15,8 @@ import DataManager from "./modules/DataManager/DataManager.js";
 import LoadingScreen from "./modules/LoadingScreen/LoadingScreen.js";
 
 // Initialize Loading Screen
-//let loadingScreen = new LoadingScreen(); // TODO uncomment
-//loadingScreen.setProgress(0.0); // TODO uncomment
+let loadingScreen = new LoadingScreen(); // TODO uncomment
+loadingScreen.setProgress(0.0); // TODO uncomment
 
 // Load CSV Data
 let data = [];

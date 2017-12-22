@@ -1,0 +1,252 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Video Games Sales</title>
+  <!-- Old legacy loading because c3 dosen't support d3 v4-->
+  <script src="./legacy_script/d3.v3.min.js" charset="utf-8"></script>
+  <script src="./legacy_script/c3.min.js"></script>
+  <script src="./d3tip.js"></script>
+  <link href="./css/c3.min.css" rel="stylesheet">
+  <!-- See doc at http://flexboxgrid.com/ -->
+  <link rel="stylesheet" href="css/flexboxgrid.min.css" type="text/css">
+  <!-- Our CSS -->
+  <link rel="stylesheet" type="text/css" href="./css/page.css">
+  <link rel="stylesheet" type="text/css" href="./css/menu.css">
+  <link rel="stylesheet" type="text/css" href="./css/banner.css">
+  <link rel="stylesheet" type="text/css" href="./css/regionSelector.css">
+  <link rel="stylesheet" type="text/css" href="./css/stackedAreaChart.css">
+  <link rel="stylesheet" type="text/css" href="./css/stackedBarChart.css">
+  <link rel="stylesheet" type="text/css" href="./css/barChart.css">
+  <link rel="stylesheet" type="text/css" href="./css/scatterPlot.css">
+  <link rel="stylesheet" type="text/css" href="./css/timeBrush.css">
+  <link rel="stylesheet" type="text/css" href="./css/genreBar.css">
+  <link rel="stylesheet" type="text/css" href="./css/genreBarButtons.css">
+  <link rel="stylesheet" type="text/css" href="./css/brandBarChart.css">
+  <link rel="stylesheet" type="text/css" href="./css/loadingScreen.css">
+  <script type="text/javascript" src="bundle.js" defer></script>
+</head>
+
+<body>
+  <!-- Loading Screen -->
+  <div id="loading_screen">
+    <div id="loading_text">Loading ...</div>
+    <div id="loading_bar_background"></div>
+    <div id="loading_bar"></div>
+  </div>
+  <!-- Menu -->
+  <div id="menu_container">
+    <div class="menu_item">
+      <a href=index.html#about>About</a>
+    </div>
+    <div class="menu_item">
+      <a href=index.html#consoles-war>The consoles war</a>
+    </div>
+    <div class="menu_item">
+      <a href=index.html#publishers-war>The publishers war</a>
+    </div>
+    <div class="menu_item">
+      <a href=index.html#game-analysis>The game analysis</a>
+    </div>
+    <div class="menu_item">
+      <a href=index.html#conclusion>Conclusion</a>
+    </div>
+  </div>
+  <button id="menu_button"></button>
+  <!-- Visualization -->
+  <div id="main_container">
+    <div id="scrolling_container">
+      <!-- Banner -->
+      <div class="row">
+        <div id="banner_container" class="col-xs"></div>
+      </div>
+      <!-- About -->
+      <div class="row">
+        <div class="col-xs">
+          <section id="about">
+            <h1>About</h1></section>
+        </div>
+      </div>
+      <!-- Console War -->
+      <div class="row">
+        <div class="col-xs">
+          <section id="consoles-war">
+            <h1>The consoles war</h1></section>
+        </div>
+      </div>
+      <div class="row row_padded">
+        <div class="col-xs-12
+                col-sm-12
+                col-md-4
+                col-lg-4">
+          <h2>Games releases</h2>
+          <p>A first interesting metric is the amount of games released for each console over the years. We've grouped those by manufacturers :</p>
+          <img class="full_width" src="./img/manufacturers.svg" />
+          <p>Atari was first in the console industry but died quicky (will it <a href="https://en.wikipedia.org/wiki/Ataribox">come back</a> ?). Then arrived Nintendo, Sony and only later Microsoft. We can observe a peak of game release around year 2009,
+            mainly due to the amount of games for mobile consoles such as Nintendo's DS and Sony's PSP but also because of the success of the Wii.</p>
+        </div>
+        <div class="col-xs-12
+                col-sm-12
+                col-md-8
+                col-lg-8">
+          <div id="consoleReleaseYears_container" class="row stackArea_chart"></div>
+        </div>
+      </div>
+      <div class="row row_padded">
+        <div class="col-xs-12
+                col-sm-12
+                col-md-6
+                col-lg-6">
+          <p>This peak is followed by a collapse which is essentially because of the vanishing of those mobile consoles (maybe because of the developement of smartphones games ?) despite the efforts of Nintendo with the release of Nintendo 3DS.</p>
+        </div>
+        <div class="col-xs-12
+                col-sm-12
+                col-md-6
+                col-lg-6">
+          <p>However we can also see that the production of games for the Wii and its sucessor the WiiU became very small. Also there is a general decrease in video games releases for other consoles such as the X360, PS3 or PC. All those together created
+            this collapse in video game releases.</p>
+        </div>
+      </div>
+      <div class="row row_padded">
+        <div class="col-xs-12
+                col-sm-12
+                col-md-8
+                col-lg-8">
+          <div id="console_sales_region_selector" class="row region_selector"></div>
+          <div id="consoleSalesYears_container" class="row stackArea_chart"></div>
+        </div>
+        <div class="col-xs-12
+                col-sm-12
+                col-md-4
+                col-lg-4">
+          <h2>Sales evolution</h2>
+          <p>A second metric we can consider is of course the number of sales. This graph shows how many sales were made by the games released in a given year. We can see that Microsoft Xbox is essentially present only in North America and Europe, while
+            Nintendo dominates the sales in Japan. In other countries it's mainly Sony making most of the sales.</p>
+          <p>The general worldwide trend follows the same evolution as the previous graph, once again this collapse in sales might be explained by the arrival of smartphones games (which are not taken into account in our dataset).</p>
+        </div>
+      </div>
+      <div class="row row_padded">
+        <div class="col-xs-12
+                col-sm-12
+                col-md-4
+                col-lg-4">
+          <h2>Sales per genres</h2>
+          <p>At last, it might be also pertinent to ask ourself which video game genre is the most present on each platform. On this graph you can select the genre you're interested in to get a better idea of which console sells the most this genre.</p>
+        </div>
+        <div class="col-xs-12
+                col-sm-12
+                col-md-4
+                col-lg-4">
+          <p>For instance, most of the <a id="sport_games_text_button" class="interactive_text_chart">sport games</a> were sold on the Wii which is not surprising. Indeed this category has been one of the Wii's main target as Nintendo's launch title <a href="https://en.wikipedia.org/wiki/Wii_Sports">Wii Sports</a>            reminds us. When it comes to <a id="puzzle_games_text_button" class="interactive_text_chart">puzzle games</a> it's Nintendo's DS that made most of the sales, surely because its stylus-driven interface and touchscreen made it ideal for this
+            kind of game. </p>
+        </div>
+        <div class="col-xs-12
+                col-sm-12
+                col-md-4
+                col-lg-4">
+          <p>Concerning <a id="shooter_games_text_button" class="interactive_text_chart">shooter games</a>, it's clearly the Playstations and Xbox that dominate the sales for this genre. And as a last example, in <a id="strategy_games_text_button" class="interactive_text_chart">strategy games</a>            playing require a lot of rapid clicks on many parts of the screen which makes nothing better than a mouse for that. This surely explains why most of strategy games sales are made on PC.</p>
+        </div>
+      </div>
+      <div class="row row_padded">
+        <div class="col-xs">
+          <div id="consoleGenre_container" class="row stackBar_chart"></div>
+        </div>
+      </div>
+      <!-- Publisher War -->
+      <div class="row">
+        <div class="col-xs">
+          <section id="publishers-war">
+            <h1>The publishers war</h1></section>
+        </div>
+      </div>
+      <div class="row row_padded">
+        <div class="col-xs-12
+                col-sm-12
+                col-md-4
+                col-lg-4">
+          <h2>Publishers sales</h2>
+          <p>Here are the top 20 publishers making the most money out of their video games sales. We decided to consider only the most popular of them, in order to make some significant observations.</p>
+          <p>Since the early 1980s, Nintendo keeps a large influence in the gaming industry around the world until now. Fueled by the success of the Wii and the portable Nintendo DS, the company reaches its best Video Games sales rate around 2006 and preserved
+            it until 2008. The games involved in this prosperity are especially the Super Mario Bros and the Wii Sports games.</p>
+          <!-- Maybe mettre un lien vers le Game Analysis ?-->
+          <p>As a matter of fact, the year 2008 was a flourishing period of sales for everybody. Mirror's Edge, Dead Space, Call of Duty, Guitar Hero were for example also part of this success. Each of these most dominant corporations came all with their
+            best sellers at this time.</p>
+          <p>In North America and in Europe, the popularity of the other publishers are quite similar, while in Japan the gamers swear only by japanese publishers. The war seems to be a civil war in there ! With these companies and the leadership of Nintendo,
+            Video gaming in Japan is definitely a major industry.</p>
+        </div>
+        <div class="col-xs-12
+                col-sm-12
+                col-md-8
+                col-lg-8">
+          <div id="publishers_war_region_selector" class="row region_selector"></div>
+          <div id="publisherSalesTop10_container" class="WORLD row bar_chart"></div>
+          <div id="publisherSalesYears_container" class="row stackArea_chart smaller_stackArea_chart smaller_text"></div>
+        </div>
+      </div>
+      <!-- Game Analysis -->
+      <div class="row">
+        <div class="col-xs">
+
+          <section id="game-analysis">
+            <h1>The Game analysis</h1></section>
+        </div>
+      </div>
+      <div class="row row_padded">
+        <div class="col-xs-12
+                col-sm-12
+                col-md-4
+                col-lg-4">
+          <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
+        </div>
+        <div class="col-xs-12
+                col-sm-12
+                col-md-4
+                col-lg-4">
+          <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
+        </div>
+        <div class="col-xs-12
+                col-sm-12
+                col-md-4
+                col-lg-4">
+          <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
+        </div>
+      </div>
+      <div class="row row_padded">
+        <div class="col-xs">
+          <p>Here goes the final Viz</p>
+          <div id="viz_container">
+            <div id="genreBar_and_buttons">
+              <div id="genreBarButtons_container"></div>
+              <div id="genreBar_container"></div>
+            </div>
+            <div id="scatterPlot_and_consoles">
+              <div id="scatterPlot_container"></div>
+              <div id="consoleBar_container">
+                <div id="individual_brands_barChart_container">
+                  <div id="nintendo_barChart_container" class="brandBarChart"></div>
+                  <div id="playstation_barChart_container" class="brandBarChart"></div>
+                  <div id="xbox_barChart_container" class="brandBarChart"></div>
+                  <div id="atari_barChart_container" class="brandBarChart"></div>
+                  <div id="pc_barChart_container" class="brandBarChart"></div>
+                </div>
+              </div>
+            </div>
+            <div id="timeBrush_container" class="scatter_plot"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Conclusion -->
+      <div class="row">
+        <div class="col-xs">
+          <section id="conclusion">
+            <h1>Conclusion</h1></section>
+        </div>
+      </div>
+
+      <!-- ....end of scrolling_container.... -->
+    </div>
+  </div>
+</body>
+
+</html>
