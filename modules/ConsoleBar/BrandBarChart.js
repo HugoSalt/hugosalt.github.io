@@ -1,7 +1,7 @@
 
 export default class BrandBarChart {
 
-  constructor(parent, consoles, container_id, name, data) {
+  constructor(parent, consoles, container_id, name, data, colors) {
     this.container_id = container_id
     this.parent = parent
     this.consoles = consoles
@@ -21,6 +21,8 @@ export default class BrandBarChart {
                  .attr("class", "brand_chart brand_chart_selected")
                  .attr("width", this.svg_width)
                  .attr("height", this.svg_height)
+
+    this.colors = colors
 
     let svg = this.svg
 
@@ -94,6 +96,7 @@ export default class BrandBarChart {
 
   update(newData, scoreBrand, maxBrand, game_count) {
     this.data = newData
+    console.log(newData)
 
     this.height = 12 * this.data.length + 60 - this.margin.top - this.margin.bottom
     this.svg.attr("height", this.height)
@@ -170,6 +173,7 @@ export default class BrandBarChart {
     this.bar_svg.selectAll(".rect_brand_bar")
               .remove()
 
+    let colors = this.colors
     let tooltip = this.tooltip
     this.group.selectAll("bar").data(this.data)
                 .enter()

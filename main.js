@@ -15,14 +15,14 @@ import DataManager from "./modules/DataManager/DataManager.js";
 import LoadingScreen from "./modules/LoadingScreen/LoadingScreen.js";
 
 // Initialize Loading Screen
-//let loadingScreen = new LoadingScreen(); // TODO uncomment
-//loadingScreen.setProgress(0.0); // TODO uncomment
+let loadingScreen = new LoadingScreen();
+loadingScreen.setProgress(0.0);
 
 // Load CSV Data
 let data = [];
 d3.csv("./data/Video_Games_Sales_as_at_22_Dec_2016.csv", (parsed_data) => {
   parsed_data.forEach((line) => data.push(line));
-  //loadingScreen.setProgress(0.2); // TODO uncomment
+  loadingScreen.setProgress(0.2);
   setTimeout(() => initialize(), 550);
 });
 
@@ -30,6 +30,29 @@ d3.csv("./data/Video_Games_Sales_as_at_22_Dec_2016.csv", (parsed_data) => {
 function initialize() {
 
   let dataProcessor = new DataProcessor(data);
+
+  let colorsConsole = {
+    "NES": "#632920",
+    "SNES": "#6e0f01",
+    "N64": "#792215",
+    "GC": "#831e0e",
+    "Wii": "#932513",
+    "WiiU": "#a3200a",
+    "GB": "#b9260d",
+    "DS": "#d02407",
+    "GBA": "#e33316",
+    "3DS": "#f54123",
+    "PS": "#025485",
+    "PS2": "#046195",
+    "PS3": "#036eac",
+    "PS4": "#0b90dd",
+    "PSP": "#0481c9",
+    "2600": "#77007a",
+    "X360": "#047e09",
+    "XOne": "#009506",
+    "XB": "#026705",
+    "PC": "#606060"
+  }
 
   // ---------------------------------------------------------------------------
   // Set up left side menu
@@ -52,28 +75,7 @@ function initialize() {
     let console_release_data = dataProcessor.getConsoleReleaseYears(platformList);
     let typesConsoles = {};
     for (let platform of platformList) typesConsoles[platform] = 'area-spline';
-    let colorsConsole = {
-      "NES": "#632920",
-      "SNES": "#6e0f01",
-      "N64": "#792215",
-      "GC": "#831e0e",
-      "Wii": "#932513",
-      "WiiU": "#a3200a",
-      "GB": "#b9260d",
-      "DS": "#d02407",
-      "GBA": "#e33316",
-      "3DS": "#f54123",
-      "PS": "#025485",
-      "PS2": "#046195",
-      "PS3": "#036eac",
-      "PS4": "#0b90dd",
-      "PSP": "#0481c9",
-      "2600": "#77007a",
-      "X360": "#047e09",
-      "XOne": "#009506",
-      "XB": "#026705",
-      "PC": "#606060"
-    }
+
     let order_stack_consoles = {
       "NES": 1,
       "SNES": 2,
@@ -292,15 +294,14 @@ function initialize() {
 */
   }
 
-  // TODO : uncomment
   // Loading Screen Timing
-  // consoleWarInit();
-  // loadingScreen.setProgress(0.7);
-  // setTimeout(() => {
-  //   publisherWarInit();
-  //   loadingScreen.setProgress(1);
-  //   setTimeout(() => loadingScreen.hide(), 400);
-  // }, 550);
+  consoleWarInit();
+  loadingScreen.setProgress(0.7);
+  setTimeout(() => {
+  publisherWarInit();
+  loadingScreen.setProgress(1);
+  setTimeout(() => loadingScreen.hide(), 400);
+   }, 550);
 
   // ---------------------------------------------------------------------------
   // GAME ANALYSIS
@@ -382,7 +383,7 @@ function initialize() {
   let genreBar = new GenreBar("genreBar_container", colorsGameType)
   let scatterPlot = new ScatterPlot("scatterPlot_container", "Number of Sales", "Critics Score");
 
-  let consoleBar = new ConsoleBar()
+  let consoleBar = new ConsoleBar(colorsConsole)
 
   let platformList = ["2600", "NES", "SNES", "N64", "GC", "Wii", "WiiU", "GB", "DS", "GBA", "3DS", "PS", "PS2", "PS3", "PS4", "PSP", "X360", "XOne", "XB", "PC"];
   let dataManager = new DataManager(data,

@@ -1,13 +1,24 @@
 import BrandBarChart from "./BrandBarChart.js"
 
+function pick(obj, keys) {
+    return keys.map(k => k in obj ? {[k]: obj[k]} : {})
+               .reduce((res, o) => Object.assign(res, o), {});
+}
+
 export default class ConsoleBar {
 
-  constructor(container_id, dataManager) {
+  constructor(colorsConsole) {
     this.nintendo = ["NES", "SNES", "N64", "GC", "Wii", "WiiU", "GB", "DS", "GBA", "3DS"]
     this.playstation = ["PS", "PS2", "PS3", "PS4", "PSP"]
     this.xbox = ["X360", "XOne", "XB"]
     this.atari = ["2600"]
     this.pc = ["PC"]
+
+    this.colorsNintendo = pick(colorsConsole, this.nintendo)
+    this.colorsPlaystation = pick(colorsConsole, this.playstation)
+    this.colorsXbox = pick(colorsConsole, this.xbox)
+    this.colorsAtari = pick(colorsConsole, this.atari)
+    this.colorsPC = pick(colorsConsole, this.pc)
 
     // Creation of a dictionary representing the selected consoles
     this.consoles = this.nintendo.concat(this.playstation)
@@ -28,23 +39,28 @@ export default class ConsoleBar {
 
     this.nintendoBarChart = new BrandBarChart(this, this.nintendo, "nintendo_barChart_container",
                                        "Nintendo",
-                                       this.get_brand_distribution(this.nintendo))
+                                       this.get_brand_distribution(this.nintendo),
+                                       this.colorsNintendo)
 
     this.playstationBarChart = new BrandBarChart(this, this.playstation, "playstation_barChart_container",
                                        "Playstation",
-                                       this.get_brand_distribution(this.nintendo))
+                                       this.get_brand_distribution(this.playstation),
+                                       this.colorsPlaystation)
 
     this.xboxBarChart = new BrandBarChart(this, this.xbox, "xbox_barChart_container",
                                        "Xbox",
-                                       this.get_brand_distribution(this.nintendo))
+                                       this.get_brand_distribution(this.xbox),
+                                       this.colorsXbox)
 
     this.atariBarChart = new BrandBarChart(this, this.atari, "atari_barChart_container",
                                        "Atari",
-                                       this.get_brand_distribution(this.nintendo))
+                                       this.get_brand_distribution(this.atari),
+                                       this.colorsAtari)
 
     this.pcBarChart = new BrandBarChart(this, this.pc, "pc_barChart_container",
                                        "PC",
-                                       this.get_brand_distribution(this.nintendo))
+                                       this.get_brand_distribution(this.pc),
+                                       this.colorsPC)
 
     this.tooltip = d3.select("body")
                      .append("div")
