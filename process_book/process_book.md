@@ -36,7 +36,7 @@ In conclusion, for our use case, we have everything we need with with vanilla JS
 
 ## About the code
 
-Concerning the code tried to keep a clean and modulable code. Unfortunately we couldn't use the WebComponents standard because some of the spec is not yet standardized (disagreement concerning HTML imports while [Custom Elements not yet implemented everywhere](https://caniuse.com/#feat=custom-elementsv1))
+Concerning the code tried to keep a very modulable code. Unfortunately we couldn't use the WebComponents standard because some of the spec is not yet standardized (disagreement concerning HTML imports while [Custom Elements not yet implemented everywhere](https://caniuse.com/#feat=custom-elementsv1))
 
 But still our code is well "componentized", every view has its own ES6 class and it's own css file.
 
@@ -46,7 +46,7 @@ We took inspiration from the "Swiss Style" also known as the [International Typo
 
 ![./inspiration_design.jpg](./inspiration_design.jpg)
 
-We've used fonts that convey this style but that are free (unlike the proprietary fonts such as [Helvetica](https://en.wikipedia.org/wiki/Helvetica) or  Brown Pro)
+We've used fonts that convey this style but that are free (unlike the proprietary fonts such as [Helvetica](https://en.wikipedia.org/wiki/Helvetica) or Brown Pro)
 
 In terms of color, we've picked some from [this site](http://swisscolors.net/) and we exposed them in [CSS Variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables) to remain coherent through the whole visualization.
 
@@ -58,7 +58,7 @@ We decided that the general layout for our visualization would be the following 
 
 ![./mockup.jpg](./mockup.jpg)
 
-This allow the user to follow our story by just scrolling a single page, yet still having the left menu for quick access to any particular section. Furthermore this kind of navigation is adapted to all form factors (tablets / desktops).
+This allow the user to follow our story by just scrolling a single page, yet still having the left menu for quick access to any particular section.
 
 Also we will use [FlexBox](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Using_CSS_flexible_boxes) to structure our page in a responsive way.
 
@@ -89,16 +89,16 @@ The original data set comes from [here](https://www.kaggle.com/gregorut/videogam
 
 # Exploring the data
 
-Looking at the features, three main topic came to our mind :
+Looking at the features, three main topics came to our mind :
 - Consoles War
-- Publisher War
+- Publishers War
 - General games analysis
 
 For each topic we considered all pairs of features and kept only those which seemed to answer relevant questions :
 
 ![./feature_pairs.jpg](./feature_pairs.jpg)
 
-Now we will explore some ideas of visualization for each topic and see which questions they might answer. We will not necessarily implement those exactly but this is a first exploration of which insights this dataset can provide.
+Now we will explore some ideas of visualization for each topic and see which questions they might answer. We will not necessarily implement those exactly, but this is a first exploration of which insights this dataset can provide.
 
 ## Consoles war
 
@@ -130,11 +130,11 @@ Question this answers : **What is the evolution of the quality of publishers' ga
 
 Same as above but with sales on the y-axis.
 
-Question this answers : **What is the evolution of publishers popularity ?**
+Question this answers : **What is the evolution of publishers' popularity ?**
 
 ### Repartition of Publishers sales per Platform (Publisher + Platform + Sales)
 
-Here again we could have used the array representation like mentioned before but as we said before we didn't find it intuitive. We also considered pie chart and also bar chart as before :
+Here again we could have used the array representation like mentioned before but as we said before we find it less intuitive. We also considered pie chart and also bar chart as before :
 
 ![./publisher_war_publisher_platform_sales.jpg](./publisher_war_publisher_platform_sales.jpg)
 
@@ -156,13 +156,13 @@ Question this answers : **Where publishers are the most popular ?**
 
 ### Console portage quality (consistency) (Publisher + Platform + Sales)
 
-We also imagined comparing the critics score of games that were published on multiple platform. As this is the same game but on different console, a big variation in the critics would indicate either :
+We also imagined comparing the critics score of games that were published on multiple platforms. As this is the same game but on different consoles, a big variation in the critics would indicate either :
   - The players of one particular console are harsher in their critics than players of other console
   - The publisher did a bad job at porting the game to the other console.
 
 Of course the second option is more likely and we take the assumption that critics on different platform are equally harsh.
 
-The metric would be the variance, lower variance mean more consistency and quality in the different console ports. Higher variance mean a bad job at adapting games to another console.
+The metric would be the variance, lower variance means more consistency and quality in the different console ports. Higher variance means a bad job at adapting games to another console.
 
 ![./publisher_war_console_port.jpg](./publisher_war_console_port.jpg)
 
@@ -172,7 +172,7 @@ Question this answers : **Which publishers are the best at porting their games o
 
 ### From unknown masterpieces to popular flops (Critics + Sales + Publisher + Year)
 
-We can confront Critics vs Sales to discover which games are popular yet poorly scored, or on the contrary, the less popular games that are actually very good :
+We can confront Critics vs Sales to discover which games are popular yet poorly scored, or on the contrary, the less popular games that are actually got a very good critic :
 
 ![./game_analysis_dot_graph.jpg](./game_analysis_dot_graph.jpg)
 
@@ -192,11 +192,11 @@ Question this answers : **What have been the trends for the different video game
 
 As you may have notice, we chose to ignore some data. It's not because it would not be interesting to visualize them, but because we thought they were less relevant to the topics we wanted to explore :
   - we didn't use Ratings (E, E10+, M, ...)
-  - we didn't use Developer but only Publisher. It would have been interesting to confront the two (Developers might get bought or work for other publishers) but wanted to remain general and only analyse publishers.
+  - we didn't use Developer but only Publisher. It would have been interesting to confront the two (developers might get bought or work for other publishers) but wanted to remain general and only analyze publishers.
   - we didn't confront Critic Score vs. Critic Count or User Score vs. User Count. This would be more of a social study of the density of review in function of the review score ("For eg : Are people hating a game more likely to go on Metacritic and write a review than those loving the game ?")
 
 Another question we encountered was : should we consider the sales or the number of game released ?
-For example to reflect the popularity of a console over the years, should we represent the number of sales of games on that console or the number game released for that console ?
+For example to reflect the popularity of a console, should we represent the number of sales of games on that console or the number game released for that console ?
 
 # Along the progress
 
@@ -208,7 +208,7 @@ The `c3` library doesn't support the modern `d3` V4 but only `d3` V3. So we had 
 
 Also we had a lot of problems with this library and we lost a lot of time because of it : limited documentation and cross browser / OS incoherence (on Chrome + Mac some graphs don't appear while they do on Chrome + Windows and Chrome + Linux)).
 
-_We spent hours and hours fighting against this library_. If we had to do it again we'd use Plotly or other any other more established and maintained library.
+_We spent hours and hours fighting against this library_. If we had to do it again we'd use Plotly or any other more established and maintained library.
 
 ### Data weirdness
 
@@ -224,12 +224,12 @@ As a first graph, using sum of sales, we obtained :
 
 - Sum of sales goes down at the end (year 2016) maybe because games released this year had less time to get sold than older games. Maybe we should switch to number of released game per year instead of sales ?
 
-- Too many lines could be clearer. We could do the following :
+- Too many lines, it could be clearer. We could do the following :
   - Remove console that make almost no sales, keep only the most important ones
   - Use a stacked chart ?
   - Maybe we could put similar color for console of the same manufacturer ? For eg [PS, PS2, PS3, etc..] for Sony, [Xbox, XboxOne, ...] for Microsoft, etc... We don't have data for this so this would require us to look on Internet for each console who is the manufacturer but doable.
 
-We did all of the above and obtained a much clearer chart :
+We implemented all of the above and obtained a much clearer chart :
 
 ![./popularity_console_final_graph.png](./popularity_console_final_graph.png)
 
@@ -241,7 +241,7 @@ For the sales per genre we implemented the stacked bars as we planned, but we ad
 
 ## Publisher war report
 
-We ended going with this representation :
+We ended up going with this representation :
 
 ![./publisher_war_graphs.png](./publisher_war_graphs.png)
 
@@ -252,8 +252,12 @@ every component would be tied to one another through the data :
 
 ![./final_plot.png](./final_plot.png)
 
-Selecting categories or time brushing would update all the components (the scatter plot and all the bar charts)
+Selecting any categories or time brushing would update all the components (the scatter plot and all the bar charts).
+
+After more discussion and having to take into account everyone's opinion on what the final visualization would look like, we ended up agreeing on this layout :
+
+![./final_mockup.jpg](./final_mockup.jpg)
 
 # Conclusion
 
-  TODO : Complete when we finish the viz. What did we end up implementing and not implementing ? Are we satisfied ? Did we answer well questions we ask ourselves about the data ? etc...
+Our visualization gives a good overview of this dataset and under all its dimensions. This was not an easy dataset to find fancy visualizations for. Indeed we had no (precise enough) geographic information which could have let us implement a map, nor was our data able to be looked at through a graph where we could have used Cytoscape. Yet we still managed to build a varied and relatively complex visualization out of it. The visualization is very interactive, all views can be filtered and played with. Our regrets however are that there were some bugs and polishings we had on our todo list we would have liked to fix, but we didn't had enough time to fix those. But overall we achieved to implement everything as planned on our final mockup.
