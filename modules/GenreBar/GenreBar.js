@@ -66,11 +66,12 @@ export default class GenreBar {
     this.svg.selectAll(".rect_bar")
             .remove()
 
+    let colors = this.colors
     this.svg.selectAll("bar").data(this.data)
                   .enter()
                   .append("rect")
                   .attr('class', 'rect_bar')
-                  .style("fill", "steelblue")
+                  .style("fill", function(d, i){ return colors[d[0]]})
                   .attr("x", function(d) { return x(d[0]); })
                   .attr("width", x.rangeBand())
                   .attr("y", function(d) { return y(d[1]); })

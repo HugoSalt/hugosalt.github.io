@@ -31,6 +31,29 @@ function initialize() {
 
   let dataProcessor = new DataProcessor(data);
 
+  let colorsConsole = {
+    "NES": "#632920",
+    "SNES": "#6e0f01",
+    "N64": "#792215",
+    "GC": "#831e0e",
+    "Wii": "#932513",
+    "WiiU": "#a3200a",
+    "GB": "#b9260d",
+    "DS": "#d02407",
+    "GBA": "#e33316",
+    "3DS": "#f54123",
+    "PS": "#025485",
+    "PS2": "#046195",
+    "PS3": "#036eac",
+    "PS4": "#0b90dd",
+    "PSP": "#0481c9",
+    "2600": "#606060",
+    "X360": "#026705",
+    "XOne": "#047e09",
+    "XB": "#009506",
+    "PC": "#77007a"
+  }
+
   // ---------------------------------------------------------------------------
   // Set up left side menu
   // ---------------------------------------------------------------------------
@@ -52,28 +75,7 @@ function initialize() {
     let console_release_data = dataProcessor.getConsoleReleaseYears(platformList);
     let typesConsoles = {};
     for (let platform of platformList) typesConsoles[platform] = 'area-spline';
-    let colorsConsole = {
-      "NES": "#632920",
-      "SNES": "#6e0f01",
-      "N64": "#792215",
-      "GC": "#831e0e",
-      "Wii": "#932513",
-      "WiiU": "#a3200a",
-      "GB": "#b9260d",
-      "DS": "#d02407",
-      "GBA": "#e33316",
-      "3DS": "#f54123",
-      "PS": "#025485",
-      "PS2": "#046195",
-      "PS3": "#036eac",
-      "PS4": "#0b90dd",
-      "PSP": "#0481c9",
-      "2600": "#77007a",
-      "X360": "#047e09",
-      "XOne": "#009506",
-      "XB": "#026705",
-      "PC": "#606060"
-    }
+
     let order_stack_consoles = {
       "NES": 1,
       "SNES": 2,
@@ -289,7 +291,6 @@ function initialize() {
           break;
       }
     }
-
   }
 
   // ---------------------------------------------------------------------------
@@ -308,8 +309,8 @@ function initialize() {
       "Simulation": "#d02407",
       "Action": "#e33316",
       "Fighting": "#f54123",
-      "Adventure": "#025485",
-      "Strategy": "#046195",
+      "Adventure": "#f56023",
+      "Strategy": "#f57523",
     }
 
     let order_stack_game_type = {
@@ -374,13 +375,15 @@ function initialize() {
     let genreBar = new GenreBar("genreBar_container", colorsGameType)
     let scatterPlot = new ScatterPlot("scatterPlot_container", "Number of Sales", "Critics Score");
 
-    let consoleBar = new ConsoleBar()
+    let consoleBar = new ConsoleBar(colorsConsole)
 
-    let platformList = ["2600", "NES", "SNES", "N64", "GC", "Wii", "WiiU", "GB", "DS", "GBA", "3DS", "PS", "PS2", "PS3", "PS4", "PSP", "X360", "XOne", "XB", "PC"];
-    let dataManager = new DataManager(data, [scatterPlot, genreBar, consoleBar],
-      genreList,
-      platformList,
-      dataProcessor.getPublisherList(), [1980, 2015])
+    let platformList = ["GC", "Wii", "WiiU", "DS", "GBA", "3DS", "PS", "PS2", "PS3", "PS4", "PSP", "X360", "XOne", "XB", "PC"];
+    let dataManager = new DataManager(data,
+                                      [scatterPlot, genreBar, consoleBar],
+                                      genreList,
+                                      platformList,
+                                      dataProcessor.getPublisherList(),
+                                      [1980, 2015])
 
     consoleBar.setDataManager(dataManager)
 
@@ -389,7 +392,7 @@ function initialize() {
       dataManager)
 
     let timeBrush = new TimeBrush("timeBrush_container", [1980, 2015], dataManager);
-    dataManager.setPlatform(dataProcessor.getConsoleList())
+    //dataManager.setPlatform(dataProcessor.getConsoleList())
   }
 
   // Loading Screen Timing

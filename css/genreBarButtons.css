@@ -1,66 +1,68 @@
+
+
 .button_not_selected rect {
-  fill: #707070;
-  stroke: #999faa;
+  fill: #d9dfe0;
+  stroke: #707080;
   stroke-width: 2px;
   cursor: pointer;
 }
 
 .button_not_selected.button_hovered rect {
-  fill: #909090;
-  stroke: #999faa;
+  fill: #e9eff0;
+  stroke: #707080;
   stroke-width: 2px;
   cursor: pointer;
 }
 
 .button_selected rect {
-  fill: #202020;
-  stroke: #999faa;
+  fill: #a0a0a7;
+  stroke: #707080;
   stroke-width: 2px;
   cursor: pointer;
 }
 
 .button_selected.button_hovered rect {
-  fill: #404040;
-  stroke: #999faa;
+  fill: #b0b0a7;
+  stroke: #707080;
   stroke-width: 2px;
   cursor: pointer;
 }
 
 .button_not_selected text {
-  fill: white;
+  fill: #111;
   font-size: 16px;
   cursor: pointer;
 }
 
 .button_selected text {
-  fill: white;
+  fill: #111;
   font-size: 16px;
   cursor: pointer;
 }
 
 .button_all_none rect{
-  fill: #666;
-  stroke: #BBB;
+  fill: #d9dfe0;
+  stroke: #707080;
   stroke-width: 2px;
   cursor: pointer;
 }
 
 .button_all_none_selected rect{
-  fill: #222;
-  stroke: #BBB;
+  fill: #b0b0a7;
+  stroke: #707080;
   stroke-width: 2px;
   cursor: pointer;
 }
 
 .button_all_none_hovered rect{
-  fill: #888;
-  stroke: #BBB;
+  fill: #e9eff0;
+  stroke: #707080;
   stroke-width: 2px;
   cursor: pointer;
 }
 
 .button_all_none_text{
-  fill: white;
+  fill: #111;
   font-size: 16px;
   cursor: pointer;
 }

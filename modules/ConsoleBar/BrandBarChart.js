@@ -1,7 +1,7 @@
 
 export default class BrandBarChart {
 
-  constructor(parent, consoles, container_id, name, data) {
+  constructor(parent, consoles, container_id, name, data, colors) {
     this.container_id = container_id
     this.parent = parent
     this.consoles = consoles
@@ -21,6 +21,8 @@ export default class BrandBarChart {
                  .attr("class", "brand_chart brand_chart_selected")
                  .attr("width", this.svg_width)
                  .attr("height", this.svg_height)
+
+    this.colors = colors
 
     let svg = this.svg
 
@@ -170,12 +172,14 @@ export default class BrandBarChart {
     this.bar_svg.selectAll(".rect_brand_bar")
               .remove()
 
+    let colors = this.colors
     let tooltip = this.tooltip
     this.group.selectAll("bar").data(this.data)
                 .enter()
                 .append("rect")
                 .attr('class', 'rect_bar')
-                .style("fill", "steelblue")
+                .style("fill", function(d, i) {
+                  return colors[d[0]]; })
                 .attr("x", 0)
                 .attr("height", 10)
                 .attr("y", function(d) { return y(d[0]) +y.rangeBand()/2 - 5; })
@@ -203,7 +207,8 @@ export default class BrandBarChart {
     if (!isNaN(bar_width)) {
       this.bar_svg.append("rect")
                   .attr('class', 'rect_brand_bar')
-                  .style("fill", "steelblue")
+                  .style("fill", function(d, i) {
+                    return Object.values(colors)[0]; })
                   .attr("x", 0)
                   .attr("height", 60)
                   .attr("y", svg_height/2-30)

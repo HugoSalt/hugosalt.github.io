@@ -121,7 +121,6 @@ export default class ScatterPlot {
 
       name_length = publisher.length;
 
-      console.log(name_length);
       if(name_length <= 10) {
         padding = 100;
       } else if(name_length > 10 && name_length < 20) {
