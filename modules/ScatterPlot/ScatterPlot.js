@@ -191,7 +191,7 @@ export default class ScatterPlot {
                       return game.Global_Sales;
                     }) : 0])
                     .range([self.padding.left, self.width])
-                    .nice();
+                    .nice()
 
     // Compute scale of y
     let yScale = d3.scaleLinear()
@@ -231,7 +231,8 @@ export default class ScatterPlot {
     // -------------------------------------------------------------------------
 
     self.xAxis = d3.axisBottom(xScale)
-                 .ticks(self.nbXticks);
+                 .ticks(self.nbXticks)
+                 .tickFormat(d3.format(".2f"));
     self.yAxis = d3.axisLeft(yScale)
                 .ticks(self.nbYticks);
 
