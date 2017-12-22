@@ -207,7 +207,8 @@ export default class BrandBarChart {
     if (!isNaN(bar_width)) {
       this.bar_svg.append("rect")
                   .attr('class', 'rect_brand_bar')
-                  .style("fill", "steelblue")
+                  .style("fill", function(d, i) {
+                    return Object.values(colors)[0]; })
                   .attr("x", 0)
                   .attr("height", 60)
                   .attr("y", svg_height/2-30)

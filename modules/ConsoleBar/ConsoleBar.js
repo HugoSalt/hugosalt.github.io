@@ -8,22 +8,19 @@ function pick(obj, keys) {
 export default class ConsoleBar {
 
   constructor(colorsConsole) {
-    this.nintendo = ["NES", "SNES", "N64", "GC", "Wii", "WiiU", "GB", "DS", "GBA", "3DS"]
+    this.nintendo = ["GC", "Wii", "WiiU", "DS", "GBA", "3DS"]
     this.playstation = ["PS", "PS2", "PS3", "PS4", "PSP"]
     this.xbox = ["X360", "XOne", "XB"]
-    this.atari = ["2600"]
     this.pc = ["PC"]
 
     this.colorsNintendo = pick(colorsConsole, this.nintendo)
     this.colorsPlaystation = pick(colorsConsole, this.playstation)
     this.colorsXbox = pick(colorsConsole, this.xbox)
-    this.colorsAtari = pick(colorsConsole, this.atari)
     this.colorsPC = pick(colorsConsole, this.pc)
 
     // Creation of a dictionary representing the selected consoles
     this.consoles = this.nintendo.concat(this.playstation)
                             .concat(this.xbox)
-                            .concat(this.atari)
                             .concat(this.pc)
     this.consoles_selected = {}
     for (let e of this.consoles) {
@@ -51,11 +48,6 @@ export default class ConsoleBar {
                                        "Xbox",
                                        this.get_brand_distribution(this.xbox),
                                        this.colorsXbox)
-
-    this.atariBarChart = new BrandBarChart(this, this.atari, "atari_barChart_container",
-                                       "Atari",
-                                       this.get_brand_distribution(this.atari),
-                                       this.colorsAtari)
 
     this.pcBarChart = new BrandBarChart(this, this.pc, "pc_barChart_container",
                                        "PC",
@@ -86,12 +78,8 @@ export default class ConsoleBar {
                                     this.sum_brand_distribution[2][1],
                                     max_brand,
                                     game_count)
-    this.atariBarChart.update(this.get_brand_distribution(this.atari),
-                                    this.sum_brand_distribution[3][1],
-                                    max_brand,
-                                    game_count)
     this.pcBarChart.update(this.get_brand_distribution(this.pc),
-                                    this.sum_brand_distribution[4][1],
+                                    this.sum_brand_distribution[3][1],
                                     max_brand,
                                     game_count)
   }
@@ -102,13 +90,11 @@ export default class ConsoleBar {
   computeConsoleDistribution(newData) {
     let nintendo = 0
     let playstation = 0
-    let atari = 0
     let xbox = 0
     let pc = 0
 
     let keys = this.nintendo.concat(this.playstation)
                             .concat(this.xbox)
-                            .concat(this.atari)
                             .concat(this.pc)
 
     let distribution_dict = {}
@@ -128,13 +114,9 @@ export default class ConsoleBar {
     }
 
     for (let e of distribution) {
-      if (e[0] == "NES" ||
-          e[0] == "SNES" ||
-          e[0] == "N64" ||
-          e[0] == "GC" ||
+      if (e[0] == "GC" ||
           e[0] == "Wii" ||
           e[0] == "WiiU" ||
-          e[0] == "GB" ||
           e[0] == "DS" ||
           e[0] == "GBA" ||
           e[0] == "3DS") {
@@ -146,9 +128,6 @@ export default class ConsoleBar {
                e[0] == "PS4" ||
                e[0] == "PSP") {
         playstation += e[1]
-      }
-      else if (e[0] == "2600"){
-        atari += e[1]
       }
       else if (e[0] == "X360" ||
                e[0] == "XOne" ||
@@ -164,7 +143,6 @@ export default class ConsoleBar {
     this.sum_brand_distribution = [["Nintendo", nintendo],
                                    ["Playstation", playstation],
                                    ["XBox", xbox],
-                                   ["Atari", atari],
                                    ["PC", pc]]
   }
 
@@ -187,9 +165,6 @@ export default class ConsoleBar {
         break;
       case "xbox_barChart_container":
         brand = this.xbox
-        break;
-      case "atari_barChart_container":
-        brand = this.atari
         break;
       case "pc_barChart_container":
         brand = this.pc

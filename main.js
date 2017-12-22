@@ -47,11 +47,11 @@ function initialize() {
     "PS3": "#036eac",
     "PS4": "#0b90dd",
     "PSP": "#0481c9",
-    "2600": "#77007a",
-    "X360": "#047e09",
-    "XOne": "#009506",
-    "XB": "#026705",
-    "PC": "#606060"
+    "2600": "#606060",
+    "X360": "#026705",
+    "XOne": "#047e09",
+    "XB": "#009506",
+    "PC": "#77007a"
   }
 
   // ---------------------------------------------------------------------------
@@ -385,7 +385,7 @@ function initialize() {
 
   let consoleBar = new ConsoleBar(colorsConsole)
 
-  let platformList = ["2600", "NES", "SNES", "N64", "GC", "Wii", "WiiU", "GB", "DS", "GBA", "3DS", "PS", "PS2", "PS3", "PS4", "PSP", "X360", "XOne", "XB", "PC"];
+  let platformList = ["GC", "Wii", "WiiU", "DS", "GBA", "3DS", "PS", "PS2", "PS3", "PS4", "PSP", "X360", "XOne", "XB", "PC"];
   let dataManager = new DataManager(data,
                                     [scatterPlot, genreBar, consoleBar],
                                     genreList,
