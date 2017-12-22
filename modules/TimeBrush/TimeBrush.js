@@ -12,7 +12,7 @@ export default class TimeBrush {
     // Set up parameters of our Time Brush
     // ---------------------------------------------------------------------------
 
-    this.margin = {top: 0, right: 60, bottom: 40, left: 60};
+    this.margin = {top: 10, right: 20, bottom: 40, left: 20};
     this.width = 1000 - this.margin.left - this.margin.right;
     this.height = 120 - this.margin.top - this.margin.bottom;
 

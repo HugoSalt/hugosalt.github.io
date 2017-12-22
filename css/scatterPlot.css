@@ -1,6 +1,6 @@
 #scatterPlot_container {
-  width: 1000px;
-  height: 700px;
+  /*width: 932px;*/
+  height: 750px;
   position: relative;
 }
 
@@ -14,20 +14,6 @@
   stroke: #000;
   shape-rendering: crispEdges;
 }
-
-/*.tooltip {
-  position: absolute;
-
-
-  min-width: 100px; max-width: 150px;
-  min-height: 30px; max-height: 300px;
-  height: auto;
-
-  border: 1px solid steelblue;
-  border-radius: 8px;
-  opacity: 0;
-  pointer-events: none;
-}*/
 
 .tooltip {
   position: absolute;
@@ -50,7 +36,4 @@
   border-radius: 8px;
   text-align: center;
   padding: 5px;
-}
-
-.circle {
 }
