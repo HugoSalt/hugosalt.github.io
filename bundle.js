@@ -38,6 +38,268 @@ function ascendingComparator(f) {
 }
 
 var ascendingBisect = bisector(ascending);
+var bisectRight = ascendingBisect.right;
+
+var e10 = Math.sqrt(50);
+var e5 = Math.sqrt(10);
+var e2 = Math.sqrt(2);
+
+var ticks = function(start, stop, count) {
+  var reverse,
+      i = -1,
+      n,
+      ticks,
+      step;
+
+  stop = +stop, start = +start, count = +count;
+  if (start === stop && count > 0) return [start];
+  if (reverse = stop < start) n = start, start = stop, stop = n;
+  if ((step = tickIncrement(start, stop, count)) === 0 || !isFinite(step)) return [];
+
+  if (step > 0) {
+    start = Math.ceil(start / step);
+    stop = Math.floor(stop / step);
+    ticks = new Array(n = Math.ceil(stop - start + 1));
+    while (++i < n) ticks[i] = (start + i) * step;
+  } else {
+    start = Math.floor(start * step);
+    stop = Math.ceil(stop * step);
+    ticks = new Array(n = Math.ceil(start - stop + 1));
+    while (++i < n) ticks[i] = (start - i) / step;
+  }
+
+  if (reverse) ticks.reverse();
+
+  return ticks;
+};
+
+function tickIncrement(start, stop, count) {
+  var step = (stop - start) / Math.max(0, count),
+      power = Math.floor(Math.log(step) / Math.LN10),
+      error = step / Math.pow(10, power);
+  return power >= 0
+      ? (error >= e10 ? 10 : error >= e5 ? 5 : error >= e2 ? 2 : 1) * Math.pow(10, power)
+      : -Math.pow(10, -power) / (error >= e10 ? 10 : error >= e5 ? 5 : error >= e2 ? 2 : 1);
+}
+
+function tickStep(start, stop, count) {
+  var step0 = Math.abs(stop - start) / Math.max(0, count),
+      step1 = Math.pow(10, Math.floor(Math.log(step0) / Math.LN10)),
+      error = step0 / step1;
+  if (error >= e10) step1 *= 10;
+  else if (error >= e5) step1 *= 5;
+  else if (error >= e2) step1 *= 2;
+  return stop < start ? -step1 : step1;
+}
+
+var max = function(values, valueof) {
+  var n = values.length,
+      i = -1,
+      value,
+      max;
+
+  if (valueof == null) {
+    while (++i < n) { // Find the first comparable value.
+      if ((value = values[i]) != null && value >= value) {
+        max = value;
+        while (++i < n) { // Compare the remaining values.
+          if ((value = values[i]) != null && value > max) {
+            max = value;
+          }
+        }
+      }
+    }
+  }
+
+  else {
+    while (++i < n) { // Find the first comparable value.
+      if ((value = valueof(values[i], i, values)) != null && value >= value) {
+        max = value;
+        while (++i < n) { // Compare the remaining values.
+          if ((value = valueof(values[i], i, values)) != null && value > max) {
+            max = value;
+          }
+        }
+      }
+    }
+  }
+
+  return max;
+};
+
+var slice$1 = Array.prototype.slice;
+
+var identity$1 = function(x) {
+  return x;
+};
+
+var top = 1;
+var right = 2;
+var bottom = 3;
+var left = 4;
+var epsilon = 1e-6;
+
+function translateX(x) {
+  return "translate(" + (x + 0.5) + ",0)";
+}
+
+function translateY(y) {
+  return "translate(0," + (y + 0.5) + ")";
+}
+
+function number$1(scale) {
+  return function(d) {
+    return +scale(d);
+  };
+}
+
+function center(scale) {
+  var offset = Math.max(0, scale.bandwidth() - 1) / 2; // Adjust for 0.5px offset.
+  if (scale.round()) offset = Math.round(offset);
+  return function(d) {
+    return +scale(d) + offset;
+  };
+}
+
+function entering() {
+  return !this.__axis;
+}
+
+function axis(orient, scale) {
+  var tickArguments = [],
+      tickValues = null,
+      tickFormat = null,
+      tickSizeInner = 6,
+      tickSizeOuter = 6,
+      tickPadding = 3,
+      k = orient === top || orient === left ? -1 : 1,
+      x = orient === left || orient === right ? "x" : "y",
+      transform = orient === top || orient === bottom ? translateX : translateY;
+
+  function axis(context) {
+    var values = tickValues == null ? (scale.ticks ? scale.ticks.apply(scale, tickArguments) : scale.domain()) : tickValues,
+        format = tickFormat == null ? (scale.tickFormat ? scale.tickFormat.apply(scale, tickArguments) : identity$1) : tickFormat,
+        spacing = Math.max(tickSizeInner, 0) + tickPadding,
+        range = scale.range(),
+        range0 = +range[0] + 0.5,
+        range1 = +range[range.length - 1] + 0.5,
+        position = (scale.bandwidth ? center : number$1)(scale.copy()),
+        selection = context.selection ? context.selection() : context,
+        path = selection.selectAll(".domain").data([null]),
+        tick = selection.selectAll(".tick").data(values, scale).order(),
+        tickExit = tick.exit(),
+        tickEnter = tick.enter().append("g").attr("class", "tick"),
+        line = tick.select("line"),
+        text = tick.select("text");
+
+    path = path.merge(path.enter().insert("path", ".tick")
+        .attr("class", "domain")
+        .attr("stroke", "#000"));
+
+    tick = tick.merge(tickEnter);
+
+    line = line.merge(tickEnter.append("line")
+        .attr("stroke", "#000")
+        .attr(x + "2", k * tickSizeInner));
+
+    text = text.merge(tickEnter.append("text")
+        .attr("fill", "#000")
+        .attr(x, k * spacing)
+        .attr("dy", orient === top ? "0em" : orient === bottom ? "0.71em" : "0.32em"));
+
+    if (context !== selection) {
+      path = path.transition(context);
+      tick = tick.transition(context);
+      line = line.transition(context);
+      text = text.transition(context);
+
+      tickExit = tickExit.transition(context)
+          .attr("opacity", epsilon)
+          .attr("transform", function(d) { return isFinite(d = position(d)) ? transform(d) : this.getAttribute("transform"); });
+
+      tickEnter
+          .attr("opacity", epsilon)
+          .attr("transform", function(d) { var p = this.parentNode.__axis; return transform(p && isFinite(p = p(d)) ? p : position(d)); });
+    }
+
+    tickExit.remove();
+
+    path
+        .attr("d", orient === left || orient == right
+            ? "M" + k * tickSizeOuter + "," + range0 + "H0.5V" + range1 + "H" + k * tickSizeOuter
+            : "M" + range0 + "," + k * tickSizeOuter + "V0.5H" + range1 + "V" + k * tickSizeOuter);
+
+    tick
+        .attr("opacity", 1)
+        .attr("transform", function(d) { return transform(position(d)); });
+
+    line
+        .attr(x + "2", k * tickSizeInner);
+
+    text
+        .attr(x, k * spacing)
+        .text(format);
+
+    selection.filter(entering)
+        .attr("fill", "none")
+        .attr("font-size", 10)
+        .attr("font-family", "sans-serif")
+        .attr("text-anchor", orient === right ? "start" : orient === left ? "end" : "middle");
+
+    selection
+        .each(function() { this.__axis = position; });
+  }
+
+  axis.scale = function(_) {
+    return arguments.length ? (scale = _, axis) : scale;
+  };
+
+  axis.ticks = function() {
+    return tickArguments = slice$1.call(arguments), axis;
+  };
+
+  axis.tickArguments = function(_) {
+    return arguments.length ? (tickArguments = _ == null ? [] : slice$1.call(_), axis) : tickArguments.slice();
+  };
+
+  axis.tickValues = function(_) {
+    return arguments.length ? (tickValues = _ == null ? null : slice$1.call(_), axis) : tickValues && tickValues.slice();
+  };
+
+  axis.tickFormat = function(_) {
+    return arguments.length ? (tickFormat = _, axis) : tickFormat;
+  };
+
+  axis.tickSize = function(_) {
+    return arguments.length ? (tickSizeInner = tickSizeOuter = +_, axis) : tickSizeInner;
+  };
+
+  axis.tickSizeInner = function(_) {
+    return arguments.length ? (tickSizeInner = +_, axis) : tickSizeInner;
+  };
+
+  axis.tickSizeOuter = function(_) {
+    return arguments.length ? (tickSizeOuter = +_, axis) : tickSizeOuter;
+  };
+
+  axis.tickPadding = function(_) {
+    return arguments.length ? (tickPadding = +_, axis) : tickPadding;
+  };
+
+  return axis;
+}
+
+
+
+
+
+function axisBottom(scale) {
+  return axis(bottom, scale);
+}
+
+function axisLeft(scale) {
+  return axis(left, scale);
+}
 
 var noop = {value: function() {}};
 
@@ -186,7 +448,7 @@ var matcher$1 = matcher;
 
 var filterEvents = {};
 
-
+var event = null;
 
 if (typeof document !== "undefined") {
   var element$1 = document.documentElement;
@@ -207,10 +469,12 @@ function filterContextListener(listener, index, group) {
 
 function contextListener(listener, index, group) {
   return function(event1) {
+    var event0 = event; // Events can be reentrant (e.g., focus).
+    event = event1;
     try {
       listener.call(this, this.__data__, index, group);
     } finally {
-      
+      event = event0;
     }
   };
 }
@@ -277,6 +541,43 @@ var selection_on = function(typename, value, capture) {
   if (capture == null) capture = false;
   for (i = 0; i < n; ++i) this.each(on(typenames[i], value, capture));
   return this;
+};
+
+function customEvent(event1, listener, that, args) {
+  var event0 = event;
+  event1.sourceEvent = event;
+  event = event1;
+  try {
+    return listener.apply(that, args);
+  } finally {
+    event = event0;
+  }
+}
+
+var sourceEvent = function() {
+  var current = event, source;
+  while (source = current.sourceEvent) current = source;
+  return current;
+};
+
+var point = function(node, event) {
+  var svg = node.ownerSVGElement || node;
+
+  if (svg.createSVGPoint) {
+    var point = svg.createSVGPoint();
+    point.x = event.clientX, point.y = event.clientY;
+    point = point.matrixTransform(node.getScreenCTM().inverse());
+    return [point.x, point.y];
+  }
+
+  var rect = node.getBoundingClientRect();
+  return [event.clientX - rect.left - node.clientLeft, event.clientY - rect.top - node.clientTop];
+};
+
+var mouse = function(node) {
+  var event = sourceEvent();
+  if (event.changedTouches) event = event.changedTouches[0];
+  return point(node, event);
 };
 
 function none() {}
@@ -976,6 +1277,55 @@ var select = function(selector) {
       : new Selection([[selector]], root);
 };
 
+var selectAll = function(selector) {
+  return typeof selector === "string"
+      ? new Selection([document.querySelectorAll(selector)], [document.documentElement])
+      : new Selection([selector == null ? [] : selector], root);
+};
+
+var touch = function(node, touches, identifier) {
+  if (arguments.length < 3) identifier = touches, touches = sourceEvent().changedTouches;
+
+  for (var i = 0, n = touches ? touches.length : 0, touch; i < n; ++i) {
+    if ((touch = touches[i]).identifier === identifier) {
+      return point(node, touch);
+    }
+  }
+
+  return null;
+};
+
+var noevent = function() {
+  event.preventDefault();
+  event.stopImmediatePropagation();
+};
+
+var dragDisable = function(view) {
+  var root = view.document.documentElement,
+      selection = select(view).on("dragstart.drag", noevent, true);
+  if ("onselectstart" in root) {
+    selection.on("selectstart.drag", noevent, true);
+  } else {
+    root.__noselect = root.style.MozUserSelect;
+    root.style.MozUserSelect = "none";
+  }
+};
+
+function yesdrag(view, noclick) {
+  var root = view.document.documentElement,
+      selection = select(view).on("dragstart.drag", null);
+  if (noclick) {
+    selection.on("click.drag", noevent, true);
+    setTimeout(function() { selection.on("click.drag", null); }, 0);
+  }
+  if ("onselectstart" in root) {
+    selection.on("selectstart.drag", null);
+  } else {
+    root.style.MozUserSelect = root.__noselect;
+    delete root.__noselect;
+  }
+}
+
 var define = function(constructor, factory, prototype) {
   constructor.prototype = factory.prototype = prototype;
   prototype.constructor = constructor;
@@ -1538,9 +1888,54 @@ var interpolateRgb = (function rgbGamma(y) {
   return rgb$$1;
 })(1);
 
+var array$1 = function(a, b) {
+  var nb = b ? b.length : 0,
+      na = a ? Math.min(nb, a.length) : 0,
+      x = new Array(nb),
+      c = new Array(nb),
+      i;
+
+  for (i = 0; i < na; ++i) x[i] = interpolateValue(a[i], b[i]);
+  for (; i < nb; ++i) c[i] = b[i];
+
+  return function(t) {
+    for (i = 0; i < na; ++i) c[i] = x[i](t);
+    return c;
+  };
+};
+
+var date = function(a, b) {
+  var d = new Date;
+  return a = +a, b -= a, function(t) {
+    return d.setTime(a + b * t), d;
+  };
+};
+
 var reinterpolate = function(a, b) {
   return a = +a, b -= a, function(t) {
     return a + b * t;
+  };
+};
+
+var object = function(a, b) {
+  var i = {},
+      c = {},
+      k;
+
+  if (a === null || typeof a !== "object") a = {};
+  if (b === null || typeof b !== "object") b = {};
+
+  for (k in b) {
+    if (k in a) {
+      i[k] = interpolateValue(a[k], b[k]);
+    } else {
+      c[k] = b[k];
+    }
+  }
+
+  return function(t) {
+    for (k in i) c[k] = i[k](t);
+    return c;
   };
 };
 
@@ -1605,6 +2000,24 @@ var interpolateString = function(a, b) {
           for (var i = 0, o; i < b; ++i) s[(o = q[i]).i] = o.x(t);
           return s.join("");
         });
+};
+
+var interpolateValue = function(a, b) {
+  var t = typeof b, c;
+  return b == null || t === "boolean" ? constant$3(b)
+      : (t === "number" ? reinterpolate
+      : t === "string" ? ((c = color(b)) ? (b = c, interpolateRgb) : interpolateString)
+      : b instanceof color ? interpolateRgb
+      : b instanceof Date ? date
+      : Array.isArray(b) ? array$1
+      : typeof b.valueOf !== "function" && typeof b.toString !== "function" || isNaN(b) ? object
+      : reinterpolate)(a, b);
+};
+
+var interpolateRound = function(a, b) {
+  return a = +a, b -= a, function(t) {
+    return Math.round(a + b * t);
+  };
 };
 
 var degrees = 180 / Math.PI;
@@ -1720,6 +2133,69 @@ var interpolateTransformCss = interpolateTransform(parseCss, "px, ", "px)", "deg
 var interpolateTransformSvg = interpolateTransform(parseSvg, ", ", ")", ")");
 
 var rho = Math.SQRT2;
+var rho2 = 2;
+var rho4 = 4;
+var epsilon2 = 1e-12;
+
+function cosh(x) {
+  return ((x = Math.exp(x)) + 1 / x) / 2;
+}
+
+function sinh(x) {
+  return ((x = Math.exp(x)) - 1 / x) / 2;
+}
+
+function tanh(x) {
+  return ((x = Math.exp(2 * x)) - 1) / (x + 1);
+}
+
+// p0 = [ux0, uy0, w0]
+// p1 = [ux1, uy1, w1]
+var interpolateZoom = function(p0, p1) {
+  var ux0 = p0[0], uy0 = p0[1], w0 = p0[2],
+      ux1 = p1[0], uy1 = p1[1], w1 = p1[2],
+      dx = ux1 - ux0,
+      dy = uy1 - uy0,
+      d2 = dx * dx + dy * dy,
+      i,
+      S;
+
+  // Special case for u0 ≅ u1.
+  if (d2 < epsilon2) {
+    S = Math.log(w1 / w0) / rho;
+    i = function(t) {
+      return [
+        ux0 + t * dx,
+        uy0 + t * dy,
+        w0 * Math.exp(rho * t * S)
+      ];
+    };
+  }
+
+  // General case.
+  else {
+    var d1 = Math.sqrt(d2),
+        b0 = (w1 * w1 - w0 * w0 + rho4 * d2) / (2 * w0 * rho2 * d1),
+        b1 = (w1 * w1 - w0 * w0 - rho4 * d2) / (2 * w1 * rho2 * d1),
+        r0 = Math.log(Math.sqrt(b0 * b0 + 1) - b0),
+        r1 = Math.log(Math.sqrt(b1 * b1 + 1) - b1);
+    S = (r1 - r0) / rho;
+    i = function(t) {
+      var s = t * S,
+          coshr0 = cosh(r0),
+          u = w0 / (rho2 * d1) * (coshr0 * tanh(rho * s + r0) - sinh(r0));
+      return [
+        ux0 + u * dx,
+        uy0 + u * dy,
+        w0 * coshr0 / cosh(rho * s + r0)
+      ];
+    };
+  }
+
+  i.duration = S * 1000;
+
+  return i;
+};
 
 function cubehelix$1(hue$$1) {
   return (function cubehelixGamma(y) {
@@ -2593,6 +3069,23 @@ function cubicInOut(t) {
 var pi = Math.PI;
 
 var tau = 2 * Math.PI;
+var amplitude = 1;
+var period = 0.3;
+
+
+
+var elasticOut = (function custom(a, p) {
+  var s = Math.asin(1 / (a = Math.max(1, a))) * (p /= tau);
+
+  function elasticOut(t) {
+    return 1 - a * Math.pow(2, -10 * (t = +t)) * Math.sin((t + s) / p);
+  }
+
+  elasticOut.amplitude = function(a) { return custom(a, p * tau); };
+  elasticOut.period = function(p) { return custom(a, p); };
+
+  return elasticOut;
+})(amplitude, period);
 
 var defaultTiming = {
   time: null, // Set on use.
@@ -2635,6 +3128,32 @@ var selection_transition = function(name) {
 selection.prototype.interrupt = selection_interrupt;
 selection.prototype.transition = selection_transition;
 
+var constant$4 = function(x) {
+  return function() {
+    return x;
+  };
+};
+
+var BrushEvent = function(target, type, selection) {
+  this.target = target;
+  this.type = type;
+  this.selection = selection;
+};
+
+function nopropagation$1() {
+  event.stopImmediatePropagation();
+}
+
+var noevent$1 = function() {
+  event.preventDefault();
+  event.stopImmediatePropagation();
+};
+
+var MODE_DRAG = {name: "drag"};
+var MODE_SPACE = {name: "space"};
+var MODE_HANDLE = {name: "handle"};
+var MODE_CENTER = {name: "center"};
+
 var X = {
   name: "x",
   handles: ["e", "w"].map(type),
@@ -2656,8 +3175,500 @@ var XY = {
   output: function(xy) { return xy; }
 };
 
+var cursors = {
+  overlay: "crosshair",
+  selection: "move",
+  n: "ns-resize",
+  e: "ew-resize",
+  s: "ns-resize",
+  w: "ew-resize",
+  nw: "nwse-resize",
+  ne: "nesw-resize",
+  se: "nwse-resize",
+  sw: "nesw-resize"
+};
+
+var flipX = {
+  e: "w",
+  w: "e",
+  nw: "ne",
+  ne: "nw",
+  se: "sw",
+  sw: "se"
+};
+
+var flipY = {
+  n: "s",
+  s: "n",
+  nw: "sw",
+  ne: "se",
+  se: "ne",
+  sw: "nw"
+};
+
+var signsX = {
+  overlay: +1,
+  selection: +1,
+  n: null,
+  e: +1,
+  s: null,
+  w: -1,
+  nw: -1,
+  ne: +1,
+  se: +1,
+  sw: -1
+};
+
+var signsY = {
+  overlay: +1,
+  selection: +1,
+  n: -1,
+  e: null,
+  s: +1,
+  w: null,
+  nw: -1,
+  ne: -1,
+  se: +1,
+  sw: +1
+};
+
 function type(t) {
   return {type: t};
+}
+
+// Ignore right-click, since that should open the context menu.
+function defaultFilter() {
+  return !event.button;
+}
+
+function defaultExtent() {
+  var svg = this.ownerSVGElement || this;
+  return [[0, 0], [svg.width.baseVal.value, svg.height.baseVal.value]];
+}
+
+// Like d3.local, but with the name “__brush” rather than auto-generated.
+function local(node) {
+  while (!node.__brush) if (!(node = node.parentNode)) return;
+  return node.__brush;
+}
+
+function empty(extent) {
+  return extent[0][0] === extent[1][0]
+      || extent[0][1] === extent[1][1];
+}
+
+
+
+function brushX() {
+  return brush$1(X);
+}
+
+
+
+function brush$1(dim) {
+  var extent = defaultExtent,
+      filter = defaultFilter,
+      listeners = dispatch(brush, "start", "brush", "end"),
+      handleSize = 6,
+      touchending;
+
+  function brush(group) {
+    var overlay = group
+        .property("__brush", initialize)
+      .selectAll(".overlay")
+      .data([type("overlay")]);
+
+    overlay.enter().append("rect")
+        .attr("class", "overlay")
+        .attr("pointer-events", "all")
+        .attr("cursor", cursors.overlay)
+      .merge(overlay)
+        .each(function() {
+          var extent = local(this).extent;
+          select(this)
+              .attr("x", extent[0][0])
+              .attr("y", extent[0][1])
+              .attr("width", extent[1][0] - extent[0][0])
+              .attr("height", extent[1][1] - extent[0][1]);
+        });
+
+    group.selectAll(".selection")
+      .data([type("selection")])
+      .enter().append("rect")
+        .attr("class", "selection")
+        .attr("cursor", cursors.selection)
+        .attr("fill", "#777")
+        .attr("fill-opacity", 0.3)
+        .attr("stroke", "#fff")
+        .attr("shape-rendering", "crispEdges");
+
+    var handle = group.selectAll(".handle")
+      .data(dim.handles, function(d) { return d.type; });
+
+    handle.exit().remove();
+
+    handle.enter().append("rect")
+        .attr("class", function(d) { return "handle handle--" + d.type; })
+        .attr("cursor", function(d) { return cursors[d.type]; });
+
+    group
+        .each(redraw)
+        .attr("fill", "none")
+        .attr("pointer-events", "all")
+        .style("-webkit-tap-highlight-color", "rgba(0,0,0,0)")
+        .on("mousedown.brush touchstart.brush", started);
+  }
+
+  brush.move = function(group, selection) {
+    if (group.selection) {
+      group
+          .on("start.brush", function() { emitter(this, arguments).beforestart().start(); })
+          .on("interrupt.brush end.brush", function() { emitter(this, arguments).end(); })
+          .tween("brush", function() {
+            var that = this,
+                state = that.__brush,
+                emit = emitter(that, arguments),
+                selection0 = state.selection,
+                selection1 = dim.input(typeof selection === "function" ? selection.apply(this, arguments) : selection, state.extent),
+                i = interpolateValue(selection0, selection1);
+
+            function tween(t) {
+              state.selection = t === 1 && empty(selection1) ? null : i(t);
+              redraw.call(that);
+              emit.brush();
+            }
+
+            return selection0 && selection1 ? tween : tween(1);
+          });
+    } else {
+      group
+          .each(function() {
+            var that = this,
+                args = arguments,
+                state = that.__brush,
+                selection1 = dim.input(typeof selection === "function" ? selection.apply(that, args) : selection, state.extent),
+                emit = emitter(that, args).beforestart();
+
+            interrupt(that);
+            state.selection = selection1 == null || empty(selection1) ? null : selection1;
+            redraw.call(that);
+            emit.start().brush().end();
+          });
+    }
+  };
+
+  function redraw() {
+    var group = select(this),
+        selection = local(this).selection;
+
+    if (selection) {
+      group.selectAll(".selection")
+          .style("display", null)
+          .attr("x", selection[0][0])
+          .attr("y", selection[0][1])
+          .attr("width", selection[1][0] - selection[0][0])
+          .attr("height", selection[1][1] - selection[0][1]);
+
+      group.selectAll(".handle")
+          .style("display", null)
+          .attr("x", function(d) { return d.type[d.type.length - 1] === "e" ? selection[1][0] - handleSize / 2 : selection[0][0] - handleSize / 2; })
+          .attr("y", function(d) { return d.type[0] === "s" ? selection[1][1] - handleSize / 2 : selection[0][1] - handleSize / 2; })
+          .attr("width", function(d) { return d.type === "n" || d.type === "s" ? selection[1][0] - selection[0][0] + handleSize : handleSize; })
+          .attr("height", function(d) { return d.type === "e" || d.type === "w" ? selection[1][1] - selection[0][1] + handleSize : handleSize; });
+    }
+
+    else {
+      group.selectAll(".selection,.handle")
+          .style("display", "none")
+          .attr("x", null)
+          .attr("y", null)
+          .attr("width", null)
+          .attr("height", null);
+    }
+  }
+
+  function emitter(that, args) {
+    return that.__brush.emitter || new Emitter(that, args);
+  }
+
+  function Emitter(that, args) {
+    this.that = that;
+    this.args = args;
+    this.state = that.__brush;
+    this.active = 0;
+  }
+
+  Emitter.prototype = {
+    beforestart: function() {
+      if (++this.active === 1) this.state.emitter = this, this.starting = true;
+      return this;
+    },
+    start: function() {
+      if (this.starting) this.starting = false, this.emit("start");
+      return this;
+    },
+    brush: function() {
+      this.emit("brush");
+      return this;
+    },
+    end: function() {
+      if (--this.active === 0) delete this.state.emitter, this.emit("end");
+      return this;
+    },
+    emit: function(type) {
+      customEvent(new BrushEvent(brush, type, dim.output(this.state.selection)), listeners.apply, listeners, [type, this.that, this.args]);
+    }
+  };
+
+  function started() {
+    if (event.touches) { if (event.changedTouches.length < event.touches.length) return noevent$1(); }
+    else if (touchending) return;
+    if (!filter.apply(this, arguments)) return;
+
+    var that = this,
+        type = event.target.__data__.type,
+        mode = (event.metaKey ? type = "overlay" : type) === "selection" ? MODE_DRAG : (event.altKey ? MODE_CENTER : MODE_HANDLE),
+        signX = dim === Y ? null : signsX[type],
+        signY = dim === X ? null : signsY[type],
+        state = local(that),
+        extent = state.extent,
+        selection = state.selection,
+        W = extent[0][0], w0, w1,
+        N = extent[0][1], n0, n1,
+        E = extent[1][0], e0, e1,
+        S = extent[1][1], s0, s1,
+        dx,
+        dy,
+        moving,
+        shifting = signX && signY && event.shiftKey,
+        lockX,
+        lockY,
+        point0 = mouse(that),
+        point = point0,
+        emit = emitter(that, arguments).beforestart();
+
+    if (type === "overlay") {
+      state.selection = selection = [
+        [w0 = dim === Y ? W : point0[0], n0 = dim === X ? N : point0[1]],
+        [e0 = dim === Y ? E : w0, s0 = dim === X ? S : n0]
+      ];
+    } else {
+      w0 = selection[0][0];
+      n0 = selection[0][1];
+      e0 = selection[1][0];
+      s0 = selection[1][1];
+    }
+
+    w1 = w0;
+    n1 = n0;
+    e1 = e0;
+    s1 = s0;
+
+    var group = select(that)
+        .attr("pointer-events", "none");
+
+    var overlay = group.selectAll(".overlay")
+        .attr("cursor", cursors[type]);
+
+    if (event.touches) {
+      group
+          .on("touchmove.brush", moved, true)
+          .on("touchend.brush touchcancel.brush", ended, true);
+    } else {
+      var view = select(event.view)
+          .on("keydown.brush", keydowned, true)
+          .on("keyup.brush", keyupped, true)
+          .on("mousemove.brush", moved, true)
+          .on("mouseup.brush", ended, true);
+
+      dragDisable(event.view);
+    }
+
+    nopropagation$1();
+    interrupt(that);
+    redraw.call(that);
+    emit.start();
+
+    function moved() {
+      var point1 = mouse(that);
+      if (shifting && !lockX && !lockY) {
+        if (Math.abs(point1[0] - point[0]) > Math.abs(point1[1] - point[1])) lockY = true;
+        else lockX = true;
+      }
+      point = point1;
+      moving = true;
+      noevent$1();
+      move();
+    }
+
+    function move() {
+      var t;
+
+      dx = point[0] - point0[0];
+      dy = point[1] - point0[1];
+
+      switch (mode) {
+        case MODE_SPACE:
+        case MODE_DRAG: {
+          if (signX) dx = Math.max(W - w0, Math.min(E - e0, dx)), w1 = w0 + dx, e1 = e0 + dx;
+          if (signY) dy = Math.max(N - n0, Math.min(S - s0, dy)), n1 = n0 + dy, s1 = s0 + dy;
+          break;
+        }
+        case MODE_HANDLE: {
+          if (signX < 0) dx = Math.max(W - w0, Math.min(E - w0, dx)), w1 = w0 + dx, e1 = e0;
+          else if (signX > 0) dx = Math.max(W - e0, Math.min(E - e0, dx)), w1 = w0, e1 = e0 + dx;
+          if (signY < 0) dy = Math.max(N - n0, Math.min(S - n0, dy)), n1 = n0 + dy, s1 = s0;
+          else if (signY > 0) dy = Math.max(N - s0, Math.min(S - s0, dy)), n1 = n0, s1 = s0 + dy;
+          break;
+        }
+        case MODE_CENTER: {
+          if (signX) w1 = Math.max(W, Math.min(E, w0 - dx * signX)), e1 = Math.max(W, Math.min(E, e0 + dx * signX));
+          if (signY) n1 = Math.max(N, Math.min(S, n0 - dy * signY)), s1 = Math.max(N, Math.min(S, s0 + dy * signY));
+          break;
+        }
+      }
+
+      if (e1 < w1) {
+        signX *= -1;
+        t = w0, w0 = e0, e0 = t;
+        t = w1, w1 = e1, e1 = t;
+        if (type in flipX) overlay.attr("cursor", cursors[type = flipX[type]]);
+      }
+
+      if (s1 < n1) {
+        signY *= -1;
+        t = n0, n0 = s0, s0 = t;
+        t = n1, n1 = s1, s1 = t;
+        if (type in flipY) overlay.attr("cursor", cursors[type = flipY[type]]);
+      }
+
+      if (state.selection) selection = state.selection; // May be set by brush.move!
+      if (lockX) w1 = selection[0][0], e1 = selection[1][0];
+      if (lockY) n1 = selection[0][1], s1 = selection[1][1];
+
+      if (selection[0][0] !== w1
+          || selection[0][1] !== n1
+          || selection[1][0] !== e1
+          || selection[1][1] !== s1) {
+        state.selection = [[w1, n1], [e1, s1]];
+        redraw.call(that);
+        emit.brush();
+      }
+    }
+
+    function ended() {
+      nopropagation$1();
+      if (event.touches) {
+        if (event.touches.length) return;
+        if (touchending) clearTimeout(touchending);
+        touchending = setTimeout(function() { touchending = null; }, 500); // Ghost clicks are delayed!
+        group.on("touchmove.brush touchend.brush touchcancel.brush", null);
+      } else {
+        yesdrag(event.view, moving);
+        view.on("keydown.brush keyup.brush mousemove.brush mouseup.brush", null);
+      }
+      group.attr("pointer-events", "all");
+      overlay.attr("cursor", cursors.overlay);
+      if (state.selection) selection = state.selection; // May be set by brush.move (on start)!
+      if (empty(selection)) state.selection = null, redraw.call(that);
+      emit.end();
+    }
+
+    function keydowned() {
+      switch (event.keyCode) {
+        case 16: { // SHIFT
+          shifting = signX && signY;
+          break;
+        }
+        case 18: { // ALT
+          if (mode === MODE_HANDLE) {
+            if (signX) e0 = e1 - dx * signX, w0 = w1 + dx * signX;
+            if (signY) s0 = s1 - dy * signY, n0 = n1 + dy * signY;
+            mode = MODE_CENTER;
+            move();
+          }
+          break;
+        }
+        case 32: { // SPACE; takes priority over ALT
+          if (mode === MODE_HANDLE || mode === MODE_CENTER) {
+            if (signX < 0) e0 = e1 - dx; else if (signX > 0) w0 = w1 - dx;
+            if (signY < 0) s0 = s1 - dy; else if (signY > 0) n0 = n1 - dy;
+            mode = MODE_SPACE;
+            overlay.attr("cursor", cursors.selection);
+            move();
+          }
+          break;
+        }
+        default: return;
+      }
+      noevent$1();
+    }
+
+    function keyupped() {
+      switch (event.keyCode) {
+        case 16: { // SHIFT
+          if (shifting) {
+            lockX = lockY = shifting = false;
+            move();
+          }
+          break;
+        }
+        case 18: { // ALT
+          if (mode === MODE_CENTER) {
+            if (signX < 0) e0 = e1; else if (signX > 0) w0 = w1;
+            if (signY < 0) s0 = s1; else if (signY > 0) n0 = n1;
+            mode = MODE_HANDLE;
+            move();
+          }
+          break;
+        }
+        case 32: { // SPACE
+          if (mode === MODE_SPACE) {
+            if (event.altKey) {
+              if (signX) e0 = e1 - dx * signX, w0 = w1 + dx * signX;
+              if (signY) s0 = s1 - dy * signY, n0 = n1 + dy * signY;
+              mode = MODE_CENTER;
+            } else {
+              if (signX < 0) e0 = e1; else if (signX > 0) w0 = w1;
+              if (signY < 0) s0 = s1; else if (signY > 0) n0 = n1;
+              mode = MODE_HANDLE;
+            }
+            overlay.attr("cursor", cursors[type]);
+            move();
+          }
+          break;
+        }
+        default: return;
+      }
+      noevent$1();
+    }
+  }
+
+  function initialize() {
+    var state = this.__brush || {selection: null};
+    state.extent = extent.apply(this, arguments);
+    state.dim = dim;
+    return state;
+  }
+
+  brush.extent = function(_) {
+    return arguments.length ? (extent = typeof _ === "function" ? _ : constant$4([[+_[0][0], +_[0][1]], [+_[1][0], +_[1][1]]]), brush) : extent;
+  };
+
+  brush.filter = function(_) {
+    return arguments.length ? (filter = typeof _ === "function" ? _ : constant$4(!!_), brush) : filter;
+  };
+
+  brush.handleSize = function(_) {
+    return arguments.length ? (handleSize = +_, brush) : handleSize;
+  };
+
+  brush.on = function() {
+    var value = listeners.on.apply(listeners, arguments);
+    return value === listeners ? brush : value;
+  };
+
+  return brush;
 }
 
 var pi$1 = Math.PI;
@@ -3634,6 +4645,19 @@ function defaultLocale(definition) {
   return locale;
 }
 
+var precisionFixed = function(step) {
+  return Math.max(0, -exponent$1(Math.abs(step)));
+};
+
+var precisionPrefix = function(step, value) {
+  return Math.max(0, Math.max(-8, Math.min(8, Math.floor(exponent$1(value) / 3))) * 3 - exponent$1(Math.abs(step)));
+};
+
+var precisionRound = function(step, max) {
+  step = Math.abs(step), max = Math.abs(max) - step;
+  return Math.max(0, exponent$1(max) - exponent$1(step)) + 1;
+};
+
 // Adds floating point numbers with twice the normal precision.
 // Reference: J. R. Shewchuk, Adaptive Precision Floating-Point Arithmetic and
 // Fast Robust Geometric Predicates, Discrete & Computational Geometry 18(3)
@@ -3889,6 +4913,365 @@ function responseOf(parse, row) {
 }
 
 var csv$1 = dsv$1("text/csv", csvParse);
+
+var array$2 = Array.prototype;
+
+var map$3 = array$2.map;
+var slice$5 = array$2.slice;
+
+var constant$9 = function(x) {
+  return function() {
+    return x;
+  };
+};
+
+var number$2 = function(x) {
+  return +x;
+};
+
+var unit = [0, 1];
+
+function deinterpolateLinear(a, b) {
+  return (b -= (a = +a))
+      ? function(x) { return (x - a) / b; }
+      : constant$9(b);
+}
+
+function deinterpolateClamp(deinterpolate) {
+  return function(a, b) {
+    var d = deinterpolate(a = +a, b = +b);
+    return function(x) { return x <= a ? 0 : x >= b ? 1 : d(x); };
+  };
+}
+
+function reinterpolateClamp(reinterpolate) {
+  return function(a, b) {
+    var r = reinterpolate(a = +a, b = +b);
+    return function(t) { return t <= 0 ? a : t >= 1 ? b : r(t); };
+  };
+}
+
+function bimap(domain, range, deinterpolate, reinterpolate) {
+  var d0 = domain[0], d1 = domain[1], r0 = range[0], r1 = range[1];
+  if (d1 < d0) d0 = deinterpolate(d1, d0), r0 = reinterpolate(r1, r0);
+  else d0 = deinterpolate(d0, d1), r0 = reinterpolate(r0, r1);
+  return function(x) { return r0(d0(x)); };
+}
+
+function polymap(domain, range, deinterpolate, reinterpolate) {
+  var j = Math.min(domain.length, range.length) - 1,
+      d = new Array(j),
+      r = new Array(j),
+      i = -1;
+
+  // Reverse descending domains.
+  if (domain[j] < domain[0]) {
+    domain = domain.slice().reverse();
+    range = range.slice().reverse();
+  }
+
+  while (++i < j) {
+    d[i] = deinterpolate(domain[i], domain[i + 1]);
+    r[i] = reinterpolate(range[i], range[i + 1]);
+  }
+
+  return function(x) {
+    var i = bisectRight(domain, x, 1, j) - 1;
+    return r[i](d[i](x));
+  };
+}
+
+function copy(source, target) {
+  return target
+      .domain(source.domain())
+      .range(source.range())
+      .interpolate(source.interpolate())
+      .clamp(source.clamp());
+}
+
+// deinterpolate(a, b)(x) takes a domain value x in [a,b] and returns the corresponding parameter t in [0,1].
+// reinterpolate(a, b)(t) takes a parameter t in [0,1] and returns the corresponding domain value x in [a,b].
+function continuous(deinterpolate, reinterpolate) {
+  var domain = unit,
+      range = unit,
+      interpolate$$1 = interpolateValue,
+      clamp = false,
+      piecewise,
+      output,
+      input;
+
+  function rescale() {
+    piecewise = Math.min(domain.length, range.length) > 2 ? polymap : bimap;
+    output = input = null;
+    return scale;
+  }
+
+  function scale(x) {
+    return (output || (output = piecewise(domain, range, clamp ? deinterpolateClamp(deinterpolate) : deinterpolate, interpolate$$1)))(+x);
+  }
+
+  scale.invert = function(y) {
+    return (input || (input = piecewise(range, domain, deinterpolateLinear, clamp ? reinterpolateClamp(reinterpolate) : reinterpolate)))(+y);
+  };
+
+  scale.domain = function(_) {
+    return arguments.length ? (domain = map$3.call(_, number$2), rescale()) : domain.slice();
+  };
+
+  scale.range = function(_) {
+    return arguments.length ? (range = slice$5.call(_), rescale()) : range.slice();
+  };
+
+  scale.rangeRound = function(_) {
+    return range = slice$5.call(_), interpolate$$1 = interpolateRound, rescale();
+  };
+
+  scale.clamp = function(_) {
+    return arguments.length ? (clamp = !!_, rescale()) : clamp;
+  };
+
+  scale.interpolate = function(_) {
+    return arguments.length ? (interpolate$$1 = _, rescale()) : interpolate$$1;
+  };
+
+  return rescale();
+}
+
+var tickFormat = function(domain, count, specifier) {
+  var start = domain[0],
+      stop = domain[domain.length - 1],
+      step = tickStep(start, stop, count == null ? 10 : count),
+      precision;
+  specifier = formatSpecifier(specifier == null ? ",f" : specifier);
+  switch (specifier.type) {
+    case "s": {
+      var value = Math.max(Math.abs(start), Math.abs(stop));
+      if (specifier.precision == null && !isNaN(precision = precisionPrefix(step, value))) specifier.precision = precision;
+      return formatPrefix(specifier, value);
+    }
+    case "":
+    case "e":
+    case "g":
+    case "p":
+    case "r": {
+      if (specifier.precision == null && !isNaN(precision = precisionRound(step, Math.max(Math.abs(start), Math.abs(stop))))) specifier.precision = precision - (specifier.type === "e");
+      break;
+    }
+    case "f":
+    case "%": {
+      if (specifier.precision == null && !isNaN(precision = precisionFixed(step))) specifier.precision = precision - (specifier.type === "%") * 2;
+      break;
+    }
+  }
+  return format(specifier);
+};
+
+function linearish(scale) {
+  var domain = scale.domain;
+
+  scale.ticks = function(count) {
+    var d = domain();
+    return ticks(d[0], d[d.length - 1], count == null ? 10 : count);
+  };
+
+  scale.tickFormat = function(count, specifier) {
+    return tickFormat(domain(), count, specifier);
+  };
+
+  scale.nice = function(count) {
+    if (count == null) count = 10;
+
+    var d = domain(),
+        i0 = 0,
+        i1 = d.length - 1,
+        start = d[i0],
+        stop = d[i1],
+        step;
+
+    if (stop < start) {
+      step = start, start = stop, stop = step;
+      step = i0, i0 = i1, i1 = step;
+    }
+
+    step = tickIncrement(start, stop, count);
+
+    if (step > 0) {
+      start = Math.floor(start / step) * step;
+      stop = Math.ceil(stop / step) * step;
+      step = tickIncrement(start, stop, count);
+    } else if (step < 0) {
+      start = Math.ceil(start * step) / step;
+      stop = Math.floor(stop * step) / step;
+      step = tickIncrement(start, stop, count);
+    }
+
+    if (step > 0) {
+      d[i0] = Math.floor(start / step) * step;
+      d[i1] = Math.ceil(stop / step) * step;
+      domain(d);
+    } else if (step < 0) {
+      d[i0] = Math.ceil(start * step) / step;
+      d[i1] = Math.floor(stop * step) / step;
+      domain(d);
+    }
+
+    return scale;
+  };
+
+  return scale;
+}
+
+function linear$2() {
+  var scale = continuous(deinterpolateLinear, reinterpolate);
+
+  scale.copy = function() {
+    return copy(scale, linear$2());
+  };
+
+  return linearish(scale);
+}
+
+var nice = function(domain, interval) {
+  domain = domain.slice();
+
+  var i0 = 0,
+      i1 = domain.length - 1,
+      x0 = domain[i0],
+      x1 = domain[i1],
+      t;
+
+  if (x1 < x0) {
+    t = i0, i0 = i1, i1 = t;
+    t = x0, x0 = x1, x1 = t;
+  }
+
+  domain[i0] = interval.floor(x0);
+  domain[i1] = interval.ceil(x1);
+  return domain;
+};
+
+function deinterpolate(a, b) {
+  return (b = Math.log(b / a))
+      ? function(x) { return Math.log(x / a) / b; }
+      : constant$9(b);
+}
+
+function reinterpolate$1(a, b) {
+  return a < 0
+      ? function(t) { return -Math.pow(-b, t) * Math.pow(-a, 1 - t); }
+      : function(t) { return Math.pow(b, t) * Math.pow(a, 1 - t); };
+}
+
+function pow10(x) {
+  return isFinite(x) ? +("1e" + x) : x < 0 ? 0 : x;
+}
+
+function powp(base) {
+  return base === 10 ? pow10
+      : base === Math.E ? Math.exp
+      : function(x) { return Math.pow(base, x); };
+}
+
+function logp(base) {
+  return base === Math.E ? Math.log
+      : base === 10 && Math.log10
+      || base === 2 && Math.log2
+      || (base = Math.log(base), function(x) { return Math.log(x) / base; });
+}
+
+function reflect(f) {
+  return function(x) {
+    return -f(-x);
+  };
+}
+
+function log$1() {
+  var scale = continuous(deinterpolate, reinterpolate$1).domain([1, 10]),
+      domain = scale.domain,
+      base = 10,
+      logs = logp(10),
+      pows = powp(10);
+
+  function rescale() {
+    logs = logp(base), pows = powp(base);
+    if (domain()[0] < 0) logs = reflect(logs), pows = reflect(pows);
+    return scale;
+  }
+
+  scale.base = function(_) {
+    return arguments.length ? (base = +_, rescale()) : base;
+  };
+
+  scale.domain = function(_) {
+    return arguments.length ? (domain(_), rescale()) : domain();
+  };
+
+  scale.ticks = function(count) {
+    var d = domain(),
+        u = d[0],
+        v = d[d.length - 1],
+        r;
+
+    if (r = v < u) i = u, u = v, v = i;
+
+    var i = logs(u),
+        j = logs(v),
+        p,
+        k,
+        t,
+        n = count == null ? 10 : +count,
+        z = [];
+
+    if (!(base % 1) && j - i < n) {
+      i = Math.round(i) - 1, j = Math.round(j) + 1;
+      if (u > 0) for (; i < j; ++i) {
+        for (k = 1, p = pows(i); k < base; ++k) {
+          t = p * k;
+          if (t < u) continue;
+          if (t > v) break;
+          z.push(t);
+        }
+      } else for (; i < j; ++i) {
+        for (k = base - 1, p = pows(i); k >= 1; --k) {
+          t = p * k;
+          if (t < u) continue;
+          if (t > v) break;
+          z.push(t);
+        }
+      }
+    } else {
+      z = ticks(i, j, Math.min(j - i, n)).map(pows);
+    }
+
+    return r ? z.reverse() : z;
+  };
+
+  scale.tickFormat = function(count, specifier) {
+    if (specifier == null) specifier = base === 10 ? ".0e" : ",";
+    if (typeof specifier !== "function") specifier = format(specifier);
+    if (count === Infinity) return specifier;
+    if (count == null) count = 10;
+    var k = Math.max(1, base * count / scale.ticks().length); // TODO fast estimate?
+    return function(d) {
+      var i = d / pows(Math.round(logs(d)));
+      if (i * base < base - 0.5) i *= base;
+      return i <= k ? specifier(d) : "";
+    };
+  };
+
+  scale.nice = function() {
+    return domain(nice(domain(), {
+      floor: function(x) { return pows(Math.floor(logs(x))); },
+      ceil: function(x) { return pows(Math.ceil(logs(x))); }
+    }));
+  };
+
+  scale.copy = function() {
+    return copy(scale, log$1().base(base));
+  };
+
+  return scale;
+}
 
 var t0$1 = new Date;
 var t1$1 = new Date;
@@ -4871,11 +6254,649 @@ ReflectContext.prototype = {
   bezierCurveTo: function(x1, y1, x2, y2, x, y) { this._context.bezierCurveTo(y1, x1, y2, x2, y, x); }
 };
 
+var constant$12 = function(x) {
+  return function() {
+    return x;
+  };
+};
+
+function ZoomEvent(target, type, transform) {
+  this.target = target;
+  this.type = type;
+  this.transform = transform;
+}
+
+function Transform(k, x, y) {
+  this.k = k;
+  this.x = x;
+  this.y = y;
+}
+
+Transform.prototype = {
+  constructor: Transform,
+  scale: function(k) {
+    return k === 1 ? this : new Transform(this.k * k, this.x, this.y);
+  },
+  translate: function(x, y) {
+    return x === 0 & y === 0 ? this : new Transform(this.k, this.x + this.k * x, this.y + this.k * y);
+  },
+  apply: function(point) {
+    return [point[0] * this.k + this.x, point[1] * this.k + this.y];
+  },
+  applyX: function(x) {
+    return x * this.k + this.x;
+  },
+  applyY: function(y) {
+    return y * this.k + this.y;
+  },
+  invert: function(location) {
+    return [(location[0] - this.x) / this.k, (location[1] - this.y) / this.k];
+  },
+  invertX: function(x) {
+    return (x - this.x) / this.k;
+  },
+  invertY: function(y) {
+    return (y - this.y) / this.k;
+  },
+  rescaleX: function(x) {
+    return x.copy().domain(x.range().map(this.invertX, this).map(x.invert, x));
+  },
+  rescaleY: function(y) {
+    return y.copy().domain(y.range().map(this.invertY, this).map(y.invert, y));
+  },
+  toString: function() {
+    return "translate(" + this.x + "," + this.y + ") scale(" + this.k + ")";
+  }
+};
+
+var identity$8 = new Transform(1, 0, 0);
+
+function nopropagation$2() {
+  event.stopImmediatePropagation();
+}
+
+var noevent$2 = function() {
+  event.preventDefault();
+  event.stopImmediatePropagation();
+};
+
+// Ignore right-click, since that should open the context menu.
+function defaultFilter$2() {
+  return !event.button;
+}
+
+function defaultExtent$1() {
+  var e = this, w, h;
+  if (e instanceof SVGElement) {
+    e = e.ownerSVGElement || e;
+    w = e.width.baseVal.value;
+    h = e.height.baseVal.value;
+  } else {
+    w = e.clientWidth;
+    h = e.clientHeight;
+  }
+  return [[0, 0], [w, h]];
+}
+
+function defaultTransform() {
+  return this.__zoom || identity$8;
+}
+
+function defaultWheelDelta() {
+  return -event.deltaY * (event.deltaMode ? 120 : 1) / 500;
+}
+
+function defaultTouchable$1() {
+  return "ontouchstart" in this;
+}
+
+var zoom = function() {
+  var filter = defaultFilter$2,
+      extent = defaultExtent$1,
+      wheelDelta = defaultWheelDelta,
+      touchable = defaultTouchable$1,
+      k0 = 0,
+      k1 = Infinity,
+      x0 = -k1,
+      x1 = k1,
+      y0 = x0,
+      y1 = x1,
+      duration = 250,
+      interpolate = interpolateZoom,
+      gestures = [],
+      listeners = dispatch("start", "zoom", "end"),
+      touchstarting,
+      touchending,
+      touchDelay = 500,
+      wheelDelay = 150,
+      clickDistance2 = 0;
+
+  function zoom(selection) {
+    selection
+        .property("__zoom", defaultTransform)
+        .on("wheel.zoom", wheeled)
+        .on("mousedown.zoom", mousedowned)
+        .on("dblclick.zoom", dblclicked)
+      .filter(touchable)
+        .on("touchstart.zoom", touchstarted)
+        .on("touchmove.zoom", touchmoved)
+        .on("touchend.zoom touchcancel.zoom", touchended)
+        .style("touch-action", "none")
+        .style("-webkit-tap-highlight-color", "rgba(0,0,0,0)");
+  }
+
+  zoom.transform = function(collection, transform$$1) {
+    var selection = collection.selection ? collection.selection() : collection;
+    selection.property("__zoom", defaultTransform);
+    if (collection !== selection) {
+      schedule(collection, transform$$1);
+    } else {
+      selection.interrupt().each(function() {
+        gesture(this, arguments)
+            .start()
+            .zoom(null, typeof transform$$1 === "function" ? transform$$1.apply(this, arguments) : transform$$1)
+            .end();
+      });
+    }
+  };
+
+  zoom.scaleBy = function(selection, k) {
+    zoom.scaleTo(selection, function() {
+      var k0 = this.__zoom.k,
+          k1 = typeof k === "function" ? k.apply(this, arguments) : k;
+      return k0 * k1;
+    });
+  };
+
+  zoom.scaleTo = function(selection, k) {
+    zoom.transform(selection, function() {
+      var e = extent.apply(this, arguments),
+          t0 = this.__zoom,
+          p0 = centroid(e),
+          p1 = t0.invert(p0),
+          k1 = typeof k === "function" ? k.apply(this, arguments) : k;
+      return constrain(translate(scale(t0, k1), p0, p1), e);
+    });
+  };
+
+  zoom.translateBy = function(selection, x, y) {
+    zoom.transform(selection, function() {
+      return constrain(this.__zoom.translate(
+        typeof x === "function" ? x.apply(this, arguments) : x,
+        typeof y === "function" ? y.apply(this, arguments) : y
+      ), extent.apply(this, arguments));
+    });
+  };
+
+  zoom.translateTo = function(selection, x, y) {
+    zoom.transform(selection, function() {
+      var e = extent.apply(this, arguments),
+          t = this.__zoom,
+          p = centroid(e);
+      return constrain(identity$8.translate(p[0], p[1]).scale(t.k).translate(
+        typeof x === "function" ? -x.apply(this, arguments) : -x,
+        typeof y === "function" ? -y.apply(this, arguments) : -y
+      ), e);
+    });
+  };
+
+  function scale(transform$$1, k) {
+    k = Math.max(k0, Math.min(k1, k));
+    return k === transform$$1.k ? transform$$1 : new Transform(k, transform$$1.x, transform$$1.y);
+  }
+
+  function translate(transform$$1, p0, p1) {
+    var x = p0[0] - p1[0] * transform$$1.k, y = p0[1] - p1[1] * transform$$1.k;
+    return x === transform$$1.x && y === transform$$1.y ? transform$$1 : new Transform(transform$$1.k, x, y);
+  }
+
+  function constrain(transform$$1, extent) {
+    var dx0 = transform$$1.invertX(extent[0][0]) - x0,
+        dx1 = transform$$1.invertX(extent[1][0]) - x1,
+        dy0 = transform$$1.invertY(extent[0][1]) - y0,
+        dy1 = transform$$1.invertY(extent[1][1]) - y1;
+    return transform$$1.translate(
+      dx1 > dx0 ? (dx0 + dx1) / 2 : Math.min(0, dx0) || Math.max(0, dx1),
+      dy1 > dy0 ? (dy0 + dy1) / 2 : Math.min(0, dy0) || Math.max(0, dy1)
+    );
+  }
+
+  function centroid(extent) {
+    return [(+extent[0][0] + +extent[1][0]) / 2, (+extent[0][1] + +extent[1][1]) / 2];
+  }
+
+  function schedule(transition, transform$$1, center) {
+    transition
+        .on("start.zoom", function() { gesture(this, arguments).start(); })
+        .on("interrupt.zoom end.zoom", function() { gesture(this, arguments).end(); })
+        .tween("zoom", function() {
+          var that = this,
+              args = arguments,
+              g = gesture(that, args),
+              e = extent.apply(that, args),
+              p = center || centroid(e),
+              w = Math.max(e[1][0] - e[0][0], e[1][1] - e[0][1]),
+              a = that.__zoom,
+              b = typeof transform$$1 === "function" ? transform$$1.apply(that, args) : transform$$1,
+              i = interpolate(a.invert(p).concat(w / a.k), b.invert(p).concat(w / b.k));
+          return function(t) {
+            if (t === 1) t = b; // Avoid rounding error on end.
+            else { var l = i(t), k = w / l[2]; t = new Transform(k, p[0] - l[0] * k, p[1] - l[1] * k); }
+            g.zoom(null, t);
+          };
+        });
+  }
+
+  function gesture(that, args) {
+    for (var i = 0, n = gestures.length, g; i < n; ++i) {
+      if ((g = gestures[i]).that === that) {
+        return g;
+      }
+    }
+    return new Gesture(that, args);
+  }
+
+  function Gesture(that, args) {
+    this.that = that;
+    this.args = args;
+    this.index = -1;
+    this.active = 0;
+    this.extent = extent.apply(that, args);
+  }
+
+  Gesture.prototype = {
+    start: function() {
+      if (++this.active === 1) {
+        this.index = gestures.push(this) - 1;
+        this.emit("start");
+      }
+      return this;
+    },
+    zoom: function(key, transform$$1) {
+      if (this.mouse && key !== "mouse") this.mouse[1] = transform$$1.invert(this.mouse[0]);
+      if (this.touch0 && key !== "touch") this.touch0[1] = transform$$1.invert(this.touch0[0]);
+      if (this.touch1 && key !== "touch") this.touch1[1] = transform$$1.invert(this.touch1[0]);
+      this.that.__zoom = transform$$1;
+      this.emit("zoom");
+      return this;
+    },
+    end: function() {
+      if (--this.active === 0) {
+        gestures.splice(this.index, 1);
+        this.index = -1;
+        this.emit("end");
+      }
+      return this;
+    },
+    emit: function(type) {
+      customEvent(new ZoomEvent(zoom, type, this.that.__zoom), listeners.apply, listeners, [type, this.that, this.args]);
+    }
+  };
+
+  function wheeled() {
+    if (!filter.apply(this, arguments)) return;
+    var g = gesture(this, arguments),
+        t = this.__zoom,
+        k = Math.max(k0, Math.min(k1, t.k * Math.pow(2, wheelDelta.apply(this, arguments)))),
+        p = mouse(this);
+
+    // If the mouse is in the same location as before, reuse it.
+    // If there were recent wheel events, reset the wheel idle timeout.
+    if (g.wheel) {
+      if (g.mouse[0][0] !== p[0] || g.mouse[0][1] !== p[1]) {
+        g.mouse[1] = t.invert(g.mouse[0] = p);
+      }
+      clearTimeout(g.wheel);
+    }
+
+    // If this wheel event won’t trigger a transform change, ignore it.
+    else if (t.k === k) return;
+
+    // Otherwise, capture the mouse point and location at the start.
+    else {
+      g.mouse = [p, t.invert(p)];
+      interrupt(this);
+      g.start();
+    }
+
+    noevent$2();
+    g.wheel = setTimeout(wheelidled, wheelDelay);
+    g.zoom("mouse", constrain(translate(scale(t, k), g.mouse[0], g.mouse[1]), g.extent));
+
+    function wheelidled() {
+      g.wheel = null;
+      g.end();
+    }
+  }
+
+  function mousedowned() {
+    if (touchending || !filter.apply(this, arguments)) return;
+    var g = gesture(this, arguments),
+        v = select(event.view).on("mousemove.zoom", mousemoved, true).on("mouseup.zoom", mouseupped, true),
+        p = mouse(this),
+        x0 = event.clientX,
+        y0 = event.clientY;
+
+    dragDisable(event.view);
+    nopropagation$2();
+    g.mouse = [p, this.__zoom.invert(p)];
+    interrupt(this);
+    g.start();
+
+    function mousemoved() {
+      noevent$2();
+      if (!g.moved) {
+        var dx = event.clientX - x0, dy = event.clientY - y0;
+        g.moved = dx * dx + dy * dy > clickDistance2;
+      }
+      g.zoom("mouse", constrain(translate(g.that.__zoom, g.mouse[0] = mouse(g.that), g.mouse[1]), g.extent));
+    }
+
+    function mouseupped() {
+      v.on("mousemove.zoom mouseup.zoom", null);
+      yesdrag(event.view, g.moved);
+      noevent$2();
+      g.end();
+    }
+  }
+
+  function dblclicked() {
+    if (!filter.apply(this, arguments)) return;
+    var t0 = this.__zoom,
+        p0 = mouse(this),
+        p1 = t0.invert(p0),
+        k1 = t0.k * (event.shiftKey ? 0.5 : 2),
+        t1 = constrain(translate(scale(t0, k1), p0, p1), extent.apply(this, arguments));
+
+    noevent$2();
+    if (duration > 0) select(this).transition().duration(duration).call(schedule, t1, p0);
+    else select(this).call(zoom.transform, t1);
+  }
+
+  function touchstarted() {
+    if (!filter.apply(this, arguments)) return;
+    var g = gesture(this, arguments),
+        touches = event.changedTouches,
+        started,
+        n = touches.length, i, t, p;
+
+    nopropagation$2();
+    for (i = 0; i < n; ++i) {
+      t = touches[i], p = touch(this, touches, t.identifier);
+      p = [p, this.__zoom.invert(p), t.identifier];
+      if (!g.touch0) g.touch0 = p, started = true;
+      else if (!g.touch1) g.touch1 = p;
+    }
+
+    // If this is a dbltap, reroute to the (optional) dblclick.zoom handler.
+    if (touchstarting) {
+      touchstarting = clearTimeout(touchstarting);
+      if (!g.touch1) {
+        g.end();
+        p = select(this).on("dblclick.zoom");
+        if (p) p.apply(this, arguments);
+        return;
+      }
+    }
+
+    if (started) {
+      touchstarting = setTimeout(function() { touchstarting = null; }, touchDelay);
+      interrupt(this);
+      g.start();
+    }
+  }
+
+  function touchmoved() {
+    var g = gesture(this, arguments),
+        touches = event.changedTouches,
+        n = touches.length, i, t, p, l;
+
+    noevent$2();
+    if (touchstarting) touchstarting = clearTimeout(touchstarting);
+    for (i = 0; i < n; ++i) {
+      t = touches[i], p = touch(this, touches, t.identifier);
+      if (g.touch0 && g.touch0[2] === t.identifier) g.touch0[0] = p;
+      else if (g.touch1 && g.touch1[2] === t.identifier) g.touch1[0] = p;
+    }
+    t = g.that.__zoom;
+    if (g.touch1) {
+      var p0 = g.touch0[0], l0 = g.touch0[1],
+          p1 = g.touch1[0], l1 = g.touch1[1],
+          dp = (dp = p1[0] - p0[0]) * dp + (dp = p1[1] - p0[1]) * dp,
+          dl = (dl = l1[0] - l0[0]) * dl + (dl = l1[1] - l0[1]) * dl;
+      t = scale(t, Math.sqrt(dp / dl));
+      p = [(p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2];
+      l = [(l0[0] + l1[0]) / 2, (l0[1] + l1[1]) / 2];
+    }
+    else if (g.touch0) p = g.touch0[0], l = g.touch0[1];
+    else return;
+    g.zoom("touch", constrain(translate(t, p, l), g.extent));
+  }
+
+  function touchended() {
+    var g = gesture(this, arguments),
+        touches = event.changedTouches,
+        n = touches.length, i, t;
+
+    nopropagation$2();
+    if (touchending) clearTimeout(touchending);
+    touchending = setTimeout(function() { touchending = null; }, touchDelay);
+    for (i = 0; i < n; ++i) {
+      t = touches[i];
+      if (g.touch0 && g.touch0[2] === t.identifier) delete g.touch0;
+      else if (g.touch1 && g.touch1[2] === t.identifier) delete g.touch1;
+    }
+    if (g.touch1 && !g.touch0) g.touch0 = g.touch1, delete g.touch1;
+    if (g.touch0) g.touch0[1] = this.__zoom.invert(g.touch0[0]);
+    else g.end();
+  }
+
+  zoom.wheelDelta = function(_) {
+    return arguments.length ? (wheelDelta = typeof _ === "function" ? _ : constant$12(+_), zoom) : wheelDelta;
+  };
+
+  zoom.filter = function(_) {
+    return arguments.length ? (filter = typeof _ === "function" ? _ : constant$12(!!_), zoom) : filter;
+  };
+
+  zoom.touchable = function(_) {
+    return arguments.length ? (touchable = typeof _ === "function" ? _ : constant$12(!!_), zoom) : touchable;
+  };
+
+  zoom.extent = function(_) {
+    return arguments.length ? (extent = typeof _ === "function" ? _ : constant$12([[+_[0][0], +_[0][1]], [+_[1][0], +_[1][1]]]), zoom) : extent;
+  };
+
+  zoom.scaleExtent = function(_) {
+    return arguments.length ? (k0 = +_[0], k1 = +_[1], zoom) : [k0, k1];
+  };
+
+  zoom.translateExtent = function(_) {
+    return arguments.length ? (x0 = +_[0][0], x1 = +_[1][0], y0 = +_[0][1], y1 = +_[1][1], zoom) : [[x0, y0], [x1, y1]];
+  };
+
+  zoom.duration = function(_) {
+    return arguments.length ? (duration = +_, zoom) : duration;
+  };
+
+  zoom.interpolate = function(_) {
+    return arguments.length ? (interpolate = _, zoom) : interpolate;
+  };
+
+  zoom.on = function() {
+    var value = listeners.on.apply(listeners, arguments);
+    return value === listeners ? zoom : value;
+  };
+
+  zoom.clickDistance = function(_) {
+    return arguments.length ? (clickDistance2 = (_ = +_) * _, zoom) : Math.sqrt(clickDistance2);
+  };
+
+  return zoom;
+};
+
 // Eg at http://c3js.org/samples/chart_area_stacked.html
+class StackedAreaChart {
+
+  constructor(container_id, x_name, y_name, y_max, columns, types, groups, colors, order_stack) {
+    document.getElementById(container_id).style.transition = "all 0.4s ease-in-out";
+    this.chart = c3.generate({
+      bindto: '#' + container_id,
+      data: {
+        x: x_name,
+        columns: columns,
+        types: types,
+        groups: groups,
+        colors: colors,
+        order: function(t1, t2) {
+          return order_stack[t1.id] < order_stack[t2.id]  ? 1 : -1;
+        }
+      },
+      tooltip: {
+        show: false
+      },
+      axis: {
+        x: {
+          label: x_name
+        },
+        y: {
+          label: y_name,
+          max: y_max
+        },
+      }
+    });
+  }
+
+  update(columns) {
+    this.chart.load({
+      columns: columns
+    });
+  }
+
+  update_full(container_id, x_name, y_name, y_max, columns, types, groups, colors, order_stack) {
+    //let container = document.getElementById(container_id);
+    //container.style.opacity = "0.0";
+    setTimeout(() => {
+      //this.chart.destroy();
+      this.chart = c3.generate({
+        bindto: '#' + container_id,
+        data: {
+          x: x_name,
+          columns: columns,
+          types: types,
+          groups: groups,
+          colors: colors,
+          order: function(t1, t2) {
+            return order_stack[t1.id] < order_stack[t2.id]  ? 1 : -1;
+          }
+        },
+        tooltip: {
+          show: false
+        },
+        axis: {
+          x: {
+            label: x_name
+          },
+          y: {
+            label: y_name,
+            max: y_max
+          },
+        }
+      });
+    }, 300);
+    //setTimeout(() => {
+    //  container.style.opacity = "1.0";
+    //}, 401);
+  }
+
+}
 
 // Eg at http://c3js.org/samples/chart_bar_stacked.html
+class StackedAreaChart$1 {
+
+  constructor(container_id, x_name, y_name, y_categories, columns, groups) {
+    this.chart = c3.generate({
+      bindto: '#' + container_id,
+      data: {
+        columns: columns,
+        type: "bar",
+        groups: groups
+      },
+      tooltip: {
+        show: false
+      },
+      axis: {
+        x: {
+          label: x_name,
+          type: 'category',
+          categories: y_categories
+        },
+        y: {
+          label: y_name
+        },
+      }
+    });
+  }
+
+  update(columns) {
+    this.chart.load({
+      columns: columns
+    });
+  }
+
+  showOnly(column_name) {
+    this.chart.hide();
+    this.chart.show(column_name);
+  }
+
+}
 
 // Eg at http://c3js.org/samples/chart_bar.html
+class BarChart {
+
+  constructor(container_id, x_name, y_name, y_categories, columns, colors) {
+    this.chart = c3.generate({
+      bindto: '#' + container_id,
+      data: {
+        columns: columns,
+        type: "bar",
+        colors: colors
+      },
+      legend: {
+        show: false
+      },
+      tooltip: {
+        show: false
+      },
+      interaction: {
+        enabled: false
+      },
+      axis: {
+        x: {
+          label: x_name,
+          type: 'category',
+          categories: y_categories
+        },
+        y: {
+          label: y_name
+        },
+      }
+    });
+  }
+
+  update(categories, columns) {
+    this.chart.load({
+      columns: columns,
+      categories : categories
+    });
+  }
+
+  showOnly(column_name) {
+    this.chart.hide();
+    this.chart.show(column_name);
+  }
+
+}
 
 // This Class contains all methods that process the Data
 class DataProcessor {
@@ -5102,6 +7123,802 @@ class Banner {
 
 }
 
+class RegionSelector {
+
+  constructor(container_id) {
+    this.container_id = container_id;
+    let container = document.getElementById(container_id);
+    // Create one button for each region
+    for (let region of ["WORLD", "NA", "EU", "JP", "OTHER"]) {
+      let btn = document.createElement("button");
+      btn.id = region + "_button";
+      btn.classList.add('region_selector_button');
+      btn.classList.add('col-xs');
+      btn.style['background-image'] = `url(./modules/RegionSelector/${region}.svg)`;
+      btn.onclick = () => this.toggle(region);
+      container.appendChild(btn);
+    }
+    // Initially WORLD is selected
+    this.toggle("WORLD");
+  }
+
+  // Region is either : "WORLD","NA","EU","JP" or "OTHER"
+  toggle(region) {
+    this.selected_region = region;
+    // Deslect all buttons
+    for (let region of ["WORLD", "NA", "EU", "JP", "OTHER"]) {
+      let button = document.querySelector(`#${this.container_id} #${region}_button`);
+      button.classList.remove("selected");
+    }
+    // Select button
+    let button = document.querySelector(`#${this.container_id} #${region}_button`);
+    button.classList.add("selected");
+    // Notify with callback
+    this.selectedRegion(region);
+  }
+
+  // Callback called when a region is selected
+  selectedRegion(region) {}
+
+}
+
+// Inspired from http://chimera.labs.oreilly.com/books/1230000000345/
+// un scatterplot zoomable qui serait joli à faire : http://bl.ocks.org/peterssonjonas/4a0e7cb8d23231243e0e
+/*
+
+  TODO : Position PublisherMeanButton correctly
+  TODO : Add a legend for Publishers
+  TODO : Add color for Publishers in tooltip when clicking
+*/
+
+class ScatterPlot {
+
+  constructor(container_id, x_name, y_name) {
+
+    // We use "self" so we won't be confused when using "this" everywhere
+    let self = this;
+
+    // Our data is empty at the beginning
+    self.data = [];
+
+    // -------------------------------------------------------------------------
+    //     Set up parameters of our Scatter Plot
+    // -------------------------------------------------------------------------
+
+    // SVG's parameters
+    self.padding = {
+      top: 10,
+      right: 2,
+      bottom: 10,
+      left: 38
+    };
+    //self.width = 860;
+    let container_width = document.getElementById("scatterPlot_container").offsetWidth;
+    self.width = container_width - self.padding.right - self.padding.left;
+    self.height = 470;
+
+    // Circles' parameters
+    self.radius = 3;
+
+    // Axis' parameters
+    self.nbXticks = 20;
+    self.nbYticks = 10;
+    self.x_name = x_name;
+    self.y_name = y_name;
+
+    // Colors for top 20 Publishers
+    self.colorsPublishers = {
+      "Nintendo": "#c22020",
+      "Electronic Arts": "#4557a2",
+      "Activision": "#4b402f",
+      "Sony Computer Entertainment": "#00bbff",
+      "Ubisoft": "#9bb4bf",
+      "Take-Two Interactive": "#d1cb42",
+      "THQ": "#b85901",
+      "Konami Digital Entertainment": "#385b33",
+      "Sega": "#331a49",
+      "Namco Bandai Games": "#ff0060",
+      "Microsoft Game Studios": "#16e800",
+      "Atari": "#9f249c",
+      "Capcom": "#80af97",
+      "Square Enix": "#000186",
+      "SquareSoft": "#c7be7f",
+      "Enix Corporation": "#7c5277",
+      "Tecmo Koei": "#4e4e4e"
+    };
+
+    // Set up the axis
+    self.xAxis;
+    self.yAxis;
+
+    // -------------------------------------------------------------------------
+    //     Create our SVG canvas and its components
+    // -------------------------------------------------------------------------
+
+    self.circles;
+
+    // Initialize an invisible tooltip used to display game's informations
+    self.tooltip = select("#" + container_id)
+      .append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0.0);
+
+    // Initialize the button to compute the Publishers' average
+    self.publishersButton = select("#" + "individual_brands_barChart_container")
+      .append('g')
+      .attr("class", "publishers_button")
+      .html("Compute Average of Publishers");
+
+    // Create the main SVG
+    self.svg = select('#' + container_id)
+      .append("svg")
+      .attr("width", self.width + self.padding.left + self.padding.right)
+      .attr("height", self.height + self.padding.bottom + self.padding.top)
+      .style("cursor", "move");
+
+    // -------------------------------------------------------------------------
+    //     Create the legend for Publishers
+    // -------------------------------------------------------------------------
+
+    self.legendPublishers = select('#' + container_id)
+      .append("svg")
+      .attr("width", self.width + self.padding.left + self.padding.right)
+      .attr("height", 100);
+
+
+    let x_offset = 20;
+    let y_offset = 15;
+    let line_number = 1;
+    let name_length = 0;
+    let padding = 0;
+
+    let publishers = Object.keys(self.colorsPublishers);
+
+    for (let publisher of publishers) {
+
+      if (x_offset + padding > self.width) {
+        x_offset = 25;
+        y_offset += 20;
+        line_number += 1;
+        
+      }
+
+      name_length = publisher.length;
+
+      if (name_length <= 10) {
+        padding = 100;
+      } else if (name_length > 10 && name_length < 20) {
+        padding = 190;
+      } else {
+        padding = 230;
+      }
+
+      if (line_number == 2 || line_number == 4) {
+        x_offset += 40;
+      }
+
+      self.legendPublishers.append("text")
+        .attr("x", x_offset)
+        .attr("y", 10 + y_offset)
+        .text(publisher)
+        .style("fill", "black");
+
+      self.legendPublishers.append("rect")
+        .attr("width", 10)
+        .attr("height", 10)
+        .attr("x", x_offset - 15)
+        .attr("y", y_offset)
+        .style("fill", function() {
+          return (self.colorsPublishers[publisher]);
+        });
+      x_offset += padding + 10;
+    }
+
+    // Create groups for our axis
+    self.x_group = self.svg.append("g");
+    self.y_group = self.svg.append("g");
+  }
+
+  // Update function that is called each time we change a component of our ScatterPlot
+  update(newData) {
+
+    // -------------------------------------------------------------------------
+    //     Bring everything we need from the constructor in this function
+    // -------------------------------------------------------------------------
+
+    let self = this;
+    self.data = newData;
+
+    let colorsPublishers = self.colorsPublishers;
+
+    // To compute Publisher's mean
+    let publishersButton = self.publishersButton;
+    let publishersMeanActivated = false;
+
+    // The tooltip used to show informations about games
+    var tooltip = self.tooltip;
+
+    // Boolean used to know if we are zoomed or not
+    let zoomed = false;
+
+    // -------------------------------------------------------------------------
+    //     Compute Scaling functions
+    // -------------------------------------------------------------------------
+
+    // Compute scale of x
+    let xScale = log$1()
+      .base(2)
+      .domain([0.01, (self.data.length > 0) ? max(self.data, function(game) {
+        return game.Global_Sales;
+      }) : 0])
+      .range([self.padding.left, self.width])
+      .nice();
+
+    // Compute scale of y
+    let yScale = linear$2()
+      .domain([0, (self.data.length > 0) ? max(self.data, function(game) {
+        return game.Critic_Score;
+      }) : 0])
+      .range([self.height - self.padding.bottom, self.padding.top])
+      .nice();
+
+    // Compute scale of radius
+    let rScale = linear$2()
+      .domain([0, (self.data.length > 0) ?
+        max(self.data, function(game) {
+          return game.Global_Sales;
+        }) : 0
+      ])
+      .range([1, 20])
+      .clamp(true);
+
+    // Compute scale of opacity
+    /*let oScale = d3.scaleLinear()
+      .domain([0, d3.max(self.data, function(game) {
+        return game.Global_Sales;
+      })])
+      .range([0, 1])
+      .clamp(true);*/
+
+    // -------------------------------------------------------------------------
+    //     Add the zoom feature
+    // -------------------------------------------------------------------------
+
+    // Compute new scale functions for zoom
+    let zoomed_xScale;
+    self.xAxis = axisBottom(xScale)
+      .ticks(self.nbXticks);
+    self.yAxis = axisLeft(yScale)
+      .ticks(self.nbYticks);
+
+    self.x_group.selectAll(".label").remove;
+    self.y_group.selectAll(".label").remove;
+
+    // Create X axis
+    self.x_group.attr("class", "x axis")
+      .attr("transform", "translate(0," + (self.height - self.padding.bottom) + ")")
+      .call(self.xAxis)
+      // Add a label to the axis
+      .append("text")
+      .attr("class", "label")
+      .attr("x", self.width - self.padding.right)
+      .attr("y", -15)
+      .style("text-anchor", "end")
+      .text(self.x_name)
+      .style("fill", "black");
+
+    // Create Y axis
+    self.y_group.attr("class", "y axis")
+      .attr("transform", "translate(" + self.padding.left + ",0)")
+      .call(self.yAxis)
+      // Add a label to the axis
+      .append("text")
+      .attr("class", "label")
+      .attr("x", 100)
+      .attr("y", 30)
+      .text(self.y_name)
+      .style("fill", "black");
+
+    // -------------------------------------------------------------------------
+    //     Create the circles for each game
+    // -------------------------------------------------------------------------
+
+    // Create a circle for each game
+    // Each game is identified uniquely with its NAME
+    self.circles = self.svg.selectAll(".circle")
+      .data(newData);
+
+    // Remove old circles when updating
+    self.circles.exit()
+      .style("opacity", 1)
+      // Add a falling and fading transition animation
+      .transition()
+      .delay(function(d) {
+        return Math.random() * 1000;
+      })
+      .duration(500)
+      .attr("cy", yScale(0))
+      .style("opacity", 0)
+      .remove();
+
+    // Add new circles for each data
+    self.circles.enter()
+      .append("circle")
+      .attr("class", "circle")
+      // Initialize Mouse Events
+      .on("mouseover", function(game) {
+        self.onMouseOverEventHandler(this, self, game, tooltip);
+      })
+      .on("mousemove", function() {
+        self.setTooltipPosition(self, tooltip);
+      })
+      .on("mouseout", function() {
+        self.onMouseOutEventHandler(this, self, tooltip);
+      })
+      .on("click", function(game) {
+        self.onClickEventHandler(this, self, game, tooltip);
+      })
+      // Position the circles
+      .attr("cx", function(game) {
+        if (zoomed) {
+          return zoomed_xScale(game.Global_Sales);
+        } else {
+          return xScale(game.Global_Sales);
+        }
+      })
+      .attr("cy", function(game) {
+        if (zoomed) {
+          return zoomed_xScale(game.Critic_Score);
+        } else {
+          return yScale(game.Critic_Score);
+        }
+      })
+      .attr("r", 0)
+      // Add a popping transition animation
+      .transition()
+      .delay(function(game) {
+        return Math.random() * 1000;
+      })
+      .ease(elasticOut)
+      .duration(3000)
+      .attr("r", self.radius)
+      // Give color and correct opacity to circles
+      // Highlight the one whose Publisher is well known
+      .attr("fill", function(game) {
+        return (colorsPublishers[game.Publisher] == undefined) ? "grey" : colorsPublishers[game.Publisher];
+      })
+      .attr("opacity", function(game) {
+        return (colorsPublishers[game.Publisher] == undefined) ? 0.2 : 1;
+      });
+
+    // Set the current circles position & make them move when the data is updating
+    self.circles.transition()
+      .delay(function(d) {
+        return Math.random() * 1000;
+      })
+      .duration(2000)
+      .style("opacity", 1)
+      .attr("cx", function(game) {
+        if (game.Global_Sales != undefined) {
+          return xScale(game.Global_Sales);
+        }
+      })
+      .attr("cy", function(game) {
+        if (game.Critic_Score != undefined) {
+          return yScale(game.Critic_Score);
+        }
+      });
+
+    // Inspired from https://bl.ocks.org/rutgerhofste/5bd5b06f7817f0ff3ba1daa64dee629d
+    let zoomBeh = zoom().on("zoom", function() {
+      zoomed = true;
+
+      let new_xScale = event.transform.rescaleX(xScale);
+      let new_yScale = event.transform.rescaleY(yScale);
+
+      // Update the axis
+      self.x_group.transition()
+        .duration(500)
+        .call(self.xAxis.scale(new_xScale));
+      self.y_group.transition()
+        .duration(500)
+        .call(self.yAxis.scale(new_yScale));
+
+      // Update circles
+      self.svg.selectAll("circle")
+        .attr("transform", event.transform);
+
+      zoomed_xScale = new_xScale;
+      
+    });
+
+    // Call the zoom feature
+    self.svg.call(zoomBeh);
+
+    // -------------------------------------------------------------------------
+    //     Create the big circles for each publisher
+    // -------------------------------------------------------------------------
+
+    let meanCircles = self.svg.selectAll(".meanCircle").data([]);
+
+    meanCircles.exit()
+                .transition()
+                .delay(function(game) {
+                  return Math.random() * 1000;
+                })
+                .duration(3000)
+                .attr("r", 0)
+                .remove();
+
+    // Compute the current publishers' average
+    // Format : [Name, globalSalesAverage, criticScoresAverage]
+    let publishersAverage = self.computeMeanPublishers(self.data);
+
+    // Publishers Button's events
+    publishersButton.on("mouseover", function() {
+                      select(this).attr("class", "publishers_button_hovered");
+                    })
+                    .on("mouseout", function() {
+                      select(this).attr("class", "publishers_button");
+                    })
+                    .on("click", function() {
+                      select(this)
+                        .transition()
+                        .duration(50)
+                        .attr("class", "publishers_button_pressed")
+                        .transition()
+                        .duration(50)
+                        .attr("class", "publishers_button_hovered");
+
+                        select(this)
+                          .select('g')
+                          .html("Display each game again");
+
+                      if(publishersMeanActivated == false) {
+                        publishersMeanActivated = true;
+                        // Move the current little circles to their mean
+                        selectAll(".circle")
+                          .transition()
+                          .delay(function() {
+                            return Math.random() * 1000;
+                          })
+                          .duration(3000)
+                          .attr("cx", function(game) {
+                            return xScale(self.getMeanPublisherCoords(publishersAverage, game)[0]);
+                          })
+                          .attr("cy", function(game) {
+                            return yScale(self.getMeanPublisherCoords(publishersAverage, game)[1]);
+                          })
+                          .style("opacity", 0);
+
+                          // Create one circle per Publisher
+                          // Make the publisher circles disappear
+                          let meanCircles = self.svg.selectAll(".meanCircle")
+                            .data(publishersAverage, function(publisher) {
+                              return publisher[0];
+                            });
+                          // Create a circle for each publisher
+                          // Each publisher is identified uniquely with its NAME
+                          meanCircles.enter()
+                            .append("circle")
+                            .attr("class", "meanCircle")
+                            .on("mouseover", function(publisher) {
+                              self.onMouseOverPublisherEventHandler(this, self, publisher, tooltip);
+                            })
+                            .on("mousemove", function() {
+                              self.setTooltipPosition(self, tooltip);
+                            })
+                            .on("mouseout", function() {
+                              self.onMouseOutPublisherEventHandler(this, self, tooltip);
+                            })
+                            .on("click", function(publisher) {
+                              self.onClickPublisherEventHandler(this, self, publisher, tooltip);
+                            })
+                            // Add transition and positioning
+                            .attr("cx", function(publisher) {
+                              return xScale(publisher[1]);
+                            })
+                            .attr("cy", function(publisher) {
+                              return yScale(publisher[2]);
+                            })
+                            .transition()
+                            .duration(5000)
+                            .attr("r", function(publisher) {
+                              return rScale(publisher[3]);
+                            })
+                            .attr("fill", function(publisher) {
+                              return (colorsPublishers[publisher[0]] == undefined) ? "grey" : colorsPublishers[publisher[0]];
+                            })
+                            .style("opacity", function(publisher) {
+                              return (colorsPublishers[publisher[0]] == undefined) ? 0.35 : 1;
+                            });
+
+                      } else {
+                        publishersMeanActivated = false;
+                        select(this).html("Compute Average of Publishers");
+
+                        // Move the current little circles to their original position
+                        self.update(newData);
+                      }
+                    });
+  }
+
+  // ---------------------------------------------------------------------------
+  //    Helpers Functions
+  // ---------------------------------------------------------------------------
+
+  // -----------------------------------------//
+  //     Mouse's events for small circles     //
+  // -----------------------------------------//
+
+  // Event handler when we click on a circle corresponding to a game
+  onClickEventHandler(context, self, game, tooltip) {
+    // Find previously selected, unselect
+    select(".selected")
+      .transition()
+      .duration(400)
+      .attr("r", self.radius);
+    select(".selected").classed("selected", false);
+
+    // Select current item
+    select(context).classed("selected", true);
+
+    select(context).transition()
+      .duration(700)
+      .attr("r", 2 * self.radius)
+      .style("cursor", "pointer");
+
+    // Display further informations about that game
+    tooltip.html(game.Name.bold().italics() + "<br/>" +
+      "<br/><div id=\"game_info\">Year of Release: " + game.Year_of_Release + "<br/>" +
+      "Genre: " + game.Genre + "<br/>" +
+      "Publisher: " + game.Publisher + "<br/>" +
+      "Global Sales: " + game.Global_Sales + "<br/>" +
+      "Critic Score: " + game.Critic_Score + "</div>");
+    self.setTooltipPosition(self, tooltip);
+
+    select("#game_info").style("text-align", "left")
+      .style("padding-left", "17px");
+
+    tooltip.transition()
+      .duration(400)
+      .style("opacity", 1)
+      .style("width", "200px")
+      .style("height", "auto");
+
+  }
+
+  // Event Handler when we pass the mouse over a circle
+  onMouseOverEventHandler(context, self, game, tooltip) {
+    if (!select(context).classed("selected")) {
+      // Make the circle swell when the mouse is on it
+      select(context)
+        .transition()
+        .duration(500)
+        .attr("r", 2 * self.radius)
+        .style("cursor", "pointer");
+
+      // Set tooltip transition
+      tooltip.transition()
+        .duration(400)
+        .style("opacity", 0.7)
+        .style("width", "100px");
+
+      // Set tooltip's text
+      tooltip.html(game.Name);
+      self.setTooltipPosition(self, tooltip);
+    }
+  }
+
+  // Event Handler when the mouse leaves the area of a circle
+  onMouseOutEventHandler(context, self, tooltip) {
+    if (!select(context).classed("selected")) {
+      select(context)
+        .transition()
+        .duration(700)
+        .attr("r", self.radius);
+
+      tooltip.transition()
+        .duration(400)
+        .style("opacity", 0.0)
+        .style("width", "40px");
+
+      tooltip.style("height", "auto");
+    }
+  }
+
+  // Small helper function to set tooltip's position
+  setTooltipPosition(self, tooltip) {
+    tooltip.style("left", (event.pageX - self.padding.left) + "px")
+           .style("top", (event.pageY - self.padding.top) + "px");
+  }
+
+  // -----------------------------------//
+  //     Publishers Average helpers     //
+  // -----------------------------------//
+
+  // Event Handler when we pass the mouse over a circle
+  onMouseOverPublisherEventHandler(context, self, publisher, tooltip) {
+    // Change cursor
+    select(context).style("cursor", "pointer");
+
+    // Set tooltip's text and position
+    tooltip.html(publisher[0]);
+    self.setTooltipPosition(self, tooltip);
+
+    // Set tooltip transition
+    tooltip.transition()
+      .duration(400)
+      .style("opacity", 0.7)
+      .style("width", "100px");
+  }
+
+  // Event Handler when the mouse leaves the area of a circle
+  onMouseOutPublisherEventHandler(context, self, tooltip) {
+    tooltip.transition()
+      .duration(400)
+      .style("opacity", 0.0)
+      .style("width", "40px");
+
+    tooltip.style("height", "auto");
+  }
+
+  onClickPublisherEventHandler(context, self, publisher, tooltip) {
+
+    // Display further informations about that publisher
+    tooltip.html(publisher[0].bold().italics() + "<br/>" +
+      "<br/><div id=\"publisher_info\"><i>Average of Global Sales:</i> " + publisher[1].toFixed(2) + "<br/>" +
+      "<i>Average Critical Score:</i> " + publisher[2].toFixed(2) + "</div>");
+
+    // Set tooltip's position
+    self.setTooltipPosition(self, tooltip);
+
+    select("#game_info").style("text-align", "left")
+      .style("padding-left", "17px");
+
+    tooltip.transition()
+      .duration(400)
+      .style("opacity", 1)
+      .style("width", "200px")
+      .style("height", "auto");
+
+  }
+
+
+  // Compute the average score and sales by Publisher
+  computeMeanPublishers(newData) {
+
+    // Group our games by publishers
+    var groupedByPublishers = newData.reduce(function(acc, game) {
+      (acc[game['Publisher']] = acc[game['Publisher']] || []).push(game);
+      return acc;
+    }, {});
+
+    var publishersAverage = [];
+    for (let publisher of Object.keys(groupedByPublishers)) {
+
+      // Initialize our values
+      let globalSales = 0.0;
+      let globalSalesCounter = 0;
+      let globalSalesAverage = 0.0;
+
+      let criticScoresCounter = 0;
+      let criticScoresAverage = 0.0;
+
+      let gamesCounter = 0;
+
+      // Get the list of games from that publisher
+      var gamesByPublisher = groupedByPublishers[publisher];
+      //console.log(publisher + " " + gamesByPublisher[0].Name + "\n");
+
+      globalSales = gamesByPublisher.reduce(function(acc, game) {
+        globalSalesCounter += 1;
+        gamesCounter += 1;
+        return acc + parseFloat(game.Global_Sales);
+      }, 0.0);
+
+      globalSalesAverage = globalSales / globalSalesCounter;
+
+      criticScoresAverage = gamesByPublisher.reduce(function(acc, game) {
+        criticScoresCounter += 1;
+        return acc + parseFloat(game.Critic_Score);
+      }, 0.0) / criticScoresCounter;
+
+      publishersAverage.push([publisher, globalSalesAverage, criticScoresAverage, gamesCounter]);
+    }
+    return publishersAverage;
+    //console.log("globalSalesAverage : " + publishersAverage[0][1] + " criticScoresAverage: " + publishersAverage[0][2]);
+  }
+
+  // Return the mean coordinates corresponding to a certain game
+  getMeanPublisherCoords(publishersAverage, game) {
+    for (let publisher of publishersAverage) {
+      if (publisher[0] == game.Publisher) {
+        return [publisher[1], publisher[2]];
+      }
+    }
+  }
+}
+
+// Inpired from https://bl.ocks.org/mbostock/6232537
+
+class TimeBrush {
+  constructor(container_id, timeInterval, dataManager) {
+
+    let self = this;
+    this.dataManager = dataManager;
+
+    // ---------------------------------------------------------------------------
+    // Set up parameters of our Time Brush
+    // ---------------------------------------------------------------------------
+
+    this.margin = {top: 10, right: 20, bottom: 40, left: 20};
+    let container_width = document.getElementById('timeBrush_container').offsetWidth;
+
+    this.width = container_width - this.margin.left - this.margin.right;
+    this.height = 80 - this.margin.top - this.margin.bottom;
+
+    this.parseDate = timeParse("%Y");
+
+    this.xScale = linear$2()
+                    .domain(timeInterval)
+                    .rangeRound([0, this.width]);
+
+    this.svg = select("#" + container_id)
+                 .append("svg")
+                 .attr("width", this.width + this.margin.left + this.margin.right)
+                 .attr("height", this.height + this.margin.top + this.margin.bottom)
+                 .append("g")
+                 .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+
+    this.svg.append("g")
+            .attr("class", "axis axis--grid")
+            .attr("transform", "translate(0," + this.height + ")")
+            .call(axisBottom(this.xScale)
+            .ticks(35)
+            .tickSize(-this.height)
+            .tickFormat(function() { return null; }))
+            .selectAll(".tick")
+            .classed("tick--minor", function(d) { return d; });
+
+    this.svg.append("g")
+            .attr("class", "axis axis--x")
+            .attr("transform", "translate(0," + this.height + ")")
+            .call(axisBottom(this.xScale)
+            .ticks(9)
+            .tickFormat(format("d"))
+            .tickPadding(0))
+            .attr("text-anchor", null)
+            .selectAll("text")
+            .attr("x", -19)
+            .attr("y", 15);
+
+    this.brushended = function() {
+
+        if (!event.sourceEvent) return; // Only transition after input.
+        if (!event.selection) return; // Ignore empty selections.
+        var d0 = event.selection.map(self.xScale.invert),
+            d1 = d0.map(Math.round);
+
+        // If empty when rounded, use floor & ceil instead.
+        if (d1[0] >= d1[1]) {
+          d1[0] = Math.floor(d0[0]);
+          d1[1] = Math.offset(d1[0]);
+        }
+
+        dataManager.setTimeInterval(d1);
+
+        select(this).transition().call(event.target.move, d1.map(self.xScale));
+      };
+
+    let brush = this.svg.append("g")
+            .attr("class", "brush")
+            .call(brushX()
+            .extent([[0, 0], [this.width, this.height]])
+            .on("end", this.brushended));
+  }
+}
+
 class GenreBar {
 
   constructor(container_id, colors) {
@@ -5169,11 +7986,12 @@ class GenreBar {
     this.svg.selectAll(".rect_bar")
             .remove();
 
+    let colors = this.colors;
     this.svg.selectAll("bar").data(this.data)
                   .enter()
                   .append("rect")
                   .attr('class', 'rect_bar')
-                  .style("fill", "steelblue")
+                  .style("fill", function(d, i){ return colors[d[0]]})
                   .attr("x", function(d) { return x(d[0]); })
                   .attr("width", x.rangeBand())
                   .attr("y", function(d) { return y(d[1]); })
@@ -5432,7 +8250,7 @@ class GenreBarButtons {
 
 class BrandBarChart {
 
-  constructor(parent, consoles, container_id, name, data) {
+  constructor(parent, consoles, container_id, name, data, colors) {
     this.container_id = container_id;
     this.parent = parent;
     this.consoles = consoles;
@@ -5452,6 +8270,8 @@ class BrandBarChart {
                  .attr("class", "brand_chart brand_chart_selected")
                  .attr("width", this.svg_width)
                  .attr("height", this.svg_height);
+
+    this.colors = colors;
 
     let svg = this.svg;
 
@@ -5601,12 +8421,14 @@ class BrandBarChart {
     this.bar_svg.selectAll(".rect_brand_bar")
               .remove();
 
+    let colors = this.colors;
     let tooltip = this.tooltip;
     this.group.selectAll("bar").data(this.data)
                 .enter()
                 .append("rect")
                 .attr('class', 'rect_bar')
-                .style("fill", "steelblue")
+                .style("fill", function(d, i) {
+                  return colors[d[0]]; })
                 .attr("x", 0)
                 .attr("height", 10)
                 .attr("y", function(d) { return y(d[0]) +y.rangeBand()/2 - 5; })
@@ -5634,7 +8456,8 @@ class BrandBarChart {
     if (!isNaN(bar_width)) {
       this.bar_svg.append("rect")
                   .attr('class', 'rect_brand_bar')
-                  .style("fill", "steelblue")
+                  .style("fill", function(d, i) {
+                    return Object.values(colors)[0]; })
                   .attr("x", 0)
                   .attr("height", 60)
                   .attr("y", svg_height/2-30)
@@ -5661,19 +8484,27 @@ class BrandBarChart {
   }
 }
 
+function pick(obj, keys) {
+    return keys.map(k => k in obj ? {[k]: obj[k]} : {})
+               .reduce((res, o) => Object.assign(res, o), {});
+}
+
 class ConsoleBar {
 
-  constructor(container_id, dataManager) {
-    this.nintendo = ["NES", "SNES", "N64", "GC", "Wii", "WiiU", "GB", "DS", "GBA", "3DS"];
+  constructor(colorsConsole) {
+    this.nintendo = ["GC", "Wii", "WiiU", "DS", "GBA", "3DS"];
     this.playstation = ["PS", "PS2", "PS3", "PS4", "PSP"];
     this.xbox = ["X360", "XOne", "XB"];
-    this.atari = ["2600"];
     this.pc = ["PC"];
+
+    this.colorsNintendo = pick(colorsConsole, this.nintendo);
+    this.colorsPlaystation = pick(colorsConsole, this.playstation);
+    this.colorsXbox = pick(colorsConsole, this.xbox);
+    this.colorsPC = pick(colorsConsole, this.pc);
 
     // Creation of a dictionary representing the selected consoles
     this.consoles = this.nintendo.concat(this.playstation)
                             .concat(this.xbox)
-                            .concat(this.atari)
                             .concat(this.pc);
     this.consoles_selected = {};
     for (let e of this.consoles) {
@@ -5687,23 +8518,23 @@ class ConsoleBar {
 
     this.nintendoBarChart = new BrandBarChart(this, this.nintendo, "nintendo_barChart_container",
                                        "Nintendo",
-                                       this.get_brand_distribution(this.nintendo));
+                                       this.get_brand_distribution(this.nintendo),
+                                       this.colorsNintendo);
 
     this.playstationBarChart = new BrandBarChart(this, this.playstation, "playstation_barChart_container",
                                        "Playstation",
-                                       this.get_brand_distribution(this.nintendo));
+                                       this.get_brand_distribution(this.playstation),
+                                       this.colorsPlaystation);
 
     this.xboxBarChart = new BrandBarChart(this, this.xbox, "xbox_barChart_container",
                                        "Xbox",
-                                       this.get_brand_distribution(this.nintendo));
-
-    this.atariBarChart = new BrandBarChart(this, this.atari, "atari_barChart_container",
-                                       "Atari",
-                                       this.get_brand_distribution(this.nintendo));
+                                       this.get_brand_distribution(this.xbox),
+                                       this.colorsXbox);
 
     this.pcBarChart = new BrandBarChart(this, this.pc, "pc_barChart_container",
                                        "PC",
-                                       this.get_brand_distribution(this.nintendo));
+                                       this.get_brand_distribution(this.pc),
+                                       this.colorsPC);
 
     this.tooltip = d3.select("body")
                      .append("div")
@@ -5729,12 +8560,8 @@ class ConsoleBar {
                                     this.sum_brand_distribution[2][1],
                                     max_brand,
                                     game_count);
-    this.atariBarChart.update(this.get_brand_distribution(this.atari),
-                                    this.sum_brand_distribution[3][1],
-                                    max_brand,
-                                    game_count);
     this.pcBarChart.update(this.get_brand_distribution(this.pc),
-                                    this.sum_brand_distribution[4][1],
+                                    this.sum_brand_distribution[3][1],
                                     max_brand,
                                     game_count);
   }
@@ -5745,13 +8572,11 @@ class ConsoleBar {
   computeConsoleDistribution(newData) {
     let nintendo = 0;
     let playstation = 0;
-    let atari = 0;
     let xbox = 0;
     let pc = 0;
 
     let keys = this.nintendo.concat(this.playstation)
                             .concat(this.xbox)
-                            .concat(this.atari)
                             .concat(this.pc);
 
     let distribution_dict = {};
@@ -5771,13 +8596,9 @@ class ConsoleBar {
     }
 
     for (let e of distribution) {
-      if (e[0] == "NES" ||
-          e[0] == "SNES" ||
-          e[0] == "N64" ||
-          e[0] == "GC" ||
+      if (e[0] == "GC" ||
           e[0] == "Wii" ||
           e[0] == "WiiU" ||
-          e[0] == "GB" ||
           e[0] == "DS" ||
           e[0] == "GBA" ||
           e[0] == "3DS") {
@@ -5789,9 +8610,6 @@ class ConsoleBar {
                e[0] == "PS4" ||
                e[0] == "PSP") {
         playstation += e[1];
-      }
-      else if (e[0] == "2600"){
-        atari += e[1];
       }
       else if (e[0] == "X360" ||
                e[0] == "XOne" ||
@@ -5807,7 +8625,6 @@ class ConsoleBar {
     this.sum_brand_distribution = [["Nintendo", nintendo],
                                    ["Playstation", playstation],
                                    ["XBox", xbox],
-                                   ["Atari", atari],
                                    ["PC", pc]];
   }
 
@@ -5830,9 +8647,6 @@ class ConsoleBar {
         break;
       case "xbox_barChart_container":
         brand = this.xbox;
-        break;
-      case "atari_barChart_container":
-        brand = this.atari;
         break;
       case "pc_barChart_container":
         brand = this.pc;
@@ -5875,7 +8689,12 @@ class ConsoleBar {
 class DataManager {
 
   constructor(data, components_to_update, genres, platforms, publishers, timeInterval) {
-    this.data = data;
+    this.data = (data.reduce((acc, game) => {
+      if(game.Critic_Score != "") {
+        acc.push(game);
+      }
+      return acc;
+    }, [])).reverse();
     this.components_to_update = components_to_update;
     this.genres = genres;
     this.platforms = platforms;
@@ -5944,7 +8763,10 @@ class DataManager {
 
 class LoadingScreen {
 
-  constructor() {}
+  constructor() {
+    document.getElementById("loading_text").style.opacity = "1";
+    document.getElementById("loading_bar_background").style.opacity = "1";
+  }
 
   // percentage = float of progress (eg 0.77)
   setProgress(percentage) {
@@ -5977,6 +8799,29 @@ function initialize() {
 
   let dataProcessor = new DataProcessor(data);
 
+  let colorsConsole = {
+    "NES": "#632920",
+    "SNES": "#6e0f01",
+    "N64": "#792215",
+    "GC": "#831e0e",
+    "Wii": "#932513",
+    "WiiU": "#a3200a",
+    "GB": "#b9260d",
+    "DS": "#d02407",
+    "GBA": "#e33316",
+    "3DS": "#f54123",
+    "PS": "#025485",
+    "PS2": "#046195",
+    "PS3": "#036eac",
+    "PS4": "#0b90dd",
+    "PSP": "#0481c9",
+    "2600": "#606060",
+    "X360": "#026705",
+    "XOne": "#047e09",
+    "XB": "#009506",
+    "PC": "#77007a"
+  };
+
   // ---------------------------------------------------------------------------
   // Set up left side menu
   // ---------------------------------------------------------------------------
@@ -5996,24 +8841,48 @@ function initialize() {
     // Get data Releases
     let platformList = ["2600", "NES", "SNES", "N64", "GC", "Wii", "WiiU", "GB", "DS", "GBA", "3DS", "PS", "PS2", "PS3", "PS4", "PSP", "X360", "XOne", "XB", "PC"];
     let console_release_data = dataProcessor.getConsoleReleaseYears(platformList);
-    
-  /*
-    not in list :
+    let typesConsoles = {};
+    for (let platform of platformList) typesConsoles[platform] = 'area-spline';
 
-    GEN : Mega Drive                  (SEGA)
-    DC : Dreamcast                    (SEGA)
-    PSV : PlayStation Vita            (PlayStation) (SONY)
-    SAT : Saturn                      (SEGA)
-    SCD : Sega CD (Mega CD)           (SEGA)
-    WS : WonderSwan                   (Bandai)
-    NG : Neo-Geo AES                  (SNK)
-    TG16 : PC Engine                  (NEC Corporation)
-    3DO : 3DO Interactive Multiplayer (Panasonic)
-    GG : Game Gear                    (SEGA)
-    PCFX : PC-FX                      (NEC)
-  */
+    let order_stack_consoles = {
+      "NES": 1,
+      "SNES": 2,
+      "N64": 3,
+      "GC": 4,
+      "Wii": 5,
+      "WiiU": 6,
+      "GB": 7,
+      "DS": 8,
+      "GBA": 9,
+      "3DS": 10,
+      "PS": 11,
+      "PS2": 12,
+      "PS3": 13,
+      "PS4": 14,
+      "PSP": 15,
+      "2600": 16,
+      "X360": 17,
+      "XOne": 18,
+      "XB": 19,
+      "PC": 20
+    };
+    /*
+      not in list :
 
-    /*// Set Up Release Games Graph
+      GEN : Mega Drive                  (SEGA)
+      DC : Dreamcast                    (SEGA)
+      PSV : PlayStation Vita            (PlayStation) (SONY)
+      SAT : Saturn                      (SEGA)
+      SCD : Sega CD (Mega CD)           (SEGA)
+      WS : WonderSwan                   (Bandai)
+      NG : Neo-Geo AES                  (SNK)
+      TG16 : PC Engine                  (NEC Corporation)
+      3DO : 3DO Interactive Multiplayer (Panasonic)
+      GG : Game Gear                    (SEGA)
+      PCFX : PC-FX                      (NEC)
+    */
+
+    // Set Up Release Games Graph
     let consoleReleaseYears = new StackedAreaChart("consoleReleaseYears_container", "Year", "Number of games released that year", 1600, console_release_data, typesConsoles, [platformList], colorsConsole, order_stack_consoles);
 
 
@@ -6027,32 +8896,32 @@ function initialize() {
     // Set Up Sales Games Graph
     let consoleSalesYears = new StackedAreaChart("consoleSalesYears_container", "Year", "Sales of games released that year", 700, console_sales_data_WORLD, typesConsoles, [platformList], colorsConsole, order_stack_consoles);
     // Set Up Region Selector
-    let consoleWarRegionSelector = new RegionSelector("console_sales_region_selector")
+    let consoleWarRegionSelector = new RegionSelector("console_sales_region_selector");
     consoleWarRegionSelector.selectedRegion = (region) => {
       switch (region) {
         case "WORLD":
-          consoleSalesYears.update(console_sales_data_WORLD)
+          consoleSalesYears.update(console_sales_data_WORLD);
           break;
         case "NA":
-          consoleSalesYears.update(console_sales_data_NA)
+          consoleSalesYears.update(console_sales_data_NA);
           break;
         case "EU":
-          consoleSalesYears.update(console_sales_data_EU)
+          consoleSalesYears.update(console_sales_data_EU);
           break;
         case "JP":
-          consoleSalesYears.update(console_sales_data_JP)
+          consoleSalesYears.update(console_sales_data_JP);
           break;
         case "OTHER":
-          consoleSalesYears.update(console_sales_data_OTHER)
+          consoleSalesYears.update(console_sales_data_OTHER);
           break;
       }
-    }
+    };
     //----------------------- Genre Sales per Console ----------------------------
     // Get Data Genre
-    let genreList = ["Sports", "Platform", "Racing", "Role-Playing", "Puzzle", "Misc", "Shooter", "Simulation", "Action", "Fighting", "Adventure", "Strategy"]
+    let genreList = ["Sports", "Platform", "Racing", "Role-Playing", "Puzzle", "Misc", "Shooter", "Simulation", "Action", "Fighting", "Adventure", "Strategy"];
     let console_genre_data = dataProcessor.getConsoleGenreSales(genreList, platformList);
     // Set Up Graph Genre
-    let consoleGenreSales = new StackedBarChart("consoleGenre_container", "Consoles", "All-Time Sales", platformList, console_genre_data, [genreList]);
+    let consoleGenreSales = new StackedAreaChart$1("consoleGenre_container", "Consoles", "All-Time Sales", platformList, console_genre_data, [genreList]);
     // Set Up text interactivity
     let sportGamesTextButton = document.getElementById('sport_games_text_button');
     sportGamesTextButton.onclick = () => consoleGenreSales.showOnly("Sports");
@@ -6062,99 +8931,237 @@ function initialize() {
     shooterGamesTextButton.onclick = () => consoleGenreSales.showOnly("Shooter");
     let strategyGamesTextButton = document.getElementById('strategy_games_text_button');
     strategyGamesTextButton.onclick = () => consoleGenreSales.showOnly("Strategy");
-    */
+
   }
 
   // ---------------------------------------------------------------------------
   // PUBLISHER WAR
   // ---------------------------------------------------------------------------
-  consoleWarInit();
-  loadingScreen.setProgress(0.7);
-  setTimeout(() => {
-    loadingScreen.setProgress(1);
-    setTimeout(() => loadingScreen.hide(), 400);
-  }, 550);
+  function publisherWarInit() {
+    //--------------------- Top Publisher by Sales -------------------------------
+    // Get Data Sales Top10
+    let publishers_sales_top10_data_WORLD = dataProcessor.getTop10PublisherSales("Global");
+    let publishers_sales_top10_data_NA = dataProcessor.getTop10PublisherSales("NA");
+    let publishers_sales_top10_data_EU = dataProcessor.getTop10PublisherSales("EU");
+    let publishers_sales_top10_data_JP = dataProcessor.getTop10PublisherSales("JP");
+    let publishers_sales_top10_data_OTHER = dataProcessor.getTop10PublisherSales("Other");
+    // Set Up Publishers Sales Top 10 graph
+    let publisherWarSalesTop10 = new BarChart("publisherSalesTop10_container", "Publishers", "All-Time Sales", publishers_sales_top10_data_WORLD[0], [publishers_sales_top10_data_WORLD[1]], {
+      Sales: "#3c3c3c"
+    });
+    // Get Data Sales over year
+    let top10_publishers_sales_year_data_WORLD = dataProcessor.getPublisherSalesYear("Global", publishers_sales_top10_data_WORLD[0]);
+    let top10_publishers_sales_year_data_NA = dataProcessor.getPublisherSalesYear("NA", publishers_sales_top10_data_NA[0]);
+    let top10_publishers_sales_year_data_EU = dataProcessor.getPublisherSalesYear("EU", publishers_sales_top10_data_EU[0]);
+    let top10_publishers_sales_year_data_JP = dataProcessor.getPublisherSalesYear("JP", publishers_sales_top10_data_JP[0]);
+    let top10_publishers_sales_year_data_OTHER = dataProcessor.getPublisherSalesYear("Other", publishers_sales_top10_data_OTHER[0]);
+    // Set Up Publisher Sales Year
+    let typesPublishers_WORLD = {};
+    for (let publisher of publishers_sales_top10_data_WORLD[0]) typesPublishers_WORLD[publisher] = 'area-spline';
+    let typesPublishers_NA = {};
+    for (let publisher of publishers_sales_top10_data_NA[0]) typesPublishers_NA[publisher] = 'area-spline';
+    let typesPublishers_EU = {};
+    for (let publisher of publishers_sales_top10_data_WORLD[0]) typesPublishers_EU[publisher] = 'area-spline';
+    let typesPublishers_JP = {};
+    for (let publisher of publishers_sales_top10_data_WORLD[0]) typesPublishers_JP[publisher] = 'area-spline';
+    let typesPublishers_OTHER = {};
+    for (let publisher of publishers_sales_top10_data_WORLD[0]) typesPublishers_OTHER[publisher] = 'area-spline';
+    let colorsPublishers = {
+      "Nintendo": "#c22020",
+      "Electronic Arts": "#4557a2",
+      "Activision": "#4b402f",
+      "Sony Computer Entertainment": "#00bbff",
+      "Ubisoft": "#9bb4bf",
+      "Take-Two Interactive": "#d1cb42",
+      "THQ": "#b85901",
+      "Konami Digital Entertainment": "#385b33",
+      "Sega": "#331a49",
+      "Namco Bandai Games": "#ff0060",
+      "Microsoft Game Studios": "#16e800",
+      "Atari": "#9f249c",
+      "Capcom": "#80af97",
+      "Square Enix": "#000186",
+      "SquareSoft": "#c7be7f",
+      "Enix Corporation": "#7c5277",
+      "Tecmo Koei": "#4e4e4e"
+    };
+    let order_stack_publishers = {
+      "Nintendo": 1,
+      "Electronic Arts": 2,
+      "Activision": 3,
+      "Sony Computer Entertainment": 4,
+      "Ubisoft": 5,
+      "Take-Two Interactive": 6,
+      "THQ": 7,
+      "Konami Digital Entertainment": 8,
+      "Sega": 9,
+      "Namco Bandai Games": 10,
+      "Microsoft Game Studios": 11,
+      "Atari": 12,
+      "Sega": 13,
+      "Capcom": 14,
+      "Square Enix": 15,
+      "SquareSoft": 16,
+      "Enix Corporation": 17,
+      "Tecmo Koei": 18
+    };
+    let publisherWarSalesYears = new StackedAreaChart("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_WORLD, typesPublishers_WORLD, [publishers_sales_top10_data_WORLD[0]], colorsPublishers, order_stack_publishers);
+
+    // Set Up Region Selector
+    let publisherWarRegionSelector = new RegionSelector("publishers_war_region_selector");
+    publisherWarRegionSelector.selectedRegion = (region) => {
+      let container = document.getElementById("publisherSalesTop10_container");
+      switch (region) {
+        case "WORLD":
+          publisherWarSalesTop10.update(publishers_sales_top10_data_WORLD[0], [publishers_sales_top10_data_WORLD[1]]);
+          container.classList.add("WORLD");
+          container.classList.remove("NA");
+          container.classList.remove("EU");
+          container.classList.remove("JP");
+          container.classList.remove("OTHER");
+          setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_WORLD, typesPublishers_WORLD, [publishers_sales_top10_data_WORLD[0]], colorsPublishers, order_stack_publishers), 200);
+          break;
+        case "NA":
+          publisherWarSalesTop10.update(publishers_sales_top10_data_NA[0], [publishers_sales_top10_data_NA[1]]);
+          container.classList.remove("WORLD");
+          container.classList.add("NA");
+          container.classList.remove("EU");
+          container.classList.remove("JP");
+          container.classList.remove("OTHER");
+          setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_NA, typesPublishers_NA, [publishers_sales_top10_data_NA[0]], colorsPublishers, order_stack_publishers), 200);
+          break;
+        case "EU":
+          publisherWarSalesTop10.update(publishers_sales_top10_data_EU[0], [publishers_sales_top10_data_EU[1]]);
+          container.classList.remove("WORLD");
+          container.classList.remove("NA");
+          container.classList.add("EU");
+          container.classList.remove("JP");
+          container.classList.remove("OTHER");
+          setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_EU, typesPublishers_EU, [publishers_sales_top10_data_EU[0]], colorsPublishers, order_stack_publishers), 200);
+          break;
+        case "JP":
+          publisherWarSalesTop10.update(publishers_sales_top10_data_JP[0], [publishers_sales_top10_data_JP[1]]);
+          container.classList.remove("WORLD");
+          container.classList.remove("NA");
+          container.classList.remove("EU");
+          container.classList.add("JP");
+          container.classList.remove("OTHER");
+          setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_JP, typesPublishers_JP, [publishers_sales_top10_data_JP[0]], colorsPublishers, order_stack_publishers), 200);
+          break;
+        case "OTHER":
+          publisherWarSalesTop10.update(publishers_sales_top10_data_OTHER[0], [publishers_sales_top10_data_OTHER[1]]);
+          container.classList.remove("WORLD");
+          container.classList.remove("NA");
+          container.classList.remove("EU");
+          container.classList.remove("JP");
+          container.classList.add("OTHER");
+          setTimeout(() => publisherWarSalesYears.update_full("publisherSalesYears_container", "Year", "Sales of games released that year", 500, top10_publishers_sales_year_data_OTHER, typesPublishers_OTHER, [publishers_sales_top10_data_OTHER[0]], colorsPublishers, order_stack_publishers), 200);
+          break;
+      }
+    };
+  }
 
   // ---------------------------------------------------------------------------
   // GAME ANALYSIS
   // ---------------------------------------------------------------------------
+  function gameAnalysisInit() {
 
-  let colorsGameType = {
-    "Sports": "#632920",
-    "Platform": "#6e0f01",
-    "Racing": "#792215",
-    "Role-Playing": "#831e0e",
-    "Puzzle": "#932513",
-    "Misc": "#a3200a",
-    "Shooter": "#b9260d",
-    "Simulation": "#d02407",
-    "Action": "#e33316",
-    "Fighting": "#f54123",
-    "Adventure": "#025485",
-    "Strategy": "#046195",
-  };
+    let colorsGameType = {
+      "Sports": "#632920",
+      "Platform": "#6e0f01",
+      "Racing": "#792215",
+      "Role-Playing": "#831e0e",
+      "Puzzle": "#932513",
+      "Misc": "#a3200a",
+      "Shooter": "#b9260d",
+      "Simulation": "#d02407",
+      "Action": "#e33316",
+      "Fighting": "#f54123",
+      "Adventure": "#f56023",
+      "Strategy": "#f57523",
+    };
 
-  let genreList = ["Sports",
-                    "Platform",
-                    "Racing",
-                    "Role-Playing",
-                    "Puzzle",
-                    "Misc",
-                    "Shooter",
-                    "Simulation",
-                    "Action",
-                    "Fighting",
-                    "Adventure",
-                    "Strategy"];
-/*
-  let platformList = [
-                      "NES",
-                      "SNES",
-                      "N64",
-                      "GC",
-                      "Wii",
-                      "WiiU",
-                      "GB",
-                      "DS",
-                      "GBA",
-                      "3DS",
-                      "PS",
-                      "PS2",
-                      "PS3",
-                      "PS4",
-                      "PSP",
-                      "2600",
-                      "X360",
-                      "XOne",
-                      "XB",
-                      "PC",
-                      "GEN",
-                      "DC",
-                      "PSV",
-                      "SAT",
-                      "SCD",
-                      "GG"]
-    }
-*/
-  let genreBar = new GenreBar("genreBar_container", colorsGameType);
+    let genreList = ["Sports",
+      "Platform",
+      "Racing",
+      "Role-Playing",
+      "Puzzle",
+      "Misc",
+      "Shooter",
+      "Simulation",
+      "Action",
+      "Fighting",
+      "Adventure",
+      "Strategy"
+    ];
+    /*
+      let platformList = [
+                          "NES",
+                          "SNES",
+                          "N64",
+                          "GC",
+                          "Wii",
+                          "WiiU",
+                          "GB",
+                          "DS",
+                          "GBA",
+                          "3DS",
+                          "PS",
+                          "PS2",
+                          "PS3",
+                          "PS4",
+                          "PSP",
+                          "2600",
+                          "X360",
+                          "XOne",
+                          "XB",
+                          "PC",
+                          "GEN",
+                          "DC",
+                          "PSV",
+                          "SAT",
+                          "SCD",
+                          "GG"]
+        }
+    */
 
-  let consoleBar = new ConsoleBar();
+    let genreBar = new GenreBar("genreBar_container", colorsGameType);
+    let scatterPlot = new ScatterPlot("scatterPlot_container", "Number of Sales", "Critics Score");
 
-  let platformList = ["2600", "NES", "SNES", "N64", "GC", "Wii", "WiiU", "GB", "DS", "GBA", "3DS", "PS", "PS2", "PS3", "PS4", "PSP", "X360", "XOne", "XB", "PC"];
-  let dataManager = new DataManager(data,
-                                    [genreBar, consoleBar],
-                                    genreList,
-                                    platformList,
-                                    dataProcessor.getPublisherList(),
-                                    [1980, 2015]);
+    let consoleBar = new ConsoleBar(colorsConsole);
 
-  consoleBar.setDataManager(dataManager);
+    let platformList = ["GC", "Wii", "WiiU", "DS", "GBA", "3DS", "PS", "PS2", "PS3", "PS4", "PSP", "X360", "XOne", "XB", "PC"];
+    let dataManager = new DataManager(data,
+                                      [scatterPlot, genreBar, consoleBar],
+                                      genreList,
+                                      platformList,
+                                      dataProcessor.getPublisherList(),
+                                      [1984, 2015]);
 
-  let genreBarButtons = new GenreBarButtons("genreBarButtons_container",
-    dataProcessor.getGenreList(),
-    dataManager);
+    consoleBar.setDataManager(dataManager);
 
-  //let scatterPlot = new ScatterPlot("scatterPlot_container", data, "Number of Sales", "Critics Score");
+    let genreBarButtons = new GenreBarButtons("genreBarButtons_container",
+      dataProcessor.getGenreList(),
+      dataManager);
+
+    let timeBrush = new TimeBrush("timeBrush_container", [1984, 2015], dataManager);
+    //dataManager.setPlatform(dataProcessor.getConsoleList())
+  }
+
+  // Loading Screen Timing
+  consoleWarInit();
+  loadingScreen.setProgress(0.5);
+  setTimeout(() => {
+    publisherWarInit();
+    loadingScreen.setProgress(0.8);
+    setTimeout(() => {
+      gameAnalysisInit();
+      setTimeout(() => {
+        loadingScreen.setProgress(1);
+        setTimeout(() => {loadingScreen.hide();}, 1500);
+      }, 600);
+    }, 600);
+  }, 600);
 }
 
 }());
