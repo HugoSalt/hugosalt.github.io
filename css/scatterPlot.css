@@ -29,8 +29,9 @@
 }
 
 .publishers_button {
+  display: flex;
   width: 200px;
-  height: auto;
+  height: 46px;
   background: #d9dfe0;
   border: solid;
   border-color: #707080;
@@ -43,8 +44,9 @@
 }
 
 .publishers_button_hovered {
+  display: flex;
   width: 200px;
-  height: auto;
+  height: 46px;
   background: #e9eff0;
   border: solid;
   border-color: #707080;
@@ -57,8 +59,9 @@
 }
 
 .publishers_button_pressed {
+  display: flex;
   width: 200px;
-  height: auto;
+  height: 46px;
   background: #b0b0a7;
   border: solid;
   border-color: #707080;
@@ -68,4 +71,8 @@
   padding: 5px;
   margin-top: 30px;
   cursor: pointer;
+}
+
+.margin_center {
+  margin: auto;
 }
