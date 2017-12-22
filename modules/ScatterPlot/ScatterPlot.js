@@ -184,8 +184,9 @@ export default class ScatterPlot {
     // -------------------------------------------------------------------------
 
     // Compute scale of x
-    let xScale = d3.scaleLinear()
-                    .domain([0, (self.data.length > 0)? d3.max(self.data, function(game) {
+    let xScale = d3.scaleLog()
+                    .base(2)
+                    .domain([0.01, (self.data.length > 0)? d3.max(self.data, function(game) {
                       return game.Global_Sales;
                     }) : 0])
                     .range([self.padding.left, self.width])
@@ -267,7 +268,9 @@ export default class ScatterPlot {
 
     // Create a circle for each game
     // Each game is identified uniquely with its NAME
-    self.circles = self.svg.selectAll("circle").data(newData);
+    self.circles = self.svg.selectAll("circle")
+                            .attr("class", "circle")
+                            .data(newData);
 
     // Remove old circles when updating
     self.circles.exit()
@@ -383,14 +386,8 @@ export default class ScatterPlot {
     // Compute the current publishers' average
     // Format : [Name, globalSalesAverage, criticScoresAverage]
     let publishersAverage = self.computeMeanPublishers(self.data);
+    var meanCircles;
 
-    // Create a circle for each publisher
-    // Each publisher is identified uniquely with its NAME
-    var meanCircles = self.svg.selectAll("circle")
-                              .data(publishersAverage, function(publisher) {
-                                return publisher[0];
-                              })
-                              .attr("class", "meanCircle");
     // Publishers Button's events
     publishersButton.on("mouseover", function() {
                       d3.select(this).style("cursor", "pointer");
@@ -398,8 +395,10 @@ export default class ScatterPlot {
                     .on("click", function() {
                       if(publishersMeanActivated == false) {
                         publishersMeanActivated = true;
+
                         // Move the current little circles to their mean
-                        self.svg.selectAll("circle") .transition()
+                        d3.selectAll(".circle")
+                                .transition()
                                 .delay(function() {
                                   return Math.random() * 1000;
                                 })
@@ -409,12 +408,22 @@ export default class ScatterPlot {
                                 })
                                 .attr("cy", function(game) {
                                   return yScale(self.getMeanPublisherCoords(publishersAverage, game)[1]);
-                                })
-                                .style("opacity", 0);
+                                });
+
+                        //d3.selectAll(".circle").remove();
+
+                        // Create a circle for each publisher
+                        // Each publisher is identified uniquely with its NAME
+                        meanCircles = self.svg.selectAll("circle")
+                                                  .attr("class", "meanCircle")
+                                                  .data(publishersAverage, function(publisher) {
+                                                    return publisher[0];
+                                                  });
 
                         // Create one circle per Publisher
                         meanCircles.enter()
                                     .append("circle")
+                                    .attr("class", "meanCircle")
                                     .on("mouseover", function(publisher) {
                                       self.onMouseOverPublisherEventHandler(this, self, publisher, tooltip);
                                     })
@@ -446,8 +455,22 @@ export default class ScatterPlot {
                                       return (colorsPublishers[publisher[0]] == undefined)? 0.5 : 1;
                                     });
 
+                                    d3.select(this).html("Display each game again");
+
                       } else {
-                        publishersMeanActivated = true;
+                        publishersMeanActivated = false;
+
+                        // Make the publisher circles disappear
+                        meanCircles.exit()
+                        transition()
+                                    .duration(3000)
+                                    .attr("r", 0)
+                                    .remove();
+
+                        d3.select(this).html("Compute Average of Publishers");
+
+                        // Move the current little circles to their original position
+                        self.update(newData);
                       }
                     });
 
