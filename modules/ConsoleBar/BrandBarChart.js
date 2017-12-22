@@ -96,7 +96,6 @@ export default class BrandBarChart {
 
   update(newData, scoreBrand, maxBrand, game_count) {
     this.data = newData
-    console.log(newData)
 
     this.height = 12 * this.data.length + 60 - this.margin.top - this.margin.bottom
     this.svg.attr("height", this.height)
@@ -179,7 +178,8 @@ export default class BrandBarChart {
                 .enter()
                 .append("rect")
                 .attr('class', 'rect_bar')
-                .style("fill", "steelblue")
+                .style("fill", function(d, i) {
+                  return colors[d[0]]; })
                 .attr("x", 0)
                 .attr("height", 10)
                 .attr("y", function(d) { return y(d[0]) +y.rangeBand()/2 - 5; })

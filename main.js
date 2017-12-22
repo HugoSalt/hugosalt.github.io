@@ -400,5 +400,5 @@ function initialize() {
     dataManager)
 
   let timeBrush = new TimeBrush("timeBrush_container", [1980, 2015], dataManager);
-  dataManager.setPlatform(dataProcessor.getConsoleList())
+  //dataManager.setPlatform(dataProcessor.getConsoleList())
 }
