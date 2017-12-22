@@ -31,9 +31,41 @@
 .publishers_button {
   width: 200px;
   height: auto;
-  background: grey;
-  border: black;
+  background: #d9dfe0;
+  border: solid;
+  border-color: #707080;
+  border-width: 2px;
   border-radius: 8px;
   text-align: center;
   padding: 5px;
+  margin-top: 30px;
+  cursor: pointer;
+}
+
+.publishers_button_hovered {
+  width: 200px;
+  height: auto;
+  background: #e9eff0;
+  border: solid;
+  border-color: #707080;
+  border-width: 2px;
+  border-radius: 8px;
+  text-align: center;
+  padding: 5px;
+  margin-top: 30px;
+  cursor: pointer;
+}
+
+.publishers_button_pressed {
+  width: 200px;
+  height: auto;
+  background: #b0b0a7;
+  border: solid;
+  border-color: #707080;
+  border-width: 2px;
+  border-radius: 8px;
+  text-align: center;
+  padding: 5px;
+  margin-top: 30px;
+  cursor: pointer;
 }
