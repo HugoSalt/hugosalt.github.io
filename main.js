@@ -15,14 +15,14 @@ import DataManager from "./modules/DataManager/DataManager.js";
 import LoadingScreen from "./modules/LoadingScreen/LoadingScreen.js";
 
 // Initialize Loading Screen
-let loadingScreen = new LoadingScreen(); // TODO uncomment
-loadingScreen.setProgress(0.0); // TODO uncomment
+let loadingScreen = new LoadingScreen();
+loadingScreen.setProgress(0.0);
 
 // Load CSV Data
 let data = [];
 d3.csv("./data/Video_Games_Sales_as_at_22_Dec_2016.csv", (parsed_data) => {
   parsed_data.forEach((line) => data.push(line));
-  //loadingScreen.setProgress(0.2); // TODO uncomment
+  loadingScreen.setProgress(0.2);
   setTimeout(() => initialize(), 550);
 });
 
@@ -96,23 +96,23 @@ function initialize() {
       "XB": 19,
       "PC": 20
     }
-  /*
-    not in list :
+    /*
+      not in list :
 
-    GEN : Mega Drive                  (SEGA)
-    DC : Dreamcast                    (SEGA)
-    PSV : PlayStation Vita            (PlayStation) (SONY)
-    SAT : Saturn                      (SEGA)
-    SCD : Sega CD (Mega CD)           (SEGA)
-    WS : WonderSwan                   (Bandai)
-    NG : Neo-Geo AES                  (SNK)
-    TG16 : PC Engine                  (NEC Corporation)
-    3DO : 3DO Interactive Multiplayer (Panasonic)
-    GG : Game Gear                    (SEGA)
-    PCFX : PC-FX                      (NEC)
-  */
+      GEN : Mega Drive                  (SEGA)
+      DC : Dreamcast                    (SEGA)
+      PSV : PlayStation Vita            (PlayStation) (SONY)
+      SAT : Saturn                      (SEGA)
+      SCD : Sega CD (Mega CD)           (SEGA)
+      WS : WonderSwan                   (Bandai)
+      NG : Neo-Geo AES                  (SNK)
+      TG16 : PC Engine                  (NEC Corporation)
+      3DO : 3DO Interactive Multiplayer (Panasonic)
+      GG : Game Gear                    (SEGA)
+      PCFX : PC-FX                      (NEC)
+    */
 
-    /*// Set Up Release Games Graph
+    // Set Up Release Games Graph
     let consoleReleaseYears = new StackedAreaChart("consoleReleaseYears_container", "Year", "Number of games released that year", 1600, console_release_data, typesConsoles, [platformList], colorsConsole, order_stack_consoles);
 
 
@@ -161,7 +161,7 @@ function initialize() {
     shooterGamesTextButton.onclick = () => consoleGenreSales.showOnly("Shooter");
     let strategyGamesTextButton = document.getElementById('strategy_games_text_button');
     strategyGamesTextButton.onclick = () => consoleGenreSales.showOnly("Strategy");
-    */
+
   }
 
   // ---------------------------------------------------------------------------
@@ -170,7 +170,7 @@ function initialize() {
   function publisherWarInit() {
     //--------------------- Top Publisher by Sales -------------------------------
     // Get Data Sales Top10
-    /*let publishers_sales_top10_data_WORLD = dataProcessor.getTop10PublisherSales("Global");
+    let publishers_sales_top10_data_WORLD = dataProcessor.getTop10PublisherSales("Global");
     let publishers_sales_top10_data_NA = dataProcessor.getTop10PublisherSales("NA");
     let publishers_sales_top10_data_EU = dataProcessor.getTop10PublisherSales("EU");
     let publishers_sales_top10_data_JP = dataProcessor.getTop10PublisherSales("JP");
@@ -289,115 +289,121 @@ function initialize() {
           break;
       }
     }
-*/
-  }
 
-  // TODO : uncomment
-  // Loading Screen Timing
-  // consoleWarInit();
-  // loadingScreen.setProgress(0.7);
-  // setTimeout(() => {
-  //   publisherWarInit();
-  //   loadingScreen.setProgress(1);
-  //   setTimeout(() => loadingScreen.hide(), 400);
-  // }, 550);
+  }
 
   // ---------------------------------------------------------------------------
   // GAME ANALYSIS
   // ---------------------------------------------------------------------------
+  function gameAnalysisInit() {
 
-  let colorsGameType = {
-    "Sports": "#632920",
-    "Platform": "#6e0f01",
-    "Racing": "#792215",
-    "Role-Playing": "#831e0e",
-    "Puzzle": "#932513",
-    "Misc": "#a3200a",
-    "Shooter": "#b9260d",
-    "Simulation": "#d02407",
-    "Action": "#e33316",
-    "Fighting": "#f54123",
-    "Adventure": "#025485",
-    "Strategy": "#046195",
-  }
-
-  let order_stack_game_type = {
-    "Sports": 1,
-    "Platform": 2,
-    "Racing": 3,
-    "Role-Playing": 4,
-    "Puzzle": 5,
-    "Misc": 6,
-    "Shooter": 7,
-    "Simulation": 8,
-    "Action": 9,
-    "Fighting": 10,
-    "Adventure": 11,
-    "Strategy": 12
-  }
-
-  let genreList = ["Sports",
-                    "Platform",
-                    "Racing",
-                    "Role-Playing",
-                    "Puzzle",
-                    "Misc",
-                    "Shooter",
-                    "Simulation",
-                    "Action",
-                    "Fighting",
-                    "Adventure",
-                    "Strategy"]
-/*
-  let platformList = [
-                      "NES",
-                      "SNES",
-                      "N64",
-                      "GC",
-                      "Wii",
-                      "WiiU",
-                      "GB",
-                      "DS",
-                      "GBA",
-                      "3DS",
-                      "PS",
-                      "PS2",
-                      "PS3",
-                      "PS4",
-                      "PSP",
-                      "2600",
-                      "X360",
-                      "XOne",
-                      "XB",
-                      "PC",
-                      "GEN",
-                      "DC",
-                      "PSV",
-                      "SAT",
-                      "SCD",
-                      "GG"]
+    let colorsGameType = {
+      "Sports": "#632920",
+      "Platform": "#6e0f01",
+      "Racing": "#792215",
+      "Role-Playing": "#831e0e",
+      "Puzzle": "#932513",
+      "Misc": "#a3200a",
+      "Shooter": "#b9260d",
+      "Simulation": "#d02407",
+      "Action": "#e33316",
+      "Fighting": "#f54123",
+      "Adventure": "#025485",
+      "Strategy": "#046195",
     }
-*/
 
-  let genreBar = new GenreBar("genreBar_container", colorsGameType)
-  let scatterPlot = new ScatterPlot("scatterPlot_container", "Number of Sales", "Critics Score");
+    let order_stack_game_type = {
+      "Sports": 1,
+      "Platform": 2,
+      "Racing": 3,
+      "Role-Playing": 4,
+      "Puzzle": 5,
+      "Misc": 6,
+      "Shooter": 7,
+      "Simulation": 8,
+      "Action": 9,
+      "Fighting": 10,
+      "Adventure": 11,
+      "Strategy": 12
+    }
 
-  let consoleBar = new ConsoleBar()
+    let genreList = ["Sports",
+      "Platform",
+      "Racing",
+      "Role-Playing",
+      "Puzzle",
+      "Misc",
+      "Shooter",
+      "Simulation",
+      "Action",
+      "Fighting",
+      "Adventure",
+      "Strategy"
+    ]
+    /*
+      let platformList = [
+                          "NES",
+                          "SNES",
+                          "N64",
+                          "GC",
+                          "Wii",
+                          "WiiU",
+                          "GB",
+                          "DS",
+                          "GBA",
+                          "3DS",
+                          "PS",
+                          "PS2",
+                          "PS3",
+                          "PS4",
+                          "PSP",
+                          "2600",
+                          "X360",
+                          "XOne",
+                          "XB",
+                          "PC",
+                          "GEN",
+                          "DC",
+                          "PSV",
+                          "SAT",
+                          "SCD",
+                          "GG"]
+        }
+    */
 
-  let platformList = ["2600", "NES", "SNES", "N64", "GC", "Wii", "WiiU", "GB", "DS", "GBA", "3DS", "PS", "PS2", "PS3", "PS4", "PSP", "X360", "XOne", "XB", "PC"];
-  let dataManager = new DataManager(data,
-                                    [scatterPlot, genreBar, consoleBar],
-                                    genreList,
-                                    platformList,
-                                    dataProcessor.getPublisherList(),
-                                    [1980, 2015])
+    let genreBar = new GenreBar("genreBar_container", colorsGameType)
+    let scatterPlot = new ScatterPlot("scatterPlot_container", "Number of Sales", "Critics Score");
 
-  consoleBar.setDataManager(dataManager)
+    let consoleBar = new ConsoleBar()
 
-  let genreBarButtons = new GenreBarButtons("genreBarButtons_container",
-    dataProcessor.getGenreList(),
-    dataManager)
+    let platformList = ["2600", "NES", "SNES", "N64", "GC", "Wii", "WiiU", "GB", "DS", "GBA", "3DS", "PS", "PS2", "PS3", "PS4", "PSP", "X360", "XOne", "XB", "PC"];
+    let dataManager = new DataManager(data, [scatterPlot, genreBar, consoleBar],
+      genreList,
+      platformList,
+      dataProcessor.getPublisherList(), [1980, 2015])
 
-  let timeBrush = new TimeBrush("timeBrush_container", [1980, 2015], dataManager);
-  dataManager.setPlatform(dataProcessor.getConsoleList())
+    consoleBar.setDataManager(dataManager)
+
+    let genreBarButtons = new GenreBarButtons("genreBarButtons_container",
+      dataProcessor.getGenreList(),
+      dataManager)
+
+    let timeBrush = new TimeBrush("timeBrush_container", [1980, 2015], dataManager);
+    dataManager.setPlatform(dataProcessor.getConsoleList())
+  }
+
+  // Loading Screen Timing
+  consoleWarInit();
+  loadingScreen.setProgress(0.5);
+  setTimeout(() => {
+    publisherWarInit();
+    loadingScreen.setProgress(0.8);
+    setTimeout(() => {
+      gameAnalysisInit()
+      setTimeout(() => {
+        loadingScreen.setProgress(1);
+        setTimeout(() => {loadingScreen.hide()}, 1500);
+      }, 600);
+    }, 600);
+  }, 600);
 }
