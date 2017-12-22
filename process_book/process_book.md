@@ -16,6 +16,7 @@
   - [Consoles war report](#consoles-war-report)
   - [Publishers war report](#publishers-war-report)
   - [Games analysis report](#games-analysis-report)
+- [Peer assessment](#peer-assessment)
 - [Conclusion](#conclusion)
 
 # About the workflow
@@ -257,6 +258,14 @@ Selecting any categories or time brushing would update all the components (the s
 After more discussion and having to take into account everyone's opinion on what the final visualization would look like, we ended up agreeing on this layout :
 
 ![./final_mockup.jpg](./final_mockup.jpg)
+
+# Peer assessment
+
+|        | Preparation | Contribution | Respect for other's ideas | Flexibility |
+|--------|-------------|--------------|---------------------------|-------------|
+| Tim    | yes         | yes          | yes                       | yes         |
+| Mike   | yes         | yes          | yes                       | yes         |
+| Hugues | yes         | yes          | yes                       | yes         |
 
 # Conclusion
 
