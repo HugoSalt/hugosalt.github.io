@@ -13,9 +13,10 @@
 <body onunload="">
   <div id="expanding_circle"></div>
   <div id="centered_div">
-    <div id="item_vis" class="welcome_item"> See our visualization </div>
-    <div id="item_sc" class="welcome_item"> Look at the screencast </div>
-    <div id="item_code" class="welcome_item"> Check our code </div>
+    <div id="item_vis" class="welcome_item">See our visualization</div>
+    <div id="item_book" class="welcome_item">Read our process book</div>
+    <div id="item_sc" class="welcome_item">Look at the screencast</div>
+    <div id="item_code" class="welcome_item">Check our code</div>
   </div>
 
   <script>
@@ -37,6 +38,9 @@
 
     document.getElementById('item_vis').onclick = (ev) => {
       circleToUrl(ev, "./visualization.html")
+    }
+    document.getElementById('item_book').onclick = (ev) => {
+      circleToUrl(ev, "https://github.com/HugoSalt/hugosalt.github.io/blob/master/process_book/process_book.md")
     }
     document.getElementById('item_sc').onclick = (ev) => {
       circleToUrl(ev, "./screencast/screencast.html")
