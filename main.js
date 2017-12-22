@@ -318,8 +318,8 @@ function initialize() {
     "Simulation": "#d02407",
     "Action": "#e33316",
     "Fighting": "#f54123",
-    "Adventure": "#025485",
-    "Strategy": "#046195",
+    "Adventure": "#f56023",
+    "Strategy": "#f57523",
   }
 
   let order_stack_game_type = {
