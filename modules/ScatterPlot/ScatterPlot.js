@@ -33,7 +33,7 @@ export default class ScatterPlot {
     //self.width = 860;
     let container_width = document.getElementById("scatterPlot_container").offsetWidth;
     self.width = container_width - self.padding.right - self.padding.left;
-    self.height = 430;
+    self.height = 470;
 
     // Circles' parameters
     self.radius = 3;
@@ -83,9 +83,8 @@ export default class ScatterPlot {
 
     // Initialize the button to compute the Publishers' average
     self.publishersButton = d3.select("#" + "individual_brands_barChart_container")
-      .append("div")
-      .attr("class", "publishers_button")
       .append('g')
+      .attr("class", "publishers_button")
       .html("Compute Average of Publishers");
 
     // Create the main SVG
@@ -118,7 +117,7 @@ export default class ScatterPlot {
     for (let publisher of publishers) {
 
       if (x_offset + padding > self.width) {
-        x_offset = 20;
+        x_offset = 25;
         y_offset += 20;
         line_number += 1;
         col = 0;
@@ -212,16 +211,16 @@ export default class ScatterPlot {
           return game.Global_Sales;
         }) : 0
       ])
-      .range([1, 50])
+      .range([1, 20])
       .clamp(true);
 
     // Compute scale of opacity
-    let oScale = d3.scaleLinear()
+    /*let oScale = d3.scaleLinear()
       .domain([0, d3.max(self.data, function(game) {
         return game.Global_Sales;
       })])
       .range([0, 1])
-      .clamp(true);
+      .clamp(true);*/
 
     // -------------------------------------------------------------------------
     //     Add the zoom feature
@@ -388,6 +387,17 @@ export default class ScatterPlot {
     //     Create the big circles for each publisher
     // -------------------------------------------------------------------------
 
+    let meanCircles = self.svg.selectAll(".meanCircle").data([]);
+
+    meanCircles.exit()
+                .transition()
+                .delay(function(game) {
+                  return Math.random() * 1000;
+                })
+                .duration(3000)
+                .attr("r", 0)
+                .remove();
+
     // Compute the current publishers' average
     // Format : [Name, globalSalesAverage, criticScoresAverage]
     let publishersAverage = self.computeMeanPublishers(self.data);
@@ -407,121 +417,78 @@ export default class ScatterPlot {
                         .transition()
                         .duration(50)
                         .attr("class", "publishers_button_hovered");
-                      if(publishersMeanActivated == false) {
-                        publishersMeanActivated = true;
-                        // Move the current little circles to their mean
-                        d3.selectAll(".circle")
-                                .transition()
-                                .delay(function() {
-                                  return Math.random() * 1000;
-                                })
-                                .duration(3000)
-                                .attr("cx", function(game) {
-                                  return xScale(self.getMeanPublisherCoords(publishersAverage, game)[0]);
-                                })
-                                .attr("cy", function(game) {
-                                  return yScale(self.getMeanPublisherCoords(publishersAverage, game)[1]);
-                                });
-    let meanCircles = self.svg.selectAll(".meanCircle")
-    .data([]);
-
-    meanCircles.exit()
-    .transition()
-    .delay(function(game) {
-      return Math.random() * 1000;
-    })
-    .duration(3000)
-    .attr("r", 0)
-    .remove();
-
-
-
-    /*meanCircles.exit()
-                .transition()
-                .duration(3000)
-                .attr("r", 0);*/
 
                         d3.select(this)
                           .select('g')
                           .html("Display each game again");
-    // Publishers Button's events
-    publishersButton.on("mouseover", function() {
-        d3.select(this).style("cursor", "pointer");
-      })
-      .on("click", function() {
-        if (publishersMeanActivated == false) {
-          publishersMeanActivated = true;
 
-          // Move the current little circles to their mean
-          //d3.selectAll(".circle")
-            self.circles.transition()
-            .delay(function() {
-              return Math.random() * 1000;
-            })
-            .duration(3000)
-            .attr("cx", function(game) {
-              return xScale(self.getMeanPublisherCoords(publishersAverage, game)[0]);
-            })
-            .attr("cy", function(game) {
-              return yScale(self.getMeanPublisherCoords(publishersAverage, game)[1]);
-            })
-            .style("opacity", 0);
+                      if(publishersMeanActivated == false) {
+                        publishersMeanActivated = true;
+                        // Move the current little circles to their mean
+                        d3.selectAll(".circle")
+                          .transition()
+                          .delay(function() {
+                            return Math.random() * 1000;
+                          })
+                          .duration(3000)
+                          .attr("cx", function(game) {
+                            return xScale(self.getMeanPublisherCoords(publishersAverage, game)[0]);
+                          })
+                          .attr("cy", function(game) {
+                            return yScale(self.getMeanPublisherCoords(publishersAverage, game)[1]);
+                          })
+                          .style("opacity", 0);
 
-          // Create one circle per Publisher
-          // Make the publisher circles disappear
-          let meanCircles = self.svg.selectAll(".meanCircle")
-            .data(publishersAverage, function(publisher) {
-              return publisher[0];
-            });
-          // Create a circle for each publisher
-          // Each publisher is identified uniquely with its NAME
-          meanCircles.enter()
-            .append("circle")
-            .attr("class", "meanCircle")
-            .on("mouseover", function(publisher) {
-              self.onMouseOverPublisherEventHandler(this, self, publisher, tooltip);
-            })
-            .on("mousemove", function() {
-              self.setTooltipPosition(self, tooltip);
-            })
-            .on("mouseout", function() {
-              self.onMouseOutPublisherEventHandler(this, self, tooltip);
-            })
-            .on("click", function(publisher) {
-              self.onClickPublisherEventHandler(this, self, publisher, tooltip);
-            })
-            // Add transition and positioning
-            .attr("cx", function(publisher) {
-              return xScale(publisher[1]);
-            })
-            .attr("cy", function(publisher) {
-              return yScale(publisher[2]);
-            })
-            .transition()
-            .duration(5000)
-            .attr("r", function(publisher) {
-              return 10 * publisher[1];
-            })
-            .attr("fill", function(publisher) {
-              return (colorsPublishers[publisher[0]] == undefined) ? "grey" : colorsPublishers[publisher[0]];
-            })
-            .style("opacity", function(publisher) {
-              return (colorsPublishers[publisher[0]] == undefined) ? 0.5 : 1;
-            });
+                          // Create one circle per Publisher
+                          // Make the publisher circles disappear
+                          let meanCircles = self.svg.selectAll(".meanCircle")
+                            .data(publishersAverage, function(publisher) {
+                              return publisher[0];
+                            });
+                          // Create a circle for each publisher
+                          // Each publisher is identified uniquely with its NAME
+                          meanCircles.enter()
+                            .append("circle")
+                            .attr("class", "meanCircle")
+                            .on("mouseover", function(publisher) {
+                              self.onMouseOverPublisherEventHandler(this, self, publisher, tooltip);
+                            })
+                            .on("mousemove", function() {
+                              self.setTooltipPosition(self, tooltip);
+                            })
+                            .on("mouseout", function() {
+                              self.onMouseOutPublisherEventHandler(this, self, tooltip);
+                            })
+                            .on("click", function(publisher) {
+                              self.onClickPublisherEventHandler(this, self, publisher, tooltip);
+                            })
+                            // Add transition and positioning
+                            .attr("cx", function(publisher) {
+                              return xScale(publisher[1]);
+                            })
+                            .attr("cy", function(publisher) {
+                              return yScale(publisher[2]);
+                            })
+                            .transition()
+                            .duration(5000)
+                            .attr("r", function(publisher) {
+                              return rScale(publisher[3]);
+                            })
+                            .attr("fill", function(publisher) {
+                              return (colorsPublishers[publisher[0]] == undefined) ? "grey" : colorsPublishers[publisher[0]];
+                            })
+                            .style("opacity", function(publisher) {
+                              return (colorsPublishers[publisher[0]] == undefined) ? 0.35 : 1;
+                            });
 
-                        d3.select(this)
-                          .select('g')
-                          .html("Compute Average of Publishers");
+                      } else {
+                        publishersMeanActivated = false;
+                        d3.select(this).html("Compute Average of Publishers");
 
-        } else {
-          publishersMeanActivated = false;
-          d3.select(this).html("Compute Average of Publishers");
-
-          // Move the current little circles to their original position
-          self.update(newData);
-        }
-      });
-
+                        // Move the current little circles to their original position
+                        self.update(newData);
+                      }
+                    });
   }
 
   // ---------------------------------------------------------------------------
@@ -611,7 +578,7 @@ export default class ScatterPlot {
   // Small helper function to set tooltip's position
   setTooltipPosition(self, tooltip) {
     tooltip.style("left", (d3.event.pageX - self.padding.left) + "px")
-      .style("top", (d3.event.pageY - self.padding.top) + "px");
+           .style("top", (d3.event.pageY - self.padding.top) + "px");
   }
 
   // -----------------------------------//
@@ -686,12 +653,15 @@ export default class ScatterPlot {
       let criticScoresCounter = 0;
       let criticScoresAverage = 0.0;
 
+      let gamesCounter = 0;
+
       // Get the list of games from that publisher
       var gamesByPublisher = groupedByPublishers[publisher];
       //console.log(publisher + " " + gamesByPublisher[0].Name + "\n");
 
       globalSales = gamesByPublisher.reduce(function(acc, game) {
         globalSalesCounter += 1;
+        gamesCounter += 1;
         return acc + parseFloat(game.Global_Sales);
       }, 0.0)
 
@@ -702,7 +672,7 @@ export default class ScatterPlot {
         return acc + parseFloat(game.Critic_Score);
       }, 0.0) / criticScoresCounter;
 
-      publishersAverage.push([publisher, globalSalesAverage, criticScoresAverage]);
+      publishersAverage.push([publisher, globalSalesAverage, criticScoresAverage, gamesCounter]);
     }
     return publishersAverage;
     //console.log("globalSalesAverage : " + publishersAverage[0][1] + " criticScoresAverage: " + publishersAverage[0][2]);
