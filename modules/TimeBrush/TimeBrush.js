@@ -14,7 +14,7 @@ export default class TimeBrush {
 
     this.margin = {top: 10, right: 20, bottom: 40, left: 20};
     let container_width = document.getElementById('timeBrush_container').offsetWidth;
-    console.log(container_width)
+
     this.width = container_width - this.margin.left - this.margin.right;
     this.height = 80 - this.margin.top - this.margin.bottom;
 

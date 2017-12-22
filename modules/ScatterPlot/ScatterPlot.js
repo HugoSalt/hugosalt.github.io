@@ -392,6 +392,36 @@ export default class ScatterPlot {
     // Format : [Name, globalSalesAverage, criticScoresAverage]
     let publishersAverage = self.computeMeanPublishers(self.data);
 
+    // Publishers Button's events
+    publishersButton.on("mouseover", function() {
+                      d3.select(this).attr("class", "publishers_button_hovered");
+                    })
+                    .on("mouseout", function() {
+                      d3.select(this).attr("class", "publishers_button");
+                    })
+                    .on("click", function() {
+                      d3.select(this)
+                        .transition()
+                        .duration(50)
+                        .attr("class", "publishers_button_pressed")
+                        .transition()
+                        .duration(50)
+                        .attr("class", "publishers_button_hovered");
+                      if(publishersMeanActivated == false) {
+                        publishersMeanActivated = true;
+                        // Move the current little circles to their mean
+                        d3.selectAll(".circle")
+                                .transition()
+                                .delay(function() {
+                                  return Math.random() * 1000;
+                                })
+                                .duration(3000)
+                                .attr("cx", function(game) {
+                                  return xScale(self.getMeanPublisherCoords(publishersAverage, game)[0]);
+                                })
+                                .attr("cy", function(game) {
+                                  return yScale(self.getMeanPublisherCoords(publishersAverage, game)[1]);
+                                });
     let meanCircles = self.svg.selectAll(".meanCircle")
     .data([]);
 
@@ -411,6 +441,9 @@ export default class ScatterPlot {
                 .duration(3000)
                 .attr("r", 0);*/
 
+                        d3.select(this)
+                          .select('g')
+                          .html("Display each game again");
     // Publishers Button's events
     publishersButton.on("mouseover", function() {
         d3.select(this).style("cursor", "pointer");
@@ -476,7 +509,9 @@ export default class ScatterPlot {
               return (colorsPublishers[publisher[0]] == undefined) ? 0.5 : 1;
             });
 
-          d3.select(this).html("Display each game again");
+                        d3.select(this)
+                          .select('g')
+                          .html("Compute Average of Publishers");
 
         } else {
           publishersMeanActivated = false;
