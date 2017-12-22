@@ -228,3 +228,54 @@ a:hover {
     .brand_bar{
       margin-top: 5px;
     }
+
+/* First welcome page centering container */
+
+#centered_div {
+  color: var(--swiss-white);
+  width: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  padding: 20px;
+  overflow: auto;
+  text-align: center;
+  transition: all 0.5s;
+}
+
+.welcome_item{
+  font-family: "IBMPlex Sans";
+  font-weight: bold;
+  color: var(--swiss-white);
+  background-color: rgba(0, 0, 0, 0);
+  font-size: 2em;
+  padding-top: 8px;
+  padding-bottom: 10px;
+  display:grid;
+  clear: left;
+  padding-right: 20px;
+  padding-left: 20px;
+  cursor: pointer;
+  border-bottom: 3px solid rgba(0, 0, 0, 0);
+  transition: 0.15s ease-in-out;
+}
+
+.welcome_item:hover{
+  color: var(--swiss-black);
+  background-color: var(--swiss-white);
+}
+
+#expanding_circle{
+  background-color: var(--swiss-white);
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 500px;
+  height: 500px;
+  transform: scale(0);
+  transition: transform 1s ease-in;
+  opacity: 0;
+  border-radius: 100%;
+  z-index: -1;
+}
