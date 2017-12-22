@@ -207,6 +207,10 @@ a:hover {
     width: calc(100% - 300px);
   }
 
+  #timeBrush_container {
+    width: calc(100% - 300px);
+  }
+
   #consoleBar_container {
     width: 300px;
     display: flex;

@@ -13,8 +13,10 @@ export default class TimeBrush {
     // ---------------------------------------------------------------------------
 
     this.margin = {top: 10, right: 20, bottom: 40, left: 20};
-    this.width = 1000 - this.margin.left - this.margin.right;
-    this.height = 120 - this.margin.top - this.margin.bottom;
+    let container_width = document.getElementById('timeBrush_container').offsetWidth;
+    console.log(container_width)
+    this.width = container_width - this.margin.left - this.margin.right;
+    this.height = 80 - this.margin.top - this.margin.bottom;
 
     this.parseDate = d3.timeParse("%Y");
 
@@ -43,7 +45,7 @@ export default class TimeBrush {
             .attr("class", "axis axis--x")
             .attr("transform", "translate(0," + this.height + ")")
             .call(d3.axisBottom(this.xScale)
-            .ticks(17)
+            .ticks(9)
             .tickFormat(d3.format("d"))
             .tickPadding(0))
             .attr("text-anchor", null)

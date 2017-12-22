@@ -383,7 +383,7 @@ function initialize() {
                                       genreList,
                                       platformList,
                                       dataProcessor.getPublisherList(),
-                                      [1980, 2015])
+                                      [1984, 2015])
 
     consoleBar.setDataManager(dataManager)
 
@@ -391,7 +391,7 @@ function initialize() {
       dataProcessor.getGenreList(),
       dataManager)
 
-    let timeBrush = new TimeBrush("timeBrush_container", [1980, 2015], dataManager);
+    let timeBrush = new TimeBrush("timeBrush_container", [1984, 2015], dataManager);
     //dataManager.setPlatform(dataProcessor.getConsoleList())
   }
 
