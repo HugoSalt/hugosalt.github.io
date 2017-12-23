@@ -16,6 +16,7 @@
   - [Consoles war report](#consoles-war-report)
   - [Publishers war report](#publishers-war-report)
   - [Games analysis report](#games-analysis-report)
+- [Peer assessment](#peer-assessment)
 - [Conclusion](#conclusion)
 
 # About the workflow
@@ -198,7 +199,7 @@ As you may have notice, we chose to ignore some data. It's not because it would 
 Another question we encountered was : should we consider the sales or the number of game released ?
 For example to reflect the popularity of a console, should we represent the number of sales of games on that console or the number game released for that console ?
 
-# Along the progress
+# Progress report
 
 Here we'll describe the problem encountered, our decisions, our solutions, etc... as we progress through the implementation.
 
@@ -216,7 +217,7 @@ _We spent hours and hours fighting against this library_. If we had to do it aga
 - Some games don't have a release date ("N/A").
 - PC sales in our dataset are surprisingly low but the rest seems coherent.
 
-## Console Popularity report
+## Consoles war report
 
 As a first graph, using sum of sales, we obtained :
 
@@ -239,13 +240,13 @@ For the sales per genre we implemented the stacked bars as we planned, but we ad
 
 ![./sales_per_genre_stacked_bar.png](./sales_per_genre_stacked_bar.png)
 
-## Publisher war report
+## Publishers war report
 
 We ended up going with this representation :
 
 ![./publisher_war_graphs.png](./publisher_war_graphs.png)
 
-## Game analysis report
+## Games analysis report
 
 We wanted to add much more interactivity so we come up with a new concept where
 every component would be tied to one another through the data :
@@ -257,6 +258,14 @@ Selecting any categories or time brushing would update all the components (the s
 After more discussion and having to take into account everyone's opinion on what the final visualization would look like, we ended up agreeing on this layout :
 
 ![./final_mockup.jpg](./final_mockup.jpg)
+
+# Peer assessment
+
+|        | Preparation | Contribution | Respect for other's ideas | Flexibility |
+|--------|-------------|--------------|---------------------------|-------------|
+| Tim    | yes         | yes          | yes                       | yes         |
+| Mike   | yes         | yes          | yes                       | yes         |
+| Hugues | yes         | yes          | yes                       | yes         |
 
 # Conclusion
 
