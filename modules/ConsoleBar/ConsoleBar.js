@@ -38,19 +38,19 @@ export default class ConsoleBar {
                                        "Nintendo",
                                        this.get_brand_distribution(this.nintendo),
                                        this.colorsNintendo,
-                                       this.colors['GC']))
+                                       this.colors['GC'])
 
     this.playstationBarChart = new BrandBarChart(this, this.playstation, "playstation_barChart_container",
                                        "Playstation",
                                        this.get_brand_distribution(this.playstation),
                                        this.colorsPlaystation,
-                                       this.colors['PS']))
+                                       this.colors['PS'])
 
     this.xboxBarChart = new BrandBarChart(this, this.xbox, "xbox_barChart_container",
                                        "Xbox",
                                        this.get_brand_distribution(this.xbox),
                                        this.colorsXbox,
-                                       this.colors['X360']))
+                                       this.colors['X360'])
 
     this.pcBarChart = new BrandBarChart(this, this.pc, "pc_barChart_container",
                                        "PC",
