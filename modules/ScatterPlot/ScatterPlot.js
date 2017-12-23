@@ -142,9 +142,9 @@ export default class ScatterPlot {
   update(newData) {
     // Create X axis
     let self = this
-    self.x_group.selectAll('text')
+    self.x_group.selectAll('.label')
                 .remove()
-    self.y_group.selectAll('text')
+    self.y_group.selectAll('.label')
                 .remove()
     // -------------------------------------------------------------------------
     //     Bring everything we need from the constructor in this function

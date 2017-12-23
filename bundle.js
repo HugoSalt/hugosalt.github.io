@@ -7294,8 +7294,6 @@ class ScatterPlot {
     select("#scatterPlot_container")
       .style("height", pixel_height + "px");
 
-    console.log(select("#scatterPlot_container"));
-
     // Create groups for our axis
     self.x_group = self.svg.append("g");
     self.y_group = self.svg.append("g");
@@ -7303,12 +7301,16 @@ class ScatterPlot {
 
   // Update function that is called each time we change a component of our ScatterPlot
   update(newData) {
-
+    // Create X axis
+    let self = this;
+    self.x_group.selectAll('.label')
+                .remove();
+    self.y_group.selectAll('.label')
+                .remove();
     // -------------------------------------------------------------------------
     //     Bring everything we need from the constructor in this function
     // -------------------------------------------------------------------------
 
-    let self = this;
     self.data = newData;
 
     let colorsPublishers = self.colorsPublishers;
@@ -7363,20 +7365,12 @@ class ScatterPlot {
     //     Set up the axis
     // -------------------------------------------------------------------------
 
+
     self.xAxis = axisBottom(xScale)
                  .ticks(self.nbXticks)
                  .tickFormat(format(".2f"));
     self.yAxis = axisLeft(yScale)
       .ticks(self.nbYticks);
-
-    self.x_group.selectAll(".label").remove;
-    self.y_group.selectAll(".label").remove;
-
-    // Create X axis
-    self.x_group.selectAll('text')
-                .remove();
-    self.y_group.selectAll('text')
-                .remove();
 
     self.x_group.attr("class", "x axis")
       .attr("transform", "translate(0," + (self.height - self.padding.bottom) + ")")
@@ -7814,7 +7808,6 @@ class ScatterPlot {
 
       // Get the list of games from that publisher
       var gamesByPublisher = groupedByPublishers[publisher];
-      //console.log(publisher + " " + gamesByPublisher[0].Name + "\n");
 
       globalSales = gamesByPublisher.reduce(function(acc, game) {
         globalSalesCounter += 1;
@@ -7832,7 +7825,6 @@ class ScatterPlot {
       publishersAverage.push([publisher, globalSalesAverage, criticScoresAverage, gamesCounter]);
     }
     return publishersAverage;
-    //console.log("globalSalesAverage : " + publishersAverage[0][1] + " criticScoresAverage: " + publishersAverage[0][2]);
   }
 
   // Return the mean coordinates corresponding to a certain game
