@@ -1,7 +1,8 @@
 
 export default class BrandBarChart {
 
-  constructor(parent, consoles, container_id, name, data, colors) {
+  constructor(parent, consoles, container_id, name, data, colors, main_color) {
+    this.main_color = main_color
     this.container_id = container_id
     this.parent = parent
     this.consoles = consoles
@@ -21,6 +22,7 @@ export default class BrandBarChart {
                  .attr("class", "brand_chart brand_chart_selected")
                  .attr("width", this.svg_width)
                  .attr("height", this.svg_height)
+                 .style('border-color', main_color)
 
     this.colors = colors
 
@@ -49,6 +51,7 @@ export default class BrandBarChart {
     let brand_name = this.brand_name
     let consoles_selected = this.consoles_selected
     let y_group = this.y_group
+    let self = this
 
     brand_name.on("mouseover", function() {
       if (brand_name[0][0].classList.contains('brand_title_selected')) {
@@ -70,6 +73,7 @@ export default class BrandBarChart {
       let classList = d3.select('#svg_' + container_id)[0][0].classList
       if (classList.contains('brand_chart_selected')) {
         svg.attr('class', 'brand_chart brand_chart_not_selected')
+        svg.style('border-color', 'grey')
         brand_name.attr('class', 'brand_title_not_selected brand_title_hovered')
         parent.update_brand(container_id, false)
         for (let e of consoles) {
@@ -79,6 +83,7 @@ export default class BrandBarChart {
       }
       else {
         svg.attr('class', 'brand_chart brand_chart_selected')
+        svg.style('border-color', self.main_color)
         brand_name.attr('class', 'brand_title_selected brand_title_hovered')
         parent.update_brand(container_id, true)
         for (let e of consoles) {
@@ -96,6 +101,7 @@ export default class BrandBarChart {
 
   update(newData, scoreBrand, maxBrand, game_count) {
     this.data = newData
+    let self = this
 
     this.height = 12 * this.data.length + 60 - this.margin.top - this.margin.bottom
     this.svg.attr("height", this.height)
@@ -151,6 +157,7 @@ export default class BrandBarChart {
                   if (consoles_selected[text]) {
                     d3.select(this).attr('class', 'console_selected console_hovered')
                     svg.attr('class', 'brand_chart brand_chart_selected')
+                    svg.style('border-color', self.main_color)
                     brand_name.attr('class', 'brand_title_selected')
                     parent.update_console(text, true)
                   }
@@ -158,6 +165,7 @@ export default class BrandBarChart {
                     if (!Object.values(consoles_selected).includes(true)) {
                       brand_name.attr('class', 'brand_title_not_selected')
                       svg.attr('class', 'brand_chart brand_chart_not_selected')
+                      svg.style('border-color', 'grey')
                     }
                     d3.select(this).attr('class', 'console_not_selected console_hovered')
                     parent.update_console(text, false)

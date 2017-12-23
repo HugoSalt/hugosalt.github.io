@@ -5,9 +5,9 @@
   border-radius: 5%;
 }
 
-.brand_chart_selected {
+/*.brand_chart_selected {
   border-color: orange;
-}
+}*/
 
 .brand_chart_not_selected{
   border-color: grey;
