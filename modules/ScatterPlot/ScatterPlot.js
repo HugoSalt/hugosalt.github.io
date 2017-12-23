@@ -508,11 +508,11 @@ export default class ScatterPlot {
   // Event handler when we click on a circle corresponding to a game
   onClickEventHandler(context, self, game, tooltip) {
     // Find previously selected, unselect
-    d3.select(".selected")
+    d3.selectAll(".selected")
       .transition()
       .duration(400)
       .attr("r", self.radius);
-    d3.select(".selected").classed("selected", false);
+    d3.selectAll(".selected").classed("selected", false);
 
     // Select current item
     d3.select(context).classed("selected", true);
@@ -520,15 +520,22 @@ export default class ScatterPlot {
     d3.select(context).transition()
       .duration(700)
       .attr("r", 2 * self.radius)
-      .style("cursor", "pointer");
+      .style("cursor", "none");
+
+    const numberWithCommas = (x) => {
+      var parts = x.toString().split(".");
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, "'");
+      return parts.join(".");
+    }
 
     // Display further informations about that game
     tooltip.html(game.Name.bold().italics() + "<br/>" +
       "<br/><div id=\"game_info\">Year of Release: " + game.Year_of_Release + "<br/>" +
       "Genre: " + game.Genre + "<br/>" +
+      "Platform: " + game.Platform + "<br/>" +
       "Publisher: " + game.Publisher + "<br/>" +
-      "Global Sales: " + game.Global_Sales + "<br/>" +
-      "Critic Score: " + game.Critic_Score + "</div>");
+      "Global Sales: " + numberWithCommas(game.Global_Sales*1000000) + "<br/>" +
+      "Critic Score: " + game.Critic_Score + "%</div>");
     self.setTooltipPosition(self, tooltip);
 
     d3.select("#game_info").style("text-align", "left")
@@ -568,6 +575,11 @@ export default class ScatterPlot {
 
   // Event Handler when the mouse leaves the area of a circle
   onMouseOutEventHandler(context, self, tooltip) {
+    d3.selectAll(".selected")
+      .transition()
+      .duration(400)
+      .attr("r", self.radius);
+    d3.selectAll(".selected").classed("selected", false);
     if (!d3.select(context).classed("selected")) {
       d3.select(context)
         .transition()
@@ -577,9 +589,10 @@ export default class ScatterPlot {
       tooltip.transition()
         .duration(400)
         .style("opacity", 0.0)
-        .style("width", "100px");
-
-      tooltip.style("height", "auto");
+        .transition()
+        .duration(1)
+        .style("width", "100px")
+        .style("height", "auto");
     }
   }
 
