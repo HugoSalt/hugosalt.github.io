@@ -1,13 +1,6 @@
 // Inspired from http://chimera.labs.oreilly.com/books/1230000000345/
-// un scatterplot zoomable qui serait joli à faire : http://bl.ocks.org/peterssonjonas/4a0e7cb8d23231243e0e
 import * as d3 from "d3";
 
-/*
-
-  TODO : Position PublisherMeanButton correctly
-  TODO : Add a legend for Publishers
-  TODO : Add color for Publishers in tooltip when clicking
-*/
 
 export default class ScatterPlot {
 
@@ -101,60 +94,46 @@ export default class ScatterPlot {
     self.legendPublishers = d3.select('#' + container_id)
       .append("svg")
       .attr("width", self.width + self.padding.left + self.padding.right)
-      .attr("height", 100);
+      .attr("height", 150);
 
 
-    let idx = 0;
-    let col = 0;
-    let x_offset = 20;
+    let x_offset = 30;
     let y_offset = 15;
-    let line_number = 1;
-    let name_length = 0;
-    let padding = 0;
-
     let publishers = Object.keys(self.colorsPublishers);
 
     for (let publisher of publishers) {
+      let legend_elem = self.legendPublishers.append("text")
+                                         .text(publisher)
+                                         .style("fill", "black");
 
-      if (x_offset + padding > self.width) {
-        x_offset = 25;
-        y_offset += 20;
-        line_number += 1;
-        col = 0;
+      let elem_width = legend_elem.node().getBBox().width
+
+      if (x_offset + elem_width > self.width) {
+        x_offset = 30
+        y_offset += 20
       }
 
-      name_length = publisher.length;
-
-      if (name_length <= 10) {
-        padding = 100;
-      } else if (name_length > 10 && name_length < 20) {
-        padding = 190;
-      } else {
-        padding = 230;
-      }
-
-      if (line_number == 2 || line_number == 4) {
-        x_offset += 40;
-      }
-
-      self.legendPublishers.append("text")
-        .attr("x", x_offset)
-        .attr("y", 10 + y_offset)
-        .text(publisher)
-        .style("fill", "black");
+      legend_elem.attr("x", x_offset)
+                 .attr("y", y_offset)
 
       self.legendPublishers.append("rect")
         .attr("width", 10)
         .attr("height", 10)
         .attr("x", x_offset - 15)
-        .attr("y", y_offset)
+        .attr("y", y_offset-10)
         .style("fill", function() {
           return (self.colorsPublishers[publisher]);
         });
-      idx += 1;
-      col += 1;
-      x_offset += padding + 10;
+
+      x_offset += elem_width + 40
     }
+
+    self.legendPublishers.attr("height", y_offset + 25)
+    let pixel_height = 620 - 150 + (y_offset + 25)
+    d3.select("#scatterPlot_container")
+      .style("height", pixel_height + "px")
+
+    console.log(d3.select("#scatterPlot_container"))
 
     // Create groups for our axis
     self.x_group = self.svg.append("g");
