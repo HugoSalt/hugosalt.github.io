@@ -13,6 +13,7 @@ export default class ConsoleBar {
     this.xbox = ["X360", "XOne", "XB"]
     this.pc = ["PC"]
 
+    this.colors = colorsConsole
     this.colorsNintendo = pick(colorsConsole, this.nintendo)
     this.colorsPlaystation = pick(colorsConsole, this.playstation)
     this.colorsXbox = pick(colorsConsole, this.xbox)
