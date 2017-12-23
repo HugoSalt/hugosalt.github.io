@@ -76,7 +76,7 @@ export default class ScatterPlot {
     self.circles;
 
     // Initialize an invisible tooltip used to display game's informations
-    self.tooltip = d3.select("#" + container_id)
+    self.tooltip = d3.select('body')
       .append("div")
       .attr("class", "tooltip")
       .style("opacity", 0.0);
@@ -244,6 +244,11 @@ export default class ScatterPlot {
     self.y_group.selectAll(".label").remove;
 
     // Create X axis
+    self.x_group.selectAll('text')
+                .remove()
+    self.y_group.selectAll('text')
+                .remove()
+
     self.x_group.attr("class", "x axis")
       .attr("transform", "translate(0," + (self.height - self.padding.bottom) + ")")
       .call(self.xAxis)
@@ -263,8 +268,8 @@ export default class ScatterPlot {
       // Add a label to the axis
       .append("text")
       .attr("class", "label")
-      .attr("x", 100)
-      .attr("y", 30)
+      .attr("x", 130)
+      .attr("y", 15)
       .text(self.y_name)
       .style("fill", "black");
 
@@ -529,7 +534,9 @@ export default class ScatterPlot {
     d3.select("#game_info").style("text-align", "left")
       .style("padding-left", "17px");
 
-    tooltip.transition()
+    tooltip
+      .style("width", "200px")
+      .transition()
       .duration(400)
       .style("opacity", 1)
       .style("width", "200px")
@@ -550,7 +557,7 @@ export default class ScatterPlot {
       // Set tooltip transition
       tooltip.transition()
         .duration(400)
-        .style("opacity", 0.7)
+        .style("opacity", 0.8)
         .style("width", "100px");
 
       // Set tooltip's text
@@ -570,7 +577,7 @@ export default class ScatterPlot {
       tooltip.transition()
         .duration(400)
         .style("opacity", 0.0)
-        .style("width", "40px");
+        .style("width", "100px");
 
       tooltip.style("height", "auto");
     }
@@ -578,8 +585,8 @@ export default class ScatterPlot {
 
   // Small helper function to set tooltip's position
   setTooltipPosition(self, tooltip) {
-    tooltip.style("left", (d3.event.pageX - self.padding.left) + "px")
-           .style("top", (d3.event.pageY - self.padding.top) + "px");
+    tooltip.style("left", (d3.event.pageX - 120) + "px")
+           .style("top", (d3.event.pageY - self.padding.top -10) + "px");
   }
 
   // -----------------------------------//
