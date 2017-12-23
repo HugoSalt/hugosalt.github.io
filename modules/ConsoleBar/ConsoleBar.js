@@ -13,7 +13,6 @@ export default class ConsoleBar {
     this.xbox = ["X360", "XOne", "XB"]
     this.pc = ["PC"]
 
-    this.colors = colorsConsole
     this.colorsNintendo = pick(colorsConsole, this.nintendo)
     this.colorsPlaystation = pick(colorsConsole, this.playstation)
     this.colorsXbox = pick(colorsConsole, this.xbox)
@@ -38,26 +37,22 @@ export default class ConsoleBar {
     this.nintendoBarChart = new BrandBarChart(this, this.nintendo, "nintendo_barChart_container",
                                        "Nintendo",
                                        this.get_brand_distribution(this.nintendo),
-                                       this.colorsNintendo,
-                                       this.colors['GC'])
+                                       this.colorsNintendo)
 
     this.playstationBarChart = new BrandBarChart(this, this.playstation, "playstation_barChart_container",
                                        "Playstation",
                                        this.get_brand_distribution(this.playstation),
-                                       this.colorsPlaystation,
-                                       this.colors['PS'])
+                                       this.colorsPlaystation)
 
     this.xboxBarChart = new BrandBarChart(this, this.xbox, "xbox_barChart_container",
                                        "Xbox",
                                        this.get_brand_distribution(this.xbox),
-                                       this.colorsXbox,
-                                       this.colors['X360'])
+                                       this.colorsXbox)
 
     this.pcBarChart = new BrandBarChart(this, this.pc, "pc_barChart_container",
                                        "PC",
                                        this.get_brand_distribution(this.pc),
-                                       this.colorsPC,
-                                       this.colors['PC'])
+                                       this.colorsPC)
 
     this.tooltip = d3.select("body")
                      .append("div")

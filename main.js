@@ -373,7 +373,7 @@ function initialize() {
     */
 
     let genreBar = new GenreBar("genreBar_container", colorsGameType)
-    let scatterPlot = new ScatterPlot("scatterPlot_container", "Number of Sales (M)", "Critics Score (%)");
+    let scatterPlot = new ScatterPlot("scatterPlot_container", "Number of Sales", "Critics Score");
 
     let consoleBar = new ConsoleBar(colorsConsole)
 
